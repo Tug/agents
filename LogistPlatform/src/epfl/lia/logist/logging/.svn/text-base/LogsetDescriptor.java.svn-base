@@ -1,0 +1,5 @@
+package epfl.lia.logist.logging;
+
+public class LogsetDescriptor {
+
+}

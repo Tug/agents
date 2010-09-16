@@ -1,0 +1,217 @@
+Logist Platform RAW Log Output:
+===============================
+
+
+Starting date : lun. oct. 12 21:35:08 CEST 2009
+Starting time : 21:35:08
+
+General environnement info:
+
+	java-vendor     : Sun Microsystems Inc.
+	java-vendor-url : http://java.sun.com/
+	java-version    : 1.6.0_16
+	os-arch         : i386
+	os-name         : Linux
+	user-name       : polo
+	cache-size      : 5
+	max-entries     : 0
+	debug-level     : debug
+
+
+Log file entries:
+
+[21:35:08] INFO    : Platform started...
+[21:35:08] INFO    : Reading the configuration file ...
+[21:35:08] INFO    : New configuration found: 'ex1-reactive3'
+[21:35:08] INFO    : Found a new logset: 'reactive_logset'
+[21:35:08] INFO    : Found a new log file: 'log1'
+[21:35:08] INFO    : Found a new taskset: 'default_taskset'
+[21:35:08] INFO    : Found a new toposet: 'topo_partOfEurope'
+[21:35:08] INFO    : New city found: 'Brest'
+[21:35:08] INFO    : New city found: 'Le Havre'
+[21:35:08] INFO    : New city found: 'Paris'
+[21:35:08] INFO    : New city found: 'Bordeaux'
+[21:35:08] INFO    : New city found: 'Marseille'
+[21:35:08] INFO    : New city found: 'Lyon'
+[21:35:08] INFO    : New city found: 'Genève'
+[21:35:08] INFO    : New city found: 'Monaco'
+[21:35:08] INFO    : New city found: 'Strasbourg'
+[21:35:08] INFO    : Found new route from 'Paris' to 'Brest'
+[21:35:08] INFO    : Found new route from 'Paris' to 'Bordeaux'
+[21:35:08] INFO    : Found new route from 'Paris' to 'Le Havre'
+[21:35:08] INFO    : Found new route from 'Paris' to 'Strasbourg'
+[21:35:08] INFO    : Found new route from 'Paris' to 'Lyon'
+[21:35:08] INFO    : Found new route from 'Strasbourg' to 'Genève'
+[21:35:08] INFO    : Found new route from 'Strasbourg' to 'Monaco'
+[21:35:08] INFO    : Found new route from 'Lyon' to 'Genève'
+[21:35:08] INFO    : Found new route from 'Lyon' to 'Marseille'
+[21:35:08] INFO    : Found new route from 'Bordeaux' to 'Marseille'
+[21:35:08] INFO    : Found new route from 'Bordeaux' to 'Lyon'
+[21:35:08] INFO    : Found new route from 'Bordeaux' to 'Brest'
+[21:35:08] INFO    : Found new route from 'Monaco' to 'Genève'
+[21:35:08] INFO    : Found new route from 'Marseille' to 'Monaco'
+[21:35:08] INFO    : Found a new agentset: 'reactive-agents'
+[21:35:08] INFO    : Found a new agent named 'Avalanche' !
+[21:35:08] DEBUG   : Agent 'Avalanche' properties:
+[21:35:08] DEBUG   :    --> speed: 120.0
+[21:35:08] DEBUG   :    --> capacity: 80.0
+[21:35:08] DEBUG   :    --> costperkm: 15.0
+[21:35:08] DEBUG   :    --> color: java.awt.Color[r=255,g=0,b=0]
+[21:35:08] DEBUG   :    --> home: random
+[21:35:08] INFO    : Found a new agent named 'Cloud' !
+[21:35:08] DEBUG   : Agent 'Cloud' properties:
+[21:35:08] DEBUG   :    --> speed: 80.0
+[21:35:08] DEBUG   :    --> capacity: 100.0
+[21:35:08] DEBUG   :    --> costperkm: 5.0
+[21:35:08] DEBUG   :    --> color: java.awt.Color[r=255,g=0,b=0]
+[21:35:08] DEBUG   :    --> home: Paris
+[21:35:08] INFO    : Agent 'Cloud' has no children !
+[21:35:08] INFO    : Found a new agent named 'Tifa' !
+[21:35:08] DEBUG   : Agent 'Tifa' properties:
+[21:35:08] DEBUG   :    --> speed: 40.0
+[21:35:08] DEBUG   :    --> capacity: 100.0
+[21:35:08] DEBUG   :    --> costperkm: 5.0
+[21:35:08] DEBUG   :    --> color: java.awt.Color[r=255,g=128,b=0]
+[21:35:08] DEBUG   :    --> home: Marseille
+[21:35:08] INFO    : Agent 'Tifa' has no children !
+[21:35:08] INFO    : Found a new agent named 'Lake' !
+[21:35:08] DEBUG   : Agent 'Lake' properties:
+[21:35:08] DEBUG   :    --> speed: 40.0
+[21:35:08] DEBUG   :    --> capacity: 100.0
+[21:35:08] DEBUG   :    --> costperkm: 5.0
+[21:35:08] DEBUG   :    --> color: java.awt.Color[r=255,g=128,b=0]
+[21:35:08] DEBUG   :    --> home: Lyon
+[21:35:08] INFO    : Agent 'Lake' has no children !
+[21:35:08] INFO    : Log file path: ./logs
+[21:35:08] INFO    : History file path: ./logs
+[21:35:08] INFO    : 'Viewing service' is initilizing...
+[21:35:08] INFO    : 'Topology indexing service' is initilizing...
+[21:35:08] INFO    : 'Inter-object messaging service' is initilizing...
+[21:35:08] INFO    : 'Task management service' is initilizing...
+[21:35:08] INFO    : 'Agent management service' is initilizing...
+[21:35:08] INFO    : Initializing the agent management service...
+[21:35:08] INFO    : Initialisation of the agent management is complete.
+[21:35:08] INFO    : 'Viewing service' is auto-setting up...
+[21:35:08] INFO    : 'Topology indexing service' is auto-setting up...
+[21:35:08] INFO    : Creating the list of cities from descriptors...
+[21:35:08] INFO    : Created new city city<Brest,14,117>.
+[21:35:08] INFO    : Created new city city<Le Havre,222,41>.
+[21:35:08] INFO    : Created new city city<Paris,324,87>.
+[21:35:08] INFO    : Created new city city<Bordeaux,190,353>.
+[21:35:08] INFO    : Created new city city<Marseille,462,451>.
+[21:35:08] INFO    : Created new city city<Lyon,438,295>.
+[21:35:08] INFO    : Created new city city<Genève,496,263>.
+[21:35:08] INFO    : Created new city city<Monaco,556,421>.
+[21:35:08] INFO    : Created new city city<Strasbourg,570,105>.
+[21:35:08] INFO    : Creating the list of routes from descriptors.
+[21:35:08] INFO    : Creating new route between city<Paris,324,87> and city<Brest,14,117>.
+[21:35:08] INFO    : Creating new route between city<Paris,324,87> and city<Bordeaux,190,353>.
+[21:35:08] INFO    : Creating new route between city<Paris,324,87> and city<Le Havre,222,41>.
+[21:35:08] INFO    : Creating new route between city<Paris,324,87> and city<Strasbourg,570,105>.
+[21:35:08] INFO    : Creating new route between city<Paris,324,87> and city<Lyon,438,295>.
+[21:35:08] INFO    : Creating new route between city<Strasbourg,570,105> and city<Genève,496,263>.
+[21:35:08] INFO    : Creating new route between city<Strasbourg,570,105> and city<Monaco,556,421>.
+[21:35:08] INFO    : Creating new route between city<Lyon,438,295> and city<Genève,496,263>.
+[21:35:08] INFO    : Creating new route between city<Lyon,438,295> and city<Marseille,462,451>.
+[21:35:08] INFO    : Creating new route between city<Bordeaux,190,353> and city<Marseille,462,451>.
+[21:35:08] INFO    : Creating new route between city<Bordeaux,190,353> and city<Lyon,438,295>.
+[21:35:08] INFO    : Creating new route between city<Bordeaux,190,353> and city<Brest,14,117>.
+[21:35:08] INFO    : Creating new route between city<Monaco,556,421> and city<Genève,496,263>.
+[21:35:08] INFO    : Creating new route between city<Marseille,462,451> and city<Monaco,556,421>.
+[21:35:08] INFO    : Computing the shortest path for all possible pairs of cities.
+[21:35:08] INFO    : 'Inter-object messaging service' is auto-setting up...
+[21:35:08] INFO    : 'Task management service' is auto-setting up...
+[21:35:08] DEBUG   : Creating the task generator.
+[21:35:08] INFO    : Creating a probabilistic task distribution
+[21:35:08] DEBUG   : Normal density function seed value is 13325 !
+[21:35:08] DEBUG   : Normal density function seed value is 13325 !
+[21:35:08] INFO    : 'Agent management service' is auto-setting up...
+[21:35:08] INFO    : Beginning creation of the individual agents...
+[21:35:08] DEBUG   : Spawning named agent 'Avalanche'...
+[21:35:08] DEBUG   : [Avalanche] Creating agent state...
+[21:35:08] FATAL   : Hello World From a Reactive Company Agent !!!
+[21:35:08] DEBUG   : [Avalanche] Agent ID is ID:0...
+[21:35:08] DEBUG   : [Avalanche] Creating agent entity...
+[21:35:08] DEBUG   : [Avalanche] No behavior was found. Resetting to defaults !
+[21:35:08] DEBUG   : [Avalanche] Entity ID is ID:1...
+[21:35:08] DEBUG   : [Avalanche] Creating agent representation...
+[21:35:08] DEBUG   : Spawning children agents for 'Avalanche'...
+[21:35:08] DEBUG   : Spawning named agent 'Cloud'...
+[21:35:08] DEBUG   : [Cloud] Creating agent state...
+[21:35:08] DEBUG   : [Cloud] Agent ID is ID:2...
+[21:35:08] DEBUG   : [Cloud] Creating agent entity...
+[21:35:08] DEBUG   : [Cloud] Entity ID is ID:3...
+[21:35:08] DEBUG   : [Cloud] Creating agent representation...
+[21:35:08] DEBUG   : [Cloud] Agent home location is city<Paris,324,87>...
+[21:35:08] DEBUG   : [Avalanche] Adding child agent 'Cloud'...
+[21:35:08] DEBUG   : Spawning children agents for 'Cloud'...
+[21:35:08] DEBUG   : Spawning named agent 'Tifa'...
+[21:35:08] DEBUG   : [Tifa] Creating agent state...
+[21:35:08] DEBUG   : [Tifa] Agent ID is ID:4...
+[21:35:08] DEBUG   : [Tifa] Creating agent entity...
+[21:35:08] DEBUG   : [Tifa] Entity ID is ID:5...
+[21:35:08] DEBUG   : [Tifa] Creating agent representation...
+[21:35:08] DEBUG   : [Tifa] Agent home location is city<Marseille,462,451>...
+[21:35:08] DEBUG   : [Avalanche] Adding child agent 'Tifa'...
+[21:35:08] DEBUG   : Spawning children agents for 'Tifa'...
+[21:35:08] DEBUG   : Spawning named agent 'Lake'...
+[21:35:08] DEBUG   : [Lake] Creating agent state...
+[21:35:08] DEBUG   : [Lake] Agent ID is ID:6...
+[21:35:08] DEBUG   : [Lake] Creating agent entity...
+[21:35:08] DEBUG   : [Lake] Entity ID is ID:7...
+[21:35:08] DEBUG   : [Lake] Creating agent representation...
+[21:35:08] DEBUG   : [Lake] Agent home location is city<Lyon,438,295>...
+[21:35:08] DEBUG   : [Avalanche] Adding child agent 'Lake'...
+[21:35:08] DEBUG   : Spawning children agents for 'Lake'...
+[21:35:08] DEBUG   : All agents were successfully created !
+[21:35:08] INFO    : Agent creation and initialization is complete.
+[21:35:11] INFO    : Created log file named 'log1' !
+[21:35:11] INFO    : Running setup()...
+[21:35:11] INFO    : Initializing the simulation model...
+[21:35:11] INFO    : Initializing the simulation model is complete.
+[21:35:11] INFO    : Initializing the scheduler...
+[21:35:12] INFO    : Initializing of the scheduler is complete.
+[21:35:12] INFO    : Initializing the display objects...
+[21:35:12] INFO    : Initialization of the display objects is complete...
+[21:35:12] INFO    : Lauching agents on first run...
+[21:35:12] INFO    : [AgentLake] Agent received an INIT signal !
+[21:35:12] INFO    : [AgentCloud] Agent received an INIT signal !
+[21:35:12] INFO    : [AgentTifa] Agent received an INIT signal !
+[21:35:12] INFO    : [AgentCloud] Agent received a SETUP signal !
+[21:35:12] INFO    : [AgentTifa] Agent received a SETUP signal !
+[21:35:12] INFO    : [AgentLake] Agent received a SETUP signal !
+[21:35:18] INFO    : [AgentTifa] reinforcement learning terminated !
+[21:35:18] INFO    : [AgentTifa] Agent is in city Marseille
+[21:35:18] INFO    : [AgentTifa] Agent takes task 5 to deliver in Genève
+[21:35:18] INFO    : [AgentLake] reinforcement learning terminated !
+[21:35:18] INFO    : [AgentLake] Agent is in city Lyon
+[21:35:26] INFO    : [AgentLake] Agent moves to Marseille
+[21:35:26] INFO    : [AgentCloud] reinforcement learning terminated !
+[21:35:26] INFO    : [AgentCloud] Agent is in city Paris
+[21:35:26] INFO    : [AgentCloud] Agent takes task 0 to deliver in Genève
+[21:35:26] INFO    : [AgentCloud] Agent has deliver task 0
+[21:35:29] INFO    : [AgentCloud] Agent is in city Genève
+[21:35:29] INFO    : [AgentCloud] Agent moves to Strasbourg
+[21:35:29] INFO    : [AgentLake] Agent is in city Marseille
+[21:35:29] INFO    : [AgentLake] Agent moves to Monaco
+[21:35:29] INFO    : [AgentTifa] Agent has deliver task 5
+[21:35:31] INFO    : [AgentTifa] Agent is in city Genève
+[21:35:31] INFO    : [AgentTifa] Agent moves to Strasbourg
+[21:35:31] INFO    : 'Agent management service' is shutting down...
+[21:35:31] INFO    : Shutting the agent management service down...
+[21:35:31] INFO    : Child agent 'Tifa' was removed from parent 'Avalanche'
+[21:35:31] INFO    : Child agent 'Cloud' was removed from parent 'Avalanche'
+[21:35:31] INFO    : Child agent 'Lake' was removed from parent 'Avalanche'
+[21:35:31] INFO    : Company agent 'Avalanche' has no more children ! Agent will kill himself !
+[21:35:31] INFO    : Agent 'Avalanche' was scheduled for killing !
+[21:35:31] INFO    : Agent management service is shutting down...
+[21:35:31] INFO    : 'Task management service' is shutting down...
+[21:35:31] INFO    : Destroying the task manager...
+[21:35:31] INFO    : 'Inter-object messaging service' is shutting down...
+[21:35:31] INFO    : 'Topology indexing service' is shutting down...
+[21:35:31] INFO    : 'Viewing service' is shutting down...
+[21:35:31] INFO    : Flushing entries in the log management subsystem...
+[21:35:31] INFO    : Simulation ended successfully...
+
+
+--| End of log |------------------------------------------------------

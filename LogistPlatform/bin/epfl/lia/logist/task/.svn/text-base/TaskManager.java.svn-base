@@ -1,0 +1,351 @@
+package epfl.lia.logist.task;
+
+/* import table */
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import epfl.lia.logist.agent.AgentProfile;
+import epfl.lia.logist.config.Configuration;
+import epfl.lia.logist.core.IService;
+import epfl.lia.logist.core.listeners.IAgentListener;
+import epfl.lia.logist.core.listeners.ITopologyListener;
+import epfl.lia.logist.core.topology.City;
+import epfl.lia.logist.core.topology.Topology;
+import epfl.lia.logist.logging.LogManager;
+import epfl.lia.logist.logging.LogSeverityEnum;
+import epfl.lia.logist.tools.AID;
+
+
+public class TaskManager implements IService, IAgentListener, ITopologyListener {
+
+	/* The ID number identifying the mailer in the messaging subsystem */
+	private TaskGenerator mTaskGen = null;
+
+	/* The singleton instance of the class */
+	private static TaskManager msSingleton = null;
+	
+	/* The topology object from which we retrieve topology data */
+	private Topology mTopology = null;
+	
+	/* The map holding lists of tasks to pickup for every city in the map */
+	private HashMap<String,ArrayList<Task>> mMapOfTasksToPickup = null;
+	
+	/* The map holding lists of delivered tasks for every city in the map */
+	private HashMap<String,ArrayList<Task>> mMapOfDeliveredTasks = null;	
+	
+	/* The map of all allocations in the simulation and per agent */
+	private HashMap<AID,ArrayList<Task>> mMapOfAllocations = null;
+	
+	/* The number of currently allocated tasks */
+	private int mNumOfAllocatedTasks = 0;
+	
+	/* The current number of free tasks */
+	private int mNumOfFreeTasks = 0;
+	
+	/* The total number of allocated tasks */
+	private int mTotalTaskCount = 0;
+	
+	/* The total number of delivered tasks */
+	private int mTotalDeliveredTasks = 0;
+	
+	
+	/**
+	 * Default constructor of the class 
+	 */
+	public TaskManager( Topology tp ) {
+		if ( msSingleton == null )
+			msSingleton = this;
+		mMapOfTasksToPickup = new HashMap<String,ArrayList<Task>>();
+		mMapOfDeliveredTasks = new HashMap<String,ArrayList<Task>>();
+		mMapOfAllocations = new HashMap<AID,ArrayList<Task>>();
+		mTopology = tp;
+	}
+
+	
+	/**
+	 * This method dispatches a given list of tasks through the city. Note that
+	 * this operation must not be interrupted, or the cities will have partial
+	 * tasks.
+	 * 
+	 * @param tasks An array of tasks to dispatch.
+	 */
+	protected synchronized void dispatchTasks( ArrayList<Task> tasks ) {
+		
+		if ( tasks == null || (tasks!=null && tasks.isEmpty())) return;
+		for ( Task t : tasks ) {
+			ArrayList<Task> lTaskList = mMapOfTasksToPickup.get( t.getPickupCity() );
+			if ( lTaskList != null)
+				lTaskList.add( t );
+		}
+	}
+	
+	
+	/**
+	 * Allocates a task to an agent an returns its ID or -1 if already allocated
+	 * @return
+	 */
+	public Task allocate( int taskID, City c, AID aid ) {
+		
+		System.out.println( "Task allocation\n\ttaskID: " + taskID + "\n\tc: " + c + "\n\taid: " + aid );
+		for( Task t : mMapOfTasksToPickup.get(c.getNodeLabel()) ) {
+			System.out.println( "Found task: " + t );
+		}
+		
+		// holds the current tasks to allocate
+		Task t = null;
+		boolean bFound = false;
+		int lIndex = 0;
+		
+		// if the pickup tasklist doesn't exist, then no task is
+		// allocated...
+		if ( c!=null && mMapOfTasksToPickup.get(c.getNodeLabel())==null )
+			return null;
+		
+		System.out.println( "Passed this part !!!" );
+		
+		// retrieve the list of tasks to pickup
+		ArrayList<Task> lTaskList = mMapOfTasksToPickup.get(c.getNodeLabel());
+		for( Task tsk : lTaskList ) {
+			if ( taskID==tsk.getID() ) {
+				bFound=true;
+				break;
+			}
+			lIndex++;
+		}
+		
+		System.out.println( "bFound: " + bFound );
+		System.out.println( "lIndex: " + lIndex);
+		
+		// the task was not found
+		if ( !bFound )
+			return null;
+		
+		// removes the task from the list
+		t = lTaskList.remove(lIndex);
+	
+		// adds it in the list of allocations
+		mMapOfAllocations.get(aid).add(t);
+		
+		System.out.println( "Here we are... ");
+		// increments the stats
+		this.mNumOfFreeTasks--;
+		this.mNumOfAllocatedTasks++;
+		
+		// generation of 10 new tasks. If allocation is not 
+		// possible, then no more tasks are added to main list, 
+		// and next time TaskManager.hasMoreTasks() will return
+		// false!!
+		//if ( mNumOfFreeTasks==0 ) {
+		//	ArrayList<Task> lArrayOfTasks =  mTaskGen.generate(10);
+		//	if ( lArrayOfTasks != null && lArrayOfTasks.size()>0 )
+		//		dispatchTasks( lArrayOfTasks );
+		//}
+		
+		// ...
+		return t;
+		
+
+	}
+
+	
+	/**
+	 * Allocates a certain amount of tasks to an agent from task ID ‘from’ to task ID ‘to’
+	 */
+	public HashMap<Integer,Boolean> allocateRange( int from, int to, AID agentID ) {
+		return null;
+	}
+
+	
+	/**
+	 * Allocates all tasks
+	 */
+	public HashMap<Integer,Boolean> allocateFull( AID agentID ) {
+		return null;
+	}
+		
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public Task getTaskFromID( City c, Integer id ) {
+		ArrayList<Task> lListOfTasks = mMapOfTasksToPickup.get( c.getNodeLabel()  );
+		for ( Task t : lListOfTasks ) {
+			if ( id.intValue() == t.getID() )
+				return t;
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * Indicates whether all tasks are delivered
+	 */
+	public boolean allTasksDelivered() {
+		return false;
+	}
+	
+
+	/**
+	 * Allows to define the task generator
+	 */
+	public void setGenerator( TaskGenerator tg ) {
+		mTaskGen = tg;
+	}
+		
+
+	/**
+	 * Returns an instance of the task generator
+	 * @return
+	 */
+	public TaskGenerator getGenerator() {
+		return mTaskGen;
+	}
+		
+
+	/**
+	 * Returns the single instance of the manager -> 
+	 * protected by the SecurityMgr
+	 * @return
+	 */
+	public static TaskManager getInstance() {
+		return msSingleton;
+	}
+	
+	/**
+	 * Initializes the whole taskset from a single descriptor
+	 */
+	public void create( TasksetDescriptor tsd ) throws Exception {
+	
+		LogManager.getInstance().log( LogManager.DEFAULT, LogSeverityEnum.LSV_DEBUG, 
+			"Creating the task generator." );
+		
+		// now, we're going to create the task generator
+		mTaskGen = new TaskGenerator( tsd.TaskGeneratorDescriptor );
+		
+		// now, we can generate the inital amount of tasks
+		this.dispatchTasks( mTaskGen.generate() );
+	}
+	
+
+	/**
+	 * Initializes the internal state of the manager
+	 */
+	public void init() {
+	}
+
+	
+	/**
+	 * Deletes tasks and resets internal state
+	 */
+	public void shutdown() {
+		LogManager.getInstance().log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, "Destroying the task manager" );
+	}
+
+	
+	/**
+	 * Sets the messaging system up
+	 */
+	public void setup( Configuration cfg ) throws Exception {
+		create( cfg.Tasks );
+	}
+
+	
+	/**
+	 * Indicates whether there is more tasks or not
+	 */
+	public boolean hasMoreTasks() {
+		return true;
+	}
+		
+
+	/**
+	 * Returns the number of tasks to pickup in this city
+	 */
+	public int getPickupTaskCount( String city ) {
+		return mMapOfTasksToPickup.get(city).size();
+	}
+	
+	
+	/**
+	 * Returns the number of delivered tasks to this city
+	 */
+	public int getDeliveredTaskCount( String city ) {
+		return mMapOfDeliveredTasks.get(city).size();
+	}
+	
+	
+	/**
+	 * 
+	 */
+	public ArrayList<Task> getPickupTasklist( String city ) {
+		return mMapOfTasksToPickup.get(city);
+	}
+	
+	
+	/**
+	 * 
+	 */
+	public ArrayList<Task> getAllocatedTasklist( AID aid ) {
+		return mMapOfAllocations.get(aid);
+	}
+	
+	
+	/**
+	 * 
+	 * @param city
+	 * @return
+	 */
+	public ArrayList<Task> getDeliveredTasklist( String city ) {
+		return mMapOfDeliveredTasks.get(city);
+	}
+		
+	
+	/**
+	 * Automatically invoked everytime a city is added
+	 */
+	public void onCityAddition( City c ) {
+		if ( c==null ) return;
+		mMapOfTasksToPickup.put( c.getNodeLabel(), new ArrayList<Task>() );
+		mMapOfDeliveredTasks.put( c.getNodeLabel(), new ArrayList<Task>() );
+	}
+	
+	
+	/**
+	 * Automatically invoked everytime a city is deleted
+	 */
+	public void onCityDeletion( City c ) {
+		if ( c==null ) return;
+		ArrayList<Task> lTaskList = mMapOfTasksToPickup.get( c.getNodeLabel() );
+		if ( lTaskList != null ) mMapOfTasksToPickup.remove( lTaskList );
+		lTaskList = mMapOfDeliveredTasks.get( c.getNodeLabel() );
+		if ( lTaskList != null ) mMapOfDeliveredTasks.remove( lTaskList );
+	}
+	
+	
+	/**
+	 * Automatically invoked everytime an agent is added
+	 */
+	public void onAgentAddition( AgentProfile ap ) {
+		if ( ap==null ) return;
+		mMapOfAllocations.put( ap.getID(), new ArrayList<Task>() );
+	}
+	
+	
+	/**
+	 * Automatically invoked everytime an agent is removed
+	 */
+	public void onAgentDeletion( AgentProfile ap ) {
+		if ( ap==null ) return;
+		ArrayList<Task> lTaskList = mMapOfAllocations.get( ap.getID() );
+		if ( lTaskList!=null ) mMapOfAllocations.remove( lTaskList );
+	}
+	
+	
+	/**
+	 * The text for the service management system
+	 */
+	public String toString() {
+		return "Task management service";
+	}
+}

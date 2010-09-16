@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- the main configuration for test agents -->
+<configuration name="ex1-reactive">
+
+	<!-- defines the properties for this configuration -->
+	<propset>
+		<property name="world-xsize" value="640" />
+		<property name="world-ysize" value="480" />
+		<property name="backcolor" value="#ffffff" />
+		<property name="forecolor" value="#000000" />
+		<property name="num-rounds" value="2" />
+		<property name="reset-timeout" value="40000" />
+		<property name="init-timeout" value="10000" />
+		<property name="setup-timeout" value="30000" />
+		<property name="kill-timeout" value="1000" />
+		<property name="city-name-color" value="#002233" />
+		<property name="city-color" value="#00aaff" />
+		<property name="city-perim-color" value="#555555" />
+		<property name="city-radius" value="8" />
+		<property name="task-text-color" value="1000" />
+		<property name="task-pickup-color" value="#ff0000" />
+		<property name="task-deliver-color" value="#0000ff" />
+		<property name="task-indicator-color" value="#000000" />
+		<property name="show-legend" value="yes" />
+		<property name="show-gui" value="yes" />
+		<property name="classpath" value="E:/custom/;" />
+		<property name="log-dir" value="logs/" />
+		<property name="history-dir" value="history/" />
+		<property name="task-threshold" value="5" />
+		<property name="antialias-scene" value="yes" />
+		<property name="antialias-text" value="yes" />		
+	</propset>
+	
+	
+	<!-- this sections describes the properties of
+	     the logs -->
+	<logset name="reactive_logset">
+		<propset />
+		<log name="hello-world">
+			<property name="format" value="xml" />
+			<property name="debug-level" value="debug" />
+			<property name="max-entries" value="-1" />
+			<property name="cache-size" value="1" />
+			<property name="stdout-dup" value="yes" />
+		</log>
+	</logset>
+	
+	<!-- takes the taskset from an external file -->
+	<taskset name="default_taskset" file="taskset.xml" />
+	
+	<!-- takes the topology from an external file -->
+	<toposet name="topo_france" file="topology/france.xml" />
+	
+	<!-- this section describes all agents in the simulation -->
+	<agentset name="reactive-agents">
+		
+		<propset />	
+		
+		<!-- the company agent ruling them all -->
+		<agent name="Avalanche">
+			<definition>
+				<propset>
+					<property name="type" value="company" />
+					<property name="behavior" value="reactive" />
+				</propset>
+				<behaviorset />
+			</definition>
+			<children>
+				<agent name="Cloud">
+					<definition>
+						<propset>
+							<property name="color" value="#ff0000" />
+							<property name="type" value="vehicle" />
+							<property name="behavior" value="reactive" />
+						</propset>
+						<behaviorset>
+							<behavior signal="*" handler="org.logist.reactive.ReactiveBehavior" />
+						</behaviorset>
+					</definition>
+					<children />
+				</agent>
+				<agent name="Tifa">
+					<definition>
+						<propset>
+							<property name="type" value="vehicle" />
+							<property name="behavior" value="reactive" />
+							<property name="color" value="#ff8000" />
+						</propset>
+						<behaviorset>
+							<behavior signal="*" handler="org.logist.reactive.ReactiveBehavior" />
+						</behaviorset>
+					</definition>
+					<children />
+				</agent>
+			</children>
+		</agent>
+	</agentset>
+</configuration>

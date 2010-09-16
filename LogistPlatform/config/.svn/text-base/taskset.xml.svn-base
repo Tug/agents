@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<taskset name="default_taskset">
+	<generator max-allocatable="-1" batch-size="10" distribution="sample1">
+		<distribution name="sample1" type="discrete" >
+			<tasks>
+				<task pickup="Genève" delivery="Lausanne" weight="100.0" reward="14.0" />
+				<task pickup="Berne" delivery="Lucerne" weight="120.0" reward="13.5" />
+				<task pickup="Genève" delivery="Sion" weight="115.0" reward="20.0" />
+				<task pickup="Sion" delivery="Lausanne" weight="112.0" reward="21.5" />
+			</tasks>
+		</distribution>
+	</generator>
+</taskset>

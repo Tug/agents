@@ -1,0 +1,205 @@
+package epfl.lia.logist.agent.state;
+
+/* import table */
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import uchicago.src.sim.network.Node;
+import epfl.lia.logist.agent.AgentProfile;
+import epfl.lia.logist.core.topology.City;
+import epfl.lia.logist.messaging.action.Action;
+import epfl.lia.logist.messaging.action.MoveAction;
+import epfl.lia.logist.messaging.action.PickupAction;
+import epfl.lia.logist.messaging.signal.InCitySignal;
+import epfl.lia.logist.task.Task;
+import epfl.lia.logist.task.TaskDescriptor;
+import epfl.lia.logist.task.TaskManager;
+
+
+/**
+ * This class represents the state of a reactive vehicle agent. It controls
+ * the position of the agents as well as all properties linked to it. It holds
+ * the state of a single agent and communicates with the entity.
+ */
+public class ReactiveVehicleState extends VehicleAgentState {
+
+	/**
+	 * Enumeration of the possible states for the internal state machine.
+	 */
+	enum ReactiveStateEnum { NONE, WAIT_RESPONSE, INITIALIZED, SETUP, IDLE, MOVING }
+	
+	/**
+	 * The state of the reactive state machine.
+	 */
+	private ReactiveStateEnum mState = ReactiveStateEnum.INITIALIZED;
+	private ReactiveStateEnum mLastState = ReactiveStateEnum.INITIALIZED;
+	
+	
+	/**
+	 * Constructor of the reactive agent state.
+	 * @param ap
+	 * @param as
+	 */
+	public ReactiveVehicleState( AgentProfile ap, AgentState as ) {
+		super(ap,as);
+	}
+			
+	
+	/**
+	 * Executes the behavior of the agent state.
+	 */
+	public void step() {
+		
+		// stack variables
+		ReactiveStateEnum lNextState = mState;		
+		Action<?> lAction = null;
+		
+		// for the states, ...
+		switch( mState ) {
+		
+			// this is the initialization state. the state advances to CREATES
+			// as soon as the agent entity replies with a ready action.
+			case INITIALIZED:
+				postInitSignal();								// ask agent to wake up
+				mLastState = ReactiveStateEnum.INITIALIZED;		// change to next state
+				lNextState = ReactiveStateEnum.WAIT_RESPONSE;
+				break;
+				
+			// this state represents the case where the agent is initialized. Here, the agent
+			// is created. Next step is top set the agent up.
+			case SETUP:
+				postSetupSignal();						// ask agent to set up
+				mLastState = ReactiveStateEnum.SETUP;			// change to next state
+				lNextState = ReactiveStateEnum.WAIT_RESPONSE;
+				break;
+			
+			// the agent is currently idle. Its not doing anything and should be currently
+			// in a city. If this is the case, then inform the agent that it arrived in
+			// a city, what to do next ?
+			case IDLE:
+				InCitySignal lSignal = buildInCitySignal();		// constructs the signal
+				//System.out.println( "Moving to city " + mProfile.getCurrentCity().getNodeLabel() + "..." );
+				postInCitySignal( lSignal );					// posts the signal
+				mLastState = ReactiveStateEnum.IDLE;			// changes the state
+				lNextState = ReactiveStateEnum.WAIT_RESPONSE;
+				break;
+				
+
+			// in this state, we are waiting for a response
+			case WAIT_RESPONSE:
+ 
+				// get the message
+				lAction = getNextAction();
+				
+				// if no action, then break...
+				if (lAction==null )
+					break;
+				
+				// what type of response ?
+				switch( lAction.getType() ) {
+				
+					// remote agent is ready...
+					case AMT_READY:
+						switch( mLastState ) {
+							case INITIALIZED: lNextState = ReactiveStateEnum.SETUP; break;									
+							case SETUP: lNextState = ReactiveStateEnum.IDLE; break;
+							//default: lNextState = .ReactiveStateEnum.IDLE;
+						}
+						break;
+					
+					// we should get moving...
+					case AMT_MOVE:
+						if ( mLastState == ReactiveStateEnum.IDLE) {
+							String village = ((MoveAction)lAction).getMessage();
+							moveToNextCity( village );
+							lNextState = ReactiveStateEnum.MOVING;
+						}
+						break;
+					
+					// we should pick the task up...
+					case AMT_PICKUP:
+						pickupAction( (PickupAction)lAction );
+						lNextState = ReactiveStateEnum.IDLE;
+						break;
+						
+					default:
+						lNextState = ReactiveStateEnum.IDLE;
+				}
+				break;
+				
+			case MOVING:
+				lNextState = ReactiveStateEnum.IDLE;
+		}
+		
+		// swap states
+		mState = lNextState;
+	}
+	
+	
+	/**
+	 * 
+	 */
+	private void moveToNextCity( String city ) {
+		//System.out.println( "Asking for city " + city + "..." );
+		mProfile.moveAgent( city );
+	}
+	
+	
+	/**
+	 * 
+	 */
+	private void pickupAction( PickupAction pa ) {
+		boolean isAccepted = mProfile.pickupTask( pa.getMessage() );
+		if ( !isAccepted ) {
+			System.out.println( "TASK refused !!!" );
+		}
+	}
+	
+	
+	/**
+	 * Builds an InCity signal. This signal represents the fact that the
+	 * agent arrived in a new city.
+	 * @return
+	 */
+	private InCitySignal buildInCitySignal() {
+		
+		//System.out.println( "--¦BuildInCitySignal¦------------------------");
+		// selects the current city
+		City lCurrentCity = mProfile.getCurrentCity();
+		//System.out.println( "Current city: " + lCurrentCity );
+		
+		// creates a new object
+		InCitySignal.InCityObject lObject = new InCitySignal.InCityObject();
+		
+		// creates the descriptor
+		lObject.Name = lCurrentCity.getNodeLabel();
+		lObject.Neighbors = new ArrayList<String>();
+		lObject.Tasks = new ArrayList<TaskDescriptor>();
+		
+		// adds the neighbours of this city
+		/*
+		Iterator lItor = lCurrentCity.getOutNodes().iterator();
+		while( lItor.hasNext() ) {
+			lObject.Neighbors.add( ((Node)lItor.next()).getNodeLabel() );
+		} */
+		ArrayList<Node> dests = lCurrentCity.getDestinations();
+		for ( Node c : dests ) {
+			//System.out.println( "Neighbour: " + (City)c );
+			lObject.Neighbors.add( c.getNodeLabel() );
+		}
+
+		// adds a task ...
+		/*
+		Iterator lItor = TaskManager.getInstance().getPickupTasklist(lCurrentCity.getNodeLabel()).iterator();
+		while( lItor.hasNext() ) {
+			lObject.Tasks.add( ((Task)lItor.next()).getDescriptor() );
+		}
+		*/
+		
+		// finds all surrounding cities
+		return new InCitySignal( getObjectID(), 
+								 mProfile.getAgent().getObjectID(), 
+								 lObject );	
+	}
+}
+

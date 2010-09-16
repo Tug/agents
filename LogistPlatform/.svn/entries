@@ -1,0 +1,206 @@
+8
+
+dir
+79
+svn+ssh://iagents/users/iagents/SVN_REPO/LogistPlatform/trunk
+svn+ssh://iagents/users/iagents/SVN_REPO
+
+
+
+2007-07-01T21:49:26.260342Z
+79
+iagents
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+81815ef8-fc1e-0410-9ca2-8adeaa6b64d6
+
+logist.txt
+file
+81
+
+
+delete
+2007-07-11T22:41:12.000000Z
+5638b1d12c713cbc67bce266962df71f
+2007-07-11T22:30:10.068131Z
+81
+iagents
+
+logfile.xml
+file
+
+
+
+delete
+2007-06-24T13:11:38.000000Z
+6614318972b94d42c25e52f0f46b8aa9
+2007-06-19T21:43:10.105068Z
+65
+iagents
+
+logist.log
+file
+
+
+
+delete
+2007-06-30T15:34:24.000000Z
+aedaa6405380998ec20c6e6651fa6170
+2007-06-30T21:28:04.118417Z
+78
+iagents
+
+.project
+file
+
+
+
+
+2007-06-24T13:11:38.000000Z
+241ab28fe2c20df188df3c3eab1faf78
+2007-05-22T20:24:13.857910Z
+57
+iagents
+
+src
+dir
+
+Linux.properties
+file
+
+
+
+
+2007-06-24T13:11:38.000000Z
+545677f398c0028ce8b7d792fd925374
+2007-05-20T16:23:34.558347Z
+53
+iagents
+
+logist.rtf
+file
+
+
+
+delete
+2007-07-01T16:09:16.000000Z
+2bf66be16c7c92014c6235d069af236d
+2007-07-01T21:49:26.260342Z
+79
+iagents
+
+README
+file
+
+
+
+
+2007-06-24T13:11:38.000000Z
+d41d8cd98f00b204e9800998ecf8427e
+2007-05-01T16:30:48.691770Z
+50
+iagents
+
+Windows XP.properties
+file
+
+
+
+
+2007-06-24T13:11:38.000000Z
+acb9338aed2dfb8b6522304cefefe281
+2007-06-02T14:57:35.139796Z
+62
+iagents
+
+build.xml
+file
+
+
+
+
+2007-06-24T13:11:38.000000Z
+646ee4605bc92713388159a7c80207e5
+2007-06-02T14:57:35.139796Z
+62
+iagents
+
+.classpath
+file
+
+
+
+
+2007-06-24T13:11:38.000000Z
+e002496dbf6c1ac7eca34d7ecc4816de
+2007-06-22T23:44:30.109956Z
+68
+iagents
+
+logist.xml
+file
+
+
+
+delete
+2007-06-24T13:11:38.000000Z
+c5d8a23581870c9d49fbfe87ecd7852b
+2007-05-30T21:52:06.469169Z
+61
+iagents
+
+logfile.log
+file
+
+
+
+delete
+2007-06-24T13:11:38.000000Z
+57343752269415587b32aba00f721a70
+2007-06-19T21:43:10.105068Z
+65
+iagents
+
+config
+dir
+
+doc
+dir
+
+
+
+delete
+
+lib
+dir
+
+bin
+dir
+
+logfile.rtf
+file
+
+
+
+delete
+2007-06-24T13:11:38.000000Z
+6dabf48c12d04ca46f31c4c91f1163f2
+2007-06-19T21:43:10.105068Z
+65
+iagents
+
+.settings
+dir
+

@@ -1,0 +1,32 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1036
+{\colortbl ;\red255\green0\blue0;\red255\green128\blue0;}
+{\fonttbl{\f0\fswiss\fcharset0 Arial;}{\f1\fmodern\fprq1\fcharset0 Courier New;}}
+\f0 \fs38 \b Logist Platform RTF Log output \b0 \par
+\par \b \fs24 Starting date : \b0 mar. juin 19 22:40:28 CEST 2007
+\par \b Starting time : \b0 22:40:28
+\par \par \fs28 \b General environnement info: \b0 \par
+\par \fs24 \tx750 \tab \f0 \b java-vendor     : \b0 Sun Microsystems Inc.
+\par \tab \f0 \b java-vendor-url : \b0 http://java.sun.com/
+\par \tab \f0 \b java-version    : \b0 1.6.0_01
+\par \tab \f0 \b os-arch         : \b0 x86
+\par \tab \f0 \b os-name         : \b0 Windows XP
+\par \tab \f0 \b user-name       : \b0 malves
+\par \tab \f0 \b cache-size      : \b0 5
+\par \tab \f0 \b max-entries     : \b0 0
+\par \tab \f0 \b debug-level     : \b0 debug
+\par \par \fs28 \b Log file entries: \b0 \fs24 \par
+\par \tx2500 
+[22:40:28] DEBUG    \tab This is a simple debug message ! \cf0
+\par \tx2500 
+[22:40:28] INFO     \tab This is a simple piece of information ! \cf0
+\par \tx2500 
+\cf2 
+[22:40:28] WARNING  \tab This is a warning ! \cf0
+\par \tx2500 
+\cf1 
+[22:40:28] ERROR    \tab This is a serious error ! \cf0
+\par \tx2500 
+\cf1 
+[22:40:28] FATAL    \tab This is a fatal error ! Must QUIT !!! \cf0
+\par \par --------------------------------------------------------------------------- \par
+}

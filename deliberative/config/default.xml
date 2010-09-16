@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+<!-- the simulation default file -->
+<simulation version="1.0" default="ex2-deliberative2">
+  
+  <!-- default configuration for deliberative agents -->
+  <configuration name="ex2-deliberative1" file="deliberative1.xml"/>
+
+  <!-- default configuration for deliberative agents -->
+  <configuration name="ex2-deliberative2" file="deliberative2.xml"/>
+
+</simulation>

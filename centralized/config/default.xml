@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+<!-- the simulation default file -->
+<simulation version="1.0" default="ex3-centralized">
+  
+  <!-- default configuration for centralized agents -->
+  <configuration name="ex3-centralized" file="centralized.xml"/>
+  
+</simulation>

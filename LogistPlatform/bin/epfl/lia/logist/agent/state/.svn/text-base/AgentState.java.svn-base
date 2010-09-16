@@ -1,0 +1,196 @@
+package epfl.lia.logist.agent.state;
+
+/* importation table */
+import java.util.ArrayList;
+
+import epfl.lia.logist.agent.AgentProfile;
+import epfl.lia.logist.messaging.Message;
+import epfl.lia.logist.messaging.MessageDispatcher;
+import epfl.lia.logist.messaging.MessageHandler;
+import epfl.lia.logist.messaging.MessageTypeEnum;
+import epfl.lia.logist.messaging.action.Action;
+import epfl.lia.logist.messaging.signal.InCitySignal;
+import epfl.lia.logist.messaging.signal.InitSignal;
+import epfl.lia.logist.messaging.signal.KillSignal;
+import epfl.lia.logist.messaging.signal.ResetSignal;
+import epfl.lia.logist.messaging.signal.SetupSignal;
+import epfl.lia.logist.messaging.signal.TaskRefusedSignal;
+import epfl.lia.logist.task.TaskDescriptor;
+import epfl.lia.logist.tools.AID;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public abstract class AgentState extends MessageHandler {
+
+	/**
+	 * The parent profile of this state
+	 */
+	protected AgentProfile mProfile = null; 
+
+	/**
+	 * The state of parent agent (container)
+	 */
+	protected AgentState mParent = null; 
+			
+	/**
+	 * The destination ID
+	 */
+	protected AID mRecipientID = null;
+	
+	/**
+	 * The message dispatcher
+	 */
+	protected MessageDispatcher mDispatcher;
+	
+	
+	
+	/**
+	 * Constructor of the state
+	 * @param ap
+	 * @param as
+	 */
+	protected AgentState( AgentProfile ap, AgentState as ) {
+		mProfile = ap;
+		mParent = as;
+		mDispatcher = MessageDispatcher.getInstance();
+		mDispatcher.register( this );
+	}
+
+	/**
+	 * Defines the recipient of this agent
+	 */
+	public void setRecipient( AID r ) {
+		mRecipientID = r;
+	}
+	
+
+	/**
+	 * Generates a descriptor for this task
+	 */
+	public abstract void step();
+		
+	
+	/**
+	 * Indicates if agent is currently idle or 
+	 * busy waiting for comms
+	 * @return
+	 */
+	public abstract boolean isIdle();
+
+			
+	/**
+	 * Indicates if the agent has more work to do or not
+	 * @return
+	 */
+	public abstract boolean hasWorkToDo();
+	
+	
+	/**
+	 * Notifies the parent when some action has been received by
+	 * the child.
+	 */
+	protected void notifyParent( Action<?> action ) {
+	}
+	
+	
+	
+	/**
+	 * Retrieves the next action to perform.
+	 */
+	protected synchronized Action<?> getNextAction() {
+
+		// stack variables
+		Message<? >lNextMsg = null;
+		
+		// while there are messages
+		while( (lNextMsg=mDispatcher.retrieve(this)) != null ) {
+			if ( lNextMsg.getMsgType() == MessageTypeEnum.MGT_ACTION ) {
+				//System.out.println( "New action: " + lNextMsg );
+				return (Action<?>)lNextMsg;
+			}
+		}
+		
+		// returns nothing
+		return null;
+	}
+
+	
+	/**
+	 * Post an initialization message to the recipient agent. 
+	 */
+	public void postInitSignal() {
+		mDispatcher.post( new InitSignal(mObjectID,mRecipientID) );
+	}
+	
+	
+	/**
+	 * Post a reset message to the recipient agent.
+	 */
+	public void postResetSignal( int round ) {
+		mDispatcher.post( new ResetSignal(mObjectID,mRecipientID,new Integer(round)) );
+	}
+	
+	
+	/**
+	 * Post a request for the agent to kill himself.
+	 */
+	public void postKillSignal( int reason ) {
+		mDispatcher.post( new KillSignal(mObjectID,mRecipientID,new Integer(reason)) );
+	}
+	
+	
+	/**
+	 * Post a request for the agent to set its state up.
+	 */
+	public void postSetupSignal() {
+		mDispatcher.post( new SetupSignal(mObjectID,mRecipientID) );
+	}
+	
+
+	/**
+	 * Informs the recipient agent that the task was refused..
+	 */
+	public void postTaskRefusedSignal( int tid ) {
+		mDispatcher.post( new TaskRefusedSignal(mObjectID,mRecipientID,tid) );
+	}
+
+	
+	/**
+	 * Informs the recipient agent that the task was delivered... 
+	 */
+	public void postTaskDeliveredSignal( int tid ) {
+		mDispatcher.post( new TaskRefusedSignal(mObjectID,mRecipientID,tid) );
+	}
+	
+	
+	/**
+	 * Sends a message to inform the agent that it reached a city.
+	 */
+	public void postInCitySignal( String name, ArrayList<String> neighbors, ArrayList<TaskDescriptor> tasks ) {
+		InCitySignal.InCityObject obj = new InCitySignal.InCityObject();
+		obj.Name = name;
+		obj.Neighbors = neighbors;
+		obj.Tasks = tasks;
+		mDispatcher.post( new InCitySignal(mObjectID,mRecipientID,obj) );
+	}
+	
+	
+	/**
+	 * Method overloading for telling an agent it reached a city.
+	 */
+	public void postInCitySignal( InCitySignal.InCityObject obj ) {
+		mDispatcher.post( new InCitySignal(mObjectID,mRecipientID,obj) );
+	}
+	
+	/**
+	 * Method overloading for telling an agent it reached a city.
+	 */
+	public void postInCitySignal( InCitySignal obj ) {
+		mDispatcher.post( obj );
+	}
+}
+

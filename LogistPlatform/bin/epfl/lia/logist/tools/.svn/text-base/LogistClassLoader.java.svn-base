@@ -1,0 +1,41 @@
+package epfl.lia.logist.tools;
+
+/* import table */
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.ArrayList;
+
+
+/**
+ * 
+ * @author salves
+ *
+ */
+public class LogistClassLoader {
+ 
+	
+	
+	/**
+	 * Instantiate a class from the disk and from
+	 *  
+	 * @param name
+	 * @return
+	 * @throws Exception
+	 */
+	public static <T> T instiateClass( String name, String path ) 
+		throws Exception {
+
+		// retrieves the file path
+		URL url = new URL( "file", null, path );
+		URL[] urls = new URL[] { url };
+		
+		// creates a new class load
+		URLClassLoader cl = URLClassLoader.newInstance( urls );
+		
+		// loads a new clas from the disk
+		Class cls = cl.loadClass( name );
+		
+		// returns the instance of the class
+		return (T)cls.newInstance();
+	}	
+}

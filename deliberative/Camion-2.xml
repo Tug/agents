@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<history>
+	<round id="0">
+		<action id="0" type="move" reward="-6990.0" distance="466.0" />
+	</round>
+	<statistics>
+		<total-cost>6990.0</total-cost>
+		<total-reward>0.0</total-reward>
+		<total-gain>-6990.0</total-gain>
+		<total-distance>466.0</total-distance>
+	</statistics>
+</history>

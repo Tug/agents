@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+<!-- the simulation default file -->
+<simulation version="1.0" default="reactive">
+  
+  <!-- global properties 
+  
+  	   these properties are reported to every configuration
+  	   below in the hierarchy -->
+  <propset>
+    <property name="WorldXSize" value="640" />
+    <property name="WorldYSize" value="480" />
+  </propset>
+  
+  <!-- default configuration for reactive agents -->
+  <configuration name="reactive" file="reactive.xml"/>
+  
+  <!-- default configuration for deliberative agents
+  <configuration name="deliberative" file="deliberative.xml"/> -->
+  
+  <!-- default configuration for centralized agents
+  <configuration name="centralized" file="centralized.xml"/> -->
+  
+  <!-- default configuration for auction agents
+  <configuration name="auction" file="auction.xml"/> -->
+  
+</simulation>

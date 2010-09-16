@@ -1,0 +1,40 @@
+package epfl.lia.logist.agent.state;
+
+import epfl.lia.logist.agent.AgentProfile;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public abstract class VehicleAgentState extends AgentState {
+
+	/**
+	 * Constructor of the class. Initializes the agent with its
+	 * associated profile and the parent state...
+	 */
+	protected VehicleAgentState( AgentProfile ap, AgentState as ) {
+		super(ap,as);
+	}
+		
+	
+	/**
+	 * Indicates if agent is currently idle or 
+	 * busy waiting for comms
+	 * @return
+	 */
+	public boolean isIdle() {
+		return true;
+	}
+
+			
+	/**
+	 * Indicates if the agent has more work to do or not
+	 * @return
+	 */
+	public boolean hasWorkToDo() {
+		return true;
+	}	
+}
+

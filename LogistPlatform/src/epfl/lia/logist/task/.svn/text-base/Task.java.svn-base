@@ -1,0 +1,144 @@
+package epfl.lia.logist.task;
+
+
+/**
+ * The task structure representing a unit of work for the agents. Agents
+ * evaluate their capacity and decide to take or or that task.
+ */
+public class Task  {
+
+	/**
+	 * The ID of the task
+	 */
+	private int mID;
+
+	/**
+	 * The reward for each KM
+	 */
+	private double mRewardPerKm;
+
+	/**
+	 * The necessary load to carry the task
+	 */
+	private double mWeight;
+
+	/**
+	 * The city where task should be picked up
+	 */
+	private String mPickupCity;
+
+	/**
+	 * The city where task should be delivered
+	 */
+	private String mDeliveryCity;
+	
+	/**
+	 * Indicates if the task has been delivered
+	 */
+	private boolean mDelivered;
+	
+	/**
+	 * The current id
+	 */
+	private static int mNextID = 0;
+	
+	
+	/**
+	 * Creates the task from a descriptor
+	 * @param td
+	 */
+	public Task( TaskDescriptor td ) {
+		mID 	      = mNextID++;
+		mRewardPerKm  = td.RewardPerKm;
+		mWeight       = td.Weight;
+		mPickupCity   = td.PickupCity;
+		mDeliveryCity = td.DeliveryCity;
+	}
+		
+	
+	/**
+	 * Generates a descriptor for this task
+	 */
+	public TaskDescriptor getDescriptor() {
+		
+		// initialize the descriptor
+		TaskDescriptor td = new TaskDescriptor();
+		td.ID			= mID;
+		td.RewardPerKm  = mRewardPerKm;
+		td.Weight       = mWeight;
+		td.PickupCity   = mPickupCity;
+		td.DeliveryCity = mDeliveryCity;
+		
+		// return the descriptor
+		return td;
+	}
+	 
+	
+	/**
+	 * The ID of the task
+	 */
+	public int getID() {
+		return mID;
+	}
+
+	
+	/**
+	 * The reward for each KM
+	 */
+	public double getRewardPerKm() {
+		return mRewardPerKm;
+	}
+
+	
+	/**
+	 * The necessary load to carry the task
+	 */
+	public double getWeight() {
+		return mWeight;
+	}
+
+	
+	/**
+	 * The city where task should be picked up
+	 */
+	public String getPickupCity() {
+		return mPickupCity;
+	}
+
+	
+	/**
+	 * The city where task should be delivered
+	 */
+	public String getDeliveryCity() {
+		return mDeliveryCity;
+	}
+	
+	
+	/**
+	 * Indicates if the task was delivered or not
+	 */
+	public boolean getDelivered() {
+		return mDelivered;
+	}
+	
+	
+	/**
+	 * Compares two cities
+	 */
+	public boolean equals( Object obj ) {
+		Task t = (Task)obj;
+		return ( t!=null && t.mID==t.getID() );
+	}
+	
+	
+	/**
+	 * Defines if the task is delivered or not.
+	 */
+	public void setDelivered( boolean status ) {
+		mDelivered = status;
+	}
+	
+	public String toString() {
+		return "Task<" + this.mID + "," + this.mPickupCity + "," + this.mDeliveryCity + "," + this.mWeight + "," + this.mRewardPerKm + ">"; 
+	}
+}

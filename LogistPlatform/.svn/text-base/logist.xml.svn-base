@@ -1,0 +1,51 @@
+<log>
+	<properties>
+		<name>Logist Platform Log</name>
+		<date>Wed May 30 23:26:29 CEST 2007</date>
+		<lang>Francais</lang>
+	</properties>
+	<log-entries>
+		<logentry>
+			<severity>LSV_DEBUG</severity>
+			<module></module>
+			<line>0</line>
+			<date>Wed May 30 23:26:29 CEST 2007</date>
+			<message>Hello World ! !!</message>
+		</logentry>
+		<logentry>
+			<severity>LSV_INFO</severity>
+			<module></module>
+			<line>0</line>
+			<date>Wed May 30 23:26:29 CEST 2007</date>
+			<message>Hello World 2 !!!</message>
+		</logentry>
+		<logentry>
+			<severity>LSV_WARNING</severity>
+			<module></module>
+			<line>0</line>
+			<date>Wed May 30 23:26:29 CEST 2007</date>
+			<message>Hello World 3 !!!</message>
+		</logentry>
+		<logentry>
+			<severity>LSV_ERROR</severity>
+			<module></module>
+			<line>0</line>
+			<date>Wed May 30 23:26:29 CEST 2007</date>
+			<message>Hello World 4 !!!</message>
+		</logentry>
+		<logentry>
+			<severity>LSV_FATAL</severity>
+			<module></module>
+			<line>0</line>
+			<date>Wed May 30 23:26:29 CEST 2007</date>
+			<message>Hello World 5 !!!</message>
+		</logentry>
+		<logentry>
+			<severity>LSV_FATAL</severity>
+			<module></module>
+			<line>0</line>
+			<date>Wed May 30 23:26:29 CEST 2007</date>
+			<message>Hello World 6 !!!</message>
+		</logentry>
+	</log-entries>
+</log>

@@ -1,0 +1,191 @@
+package epfl.lia.logist.messaging;
+
+/* importation table */
+import java.util.HashMap;
+
+import epfl.lia.logist.config.Configuration;
+import epfl.lia.logist.core.IService;
+import epfl.lia.logist.logging.LogManager;
+import epfl.lia.logist.logging.LogSeverityEnum;
+import epfl.lia.logist.tools.AID;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class MessageDispatcher implements IService {
+	
+	/**
+	 * The hashmap of classes.
+	 */
+	private HashMap<AID,MessageBox> mMessageBoxes = null;
+	
+	/**
+	 * Singleton instance of the class
+	 */
+	private static MessageDispatcher msSingleton = null;
+	
+	
+	/**
+	 * Default constructor of the class
+	 */
+	public MessageDispatcher() {
+		if ( msSingleton == null )
+			msSingleton = this;
+	}
+	
+	
+	/**
+	 * Posts a new message. Recipient is given by Message.getRecipientID()
+	 * @param m
+	 */
+	public void post( Message<?> m ) {
+		
+		// if the destination address of the message is a 
+		// broadcast addres, then post msg to every message box
+		if ( m.getRecipientID() == AID.BROADCAST_ADDRESS ) {
+			postToEveryone(m);
+			
+		// try to post message to message box
+		} else if ( mMessageBoxes.containsKey(m.getRecipientID()) ) {
+			//LogManager.getInstance().log( "stdout", LogSeverityEnum.LSV_INFO, "Logging message: " + m );
+			MessageBox mBox = mMessageBoxes.get( m.getRecipientID() );
+			if ( mBox != null ) {
+				mBox.store( m );
+			}
+		}
+	}
+
+	
+	/**
+	 * Posts the message to every message box
+	 * @param m
+	 */
+	protected void postToEveryone( Message<?> m ) {
+		for( MessageBox mBox: mMessageBoxes.values() )
+			mBox.store( m );
+	}
+	
+	
+	/**
+	 * Retrieves a message if any from private message box
+	 * @param m
+	 * @return
+	 */
+	public Message<?> retrieve( MessageHandler m ) {
+		MessageBox mBox = mMessageBoxes.get( m.getObjectID() );
+		if ( mBox != null && !mBox.isEmpty() ) {
+			Message<?> mm = mBox.retrieve();
+			return mm; 
+		}
+		return null;
+	}
+
+	/**
+	 * Checks if there are new messages in the private message box
+	 * @param m
+	 * @return
+	 */
+	public boolean check( MessageHandler m ) {
+		MessageBox mBox = mMessageBoxes.get( m.getObjectID() );
+		if ( mBox != null )
+			return !mBox.isEmpty();
+		return false;
+	}
+
+	/**
+	 * Retrieves the global instance of the dispatcher
+	 * @return
+	 */
+	public static MessageDispatcher getInstance() {
+		return msSingleton;
+	}
+	
+	
+	/**
+	 * Registers a new message handler
+	 * @param m
+	 */
+	public void register( MessageHandler m ) {
+		if ( !mMessageBoxes.containsKey(m.getObjectID()) )
+			mMessageBoxes.put( m.getObjectID(), 
+							   new MessageBox() );
+	}
+
+	/**
+	 * Unregisters a message handler by passing the handler instance
+	 */
+	public boolean unregister( MessageHandler m ) {
+		return mMessageBoxes.remove(m.getObjectID()) != null;
+
+	}
+
+	/**
+	 * Unregisters a message handler by passing the ID of the handler
+	 * @param mid
+	 * @return
+	 */
+	public boolean unregister( AID mid ) {
+		return mMessageBoxes.remove(mid) != null;
+	}
+
+	
+	/**
+	 * Initializes the message dispatcher
+	 */
+	public void init() {
+		
+		// creates a new table of messageboxes
+		if ( mMessageBoxes == null)
+			mMessageBoxes = new HashMap<AID,MessageBox> ();
+		else
+			mMessageBoxes.clear();
+		
+		// explicitely calls the Garbage Collector to
+		// ensure that unneeded objects are properly
+		// destroyed..
+		Runtime.getRuntime().gc();
+	}
+
+
+	/**
+	 * Shuts all subsystems within the dispatcher
+	 *
+	 */
+	public void shutdown() {
+
+		// creates a new table of messageboxes
+		if ( mMessageBoxes == null )
+			return;
+		else {
+			for( MessageBox mb : mMessageBoxes.values() ) {
+				mb.trashAll();
+			}
+			mMessageBoxes.clear();
+		}
+		
+		// effectively deletes the object
+		mMessageBoxes = null;
+		
+		// explicitely calls the Garbage Collector to
+		// ensure that unneeded objects are properly
+		// destroyed..
+		Runtime.getRuntime().gc();
+	}
+
+	
+	/**
+	 * Sets the object up
+	 */
+	public void setup( Configuration cfg ) {
+	}
+	
+	/**
+	 * The text for the service management system
+	 */
+	public String toString() {
+		return "Inter-object messaging service";
+	}
+}

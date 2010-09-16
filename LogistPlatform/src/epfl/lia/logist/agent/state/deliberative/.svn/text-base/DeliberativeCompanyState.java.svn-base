@@ -1,0 +1,30 @@
+package epfl.lia.logist.agent.state;
+
+/* importation table */
+import epfl.lia.logist.agent.AgentProfile;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class DeliberativeCompanyState extends CompanyAgentState {
+
+	/**
+	 * Constructor of the state
+	 * @param ap
+	 * @param as
+	 */
+	public DeliberativeCompanyState( AgentProfile ap, AgentState as ) {
+		super(ap,as);
+	}
+			
+	
+	/**
+	 * Executes the vehavior of the agent state
+	 */
+	protected void execute() {
+	}
+}
+

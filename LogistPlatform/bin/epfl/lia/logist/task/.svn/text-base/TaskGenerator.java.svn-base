@@ -1,0 +1,144 @@
+package epfl.lia.logist.task;
+
+/* import table */
+import java.util.ArrayList;
+
+import epfl.lia.logist.logging.LogManager;
+import epfl.lia.logist.logging.LogSeverityEnum;
+import epfl.lia.logist.task.distribution.DiscreteTaskDistribution;
+import epfl.lia.logist.task.distribution.ITaskDistribution;
+
+
+/**
+ * 
+ *
+ */
+public class TaskGenerator {
+
+	/**
+	 * The distribution of the tasks
+	 */
+	private ITaskDistribution mTaskDistribution = null; 
+
+	/**
+	 * The size of a batch of tasks
+	 */
+	private int mBatchSize = 10;
+
+	/**
+	 * The max number of tasks that can be allocated
+	 */
+	private int mMaxAllocatable = -1;
+	
+	
+	/**
+	 * Constructor of the class
+	 * @param td
+	 */
+	public TaskGenerator( TaskgenDescriptor td ) throws Exception {
+		
+		// starts out by creating a task distribution
+		createTaskDistribution( td.Distribution );
+		
+		// then initialize params
+		mBatchSize = td.BatchSize;
+		mMaxAllocatable = td.MaxAllocatable;
+	}		
+
+	
+	/**
+	 * Create a new task distribution
+	 */
+	private void createTaskDistribution( TaskDistributionDescriptor tdd ) 
+		throws Exception 
+	{
+		
+		// the name of the distribution
+		String lDistributionType = tdd.Type;
+		
+		// what type of task distribution to create? 
+		if ( lDistributionType.equals("discrete") ) {
+			createDiscreteDistribution( tdd );
+		} else if ( lDistributionType.equals("poisson") ) {
+			createPoissonDistribution( tdd );
+		} else if ( lDistributionType.equals("gaussian") ) {
+			createGaussianDistribution( tdd );
+		}
+	}
+	
+	
+	/**
+	 * Creates a new discrete task distribution
+	 */
+	private void createDiscreteDistribution( TaskDistributionDescriptor tdd ) 
+		throws Exception 
+	{
+		// log the event
+		LogManager.getInstance().log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+				"Creating a discrete task distribution" );
+		
+		// are there some tasks ?
+		if ( tdd.TaskDescriptorList == null || 
+			(tdd.TaskDescriptorList!=null && tdd.TaskDescriptorList.size()<=0) ) 
+			throw new Exception( "No task was defined for current configuration" );
+		
+		// now we can create an array of tasks
+		ArrayList<Task> lTasks = new ArrayList<Task>();
+		
+		// for every task descriptor out there, create a task
+		for( TaskDescriptor td : tdd.TaskDescriptorList ) 
+			lTasks.add( new Task(td) );
+		
+		// now that we have the array, we can create a task distribution object
+		mTaskDistribution = new DiscreteTaskDistribution(lTasks);
+	}
+	
+	
+	/**
+	 * Creates a new poisson task distribution
+	 */
+	private void createPoissonDistribution( TaskDistributionDescriptor tdd ) 
+		throws Exception 
+	{
+		// log the event
+		LogManager.getInstance().log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+				"Creating a poisson task distribution" );
+		
+		throw new Exception( "The platform currently supports " +
+				"only discrete distributions" );
+	}
+	
+	
+	/**
+	 * Creates a new gaussian task distribution
+	 */
+	private void createGaussianDistribution( TaskDistributionDescriptor tdd ) 
+		throws Exception 
+	{
+		// log the event
+		LogManager.getInstance().log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+				"Creating a gaussian task distribution" );
+		
+		throw new Exception( "The platform currently supports " +
+		"only discrete distributions" );
+	}
+	
+	
+	/**
+	 * Generates a complete batch of tasks
+	 */
+	public ArrayList<Task> generate() {
+		if ( mTaskDistribution != null )
+			return mTaskDistribution.generate( mBatchSize );
+		return null;
+	}
+		
+	
+	/**
+	 * Retrives the task distribution followed by task generator
+	 * @return
+	 */
+	public ITaskDistribution getDistribution() {
+		return mTaskDistribution;
+	}
+}

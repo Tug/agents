@@ -1,0 +1,39 @@
+8
+
+dir
+0
+svn+ssh://iagents/users/iagents/SVN_REPO/LogistPlatform/trunk/src/epfl/lia/logist/agent/state/auction
+svn+ssh://iagents/users/iagents/SVN_REPO
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+AuctionCompanyState.java
+file
+
+
+
+add
+
+99cbe0a0e2380675bc1d8c90cd5fa5a4
+
+
+
+
+
+
+
+
+
+
+
+copied
+svn+ssh://iagents/users/iagents/SVN_REPO/LogistPlatform/trunk/src/epfl/lia/logist/agent/state/AuctionCompanyState.java
+79
+

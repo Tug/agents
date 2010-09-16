@@ -1,0 +1,30 @@
+Logist Platform RAW Log Output:
+===============================
+
+
+Starting date : mar. juin 19 22:40:28 CEST 2007
+Starting time : 22:40:28
+
+General environnement info:
+
+	java-vendor     : Sun Microsystems Inc.
+	java-vendor-url : http://java.sun.com/
+	java-version    : 1.6.0_01
+	os-arch         : x86
+	os-name         : Windows XP
+	user-name       : malves
+	cache-size      : 5
+	max-entries     : 0
+	debug-level     : debug
+
+
+Log file entries:
+
+[22:40:28] DEBUG   : This is a simple debug message !
+[22:40:28] INFO    : This is a simple piece of information !
+[22:40:28] WARNING : This is a warning !
+[22:40:28] ERROR   : This is a serious error !
+[22:40:28] FATAL   : This is a fatal error ! Must QUIT !!!
+
+
+--| End of log |------------------------------------------------------

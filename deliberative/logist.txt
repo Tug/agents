@@ -1,0 +1,142 @@
+Logist Platform RAW Log Output:
+===============================
+
+
+Starting date : mar. oct. 27 21:46:31 CET 2009
+Starting time : 21:46:31
+
+General environnement info:
+
+	java-vendor     : Sun Microsystems Inc.
+	java-vendor-url : http://java.sun.com/
+	java-version    : 1.6.0_16
+	os-arch         : i386
+	os-name         : Linux
+	user-name       : polo
+	cache-size      : 5
+	max-entries     : 0
+	debug-level     : debug
+
+
+Log file entries:
+
+[21:46:31] INFO    : Platform started...
+[21:46:31] INFO    : Reading the configuration file ...
+[21:46:31] INFO    : New configuration found: 'ex2-deliberative1'
+[21:46:31] INFO    : Found a new logset: 'deliberative-logset'
+[21:46:31] INFO    : Found a new taskset: 'default_taskset'
+[21:46:31] INFO    : Found a new toposet: 'topo_partOfEurope'
+[21:46:31] INFO    : New city found: 'Brest'
+[21:46:31] INFO    : New city found: 'Le Havre'
+[21:46:31] INFO    : New city found: 'Paris'
+[21:46:31] INFO    : New city found: 'Bordeaux'
+[21:46:31] INFO    : New city found: 'Marseille'
+[21:46:31] INFO    : New city found: 'Lyon'
+[21:46:31] INFO    : New city found: 'Genève'
+[21:46:31] INFO    : New city found: 'Monaco'
+[21:46:31] INFO    : New city found: 'Strasbourg'
+[21:46:31] INFO    : Found new route from 'Paris' to 'Brest'
+[21:46:31] INFO    : Found new route from 'Paris' to 'Bordeaux'
+[21:46:31] INFO    : Found new route from 'Paris' to 'Le Havre'
+[21:46:31] INFO    : Found new route from 'Paris' to 'Strasbourg'
+[21:46:31] INFO    : Found new route from 'Paris' to 'Lyon'
+[21:46:31] INFO    : Found new route from 'Strasbourg' to 'Genève'
+[21:46:31] INFO    : Found new route from 'Strasbourg' to 'Monaco'
+[21:46:31] INFO    : Found new route from 'Lyon' to 'Genève'
+[21:46:31] INFO    : Found new route from 'Lyon' to 'Marseille'
+[21:46:31] INFO    : Found new route from 'Bordeaux' to 'Marseille'
+[21:46:31] INFO    : Found new route from 'Bordeaux' to 'Lyon'
+[21:46:31] INFO    : Found new route from 'Bordeaux' to 'Brest'
+[21:46:31] INFO    : Found new route from 'Monaco' to 'Genève'
+[21:46:31] INFO    : Found new route from 'Marseille' to 'Monaco'
+[21:46:31] INFO    : Found a new agentset: 'deliberative-agents'
+[21:46:31] INFO    : Found a new agent named 'TransporteX' !
+[21:46:31] DEBUG   : Agent 'TransporteX' properties:
+[21:46:31] DEBUG   :    --> speed: 120.0
+[21:46:31] DEBUG   :    --> capacity: 80.0
+[21:46:31] DEBUG   :    --> costperkm: 15.0
+[21:46:31] DEBUG   :    --> color: java.awt.Color[r=255,g=0,b=0]
+[21:46:31] DEBUG   :    --> home: random
+[21:46:31] INFO    : Found a new agent named 'Camion-1' !
+[21:46:31] DEBUG   : Agent 'Camion-1' properties:
+[21:46:31] DEBUG   :    --> speed: 90.0
+[21:46:31] DEBUG   :    --> capacity: 80.0
+[21:46:31] DEBUG   :    --> costperkm: 15.0
+[21:46:31] DEBUG   :    --> color: java.awt.Color[r=0,g=0,b=255]
+[21:46:31] DEBUG   :    --> home: Paris
+[21:46:31] INFO    : Agent 'Camion-1' has no children !
+[21:46:31] INFO    : Log file path: logs/
+[21:46:31] INFO    : History file path: /home/polo/Work/EPFL/ia/deliberative
+[21:46:31] INFO    : 'Viewing service' is initilizing...
+[21:46:31] INFO    : 'Topology indexing service' is initilizing...
+[21:46:31] INFO    : 'Inter-object messaging service' is initilizing...
+[21:46:31] INFO    : 'Task management service' is initilizing...
+[21:46:31] INFO    : 'Agent management service' is initilizing...
+[21:46:31] INFO    : Initializing the agent management service...
+[21:46:31] INFO    : Initialisation of the agent management is complete.
+[21:46:31] INFO    : 'Viewing service' is auto-setting up...
+[21:46:31] INFO    : 'Topology indexing service' is auto-setting up...
+[21:46:31] INFO    : Creating the list of cities from descriptors...
+[21:46:31] INFO    : Created new city city<Brest,14,117>.
+[21:46:31] INFO    : Created new city city<Le Havre,222,41>.
+[21:46:31] INFO    : Created new city city<Paris,324,87>.
+[21:46:31] INFO    : Created new city city<Bordeaux,190,353>.
+[21:46:31] INFO    : Created new city city<Marseille,462,451>.
+[21:46:31] INFO    : Created new city city<Lyon,438,295>.
+[21:46:31] INFO    : Created new city city<Genève,496,263>.
+[21:46:31] INFO    : Created new city city<Monaco,556,421>.
+[21:46:31] INFO    : Created new city city<Strasbourg,570,105>.
+[21:46:31] INFO    : Creating the list of routes from descriptors.
+[21:46:31] INFO    : Creating new route between city<Paris,324,87> and city<Brest,14,117>.
+[21:46:31] INFO    : Creating new route between city<Paris,324,87> and city<Bordeaux,190,353>.
+[21:46:31] INFO    : Creating new route between city<Paris,324,87> and city<Le Havre,222,41>.
+[21:46:31] INFO    : Creating new route between city<Paris,324,87> and city<Strasbourg,570,105>.
+[21:46:31] INFO    : Creating new route between city<Paris,324,87> and city<Lyon,438,295>.
+[21:46:31] INFO    : Creating new route between city<Strasbourg,570,105> and city<Genève,496,263>.
+[21:46:31] INFO    : Creating new route between city<Strasbourg,570,105> and city<Monaco,556,421>.
+[21:46:31] INFO    : Creating new route between city<Lyon,438,295> and city<Genève,496,263>.
+[21:46:31] INFO    : Creating new route between city<Lyon,438,295> and city<Marseille,462,451>.
+[21:46:31] INFO    : Creating new route between city<Bordeaux,190,353> and city<Marseille,462,451>.
+[21:46:31] INFO    : Creating new route between city<Bordeaux,190,353> and city<Lyon,438,295>.
+[21:46:31] INFO    : Creating new route between city<Bordeaux,190,353> and city<Brest,14,117>.
+[21:46:31] INFO    : Creating new route between city<Monaco,556,421> and city<Genève,496,263>.
+[21:46:31] INFO    : Creating new route between city<Marseille,462,451> and city<Monaco,556,421>.
+[21:46:31] INFO    : Computing the shortest path for all possible pairs of cities.
+[21:46:31] INFO    : 'Inter-object messaging service' is auto-setting up...
+[21:46:31] INFO    : 'Task management service' is auto-setting up...
+[21:46:31] DEBUG   : Creating the task generator.
+[21:46:31] INFO    : Creating a probabilistic task distribution
+[21:46:31] DEBUG   : Binary density function seed value is 13325 !
+[21:46:31] DEBUG   : Normal density function seed value is 13325 !
+[21:46:31] DEBUG   : Uniform density function seed value is 13325 !
+[21:46:31] INFO    : 'Agent management service' is auto-setting up...
+[21:46:31] INFO    : Beginning creation of the individual agents...
+[21:46:31] DEBUG   : Spawning named agent 'TransporteX'...
+[21:46:31] DEBUG   : [TransporteX] Creating agent state...
+[21:46:31] DEBUG   : [TransporteX] Agent ID is ID:0...
+[21:46:31] DEBUG   : [TransporteX] Creating agent entity...
+[21:46:31] DEBUG   : [TransporteX] No behavior was found. Resetting to defaults !
+[21:46:31] DEBUG   : [TransporteX] Entity ID is ID:1...
+[21:46:31] DEBUG   : [TransporteX] Creating agent representation...
+[21:46:31] DEBUG   : Spawning children agents for 'TransporteX'...
+[21:46:31] DEBUG   : Spawning named agent 'Camion-1'...
+[21:46:31] DEBUG   : [Camion-1] Creating agent state...
+[21:46:31] DEBUG   : [Camion-1] Agent ID is ID:2...
+[21:46:31] DEBUG   : [Camion-1] Creating agent entity...
+[21:46:31] DEBUG   : [Camion-1] Entity ID is ID:3...
+[21:46:31] DEBUG   : [Camion-1] Creating agent representation...
+[21:46:31] DEBUG   : [Camion-1] Agent home location is city<Paris,324,87>...
+[21:46:31] DEBUG   : [TransporteX] Adding child agent 'Camion-1'...
+[21:46:31] DEBUG   : Spawning children agents for 'Camion-1'...
+[21:46:31] DEBUG   : All agents were successfully created !
+[21:46:31] INFO    : Agent creation and initialization is complete.
+[21:46:36] INFO    : Running setup()...
+[21:46:37] INFO    : Initializing the simulation model...
+[21:46:37] INFO    : Initializing the simulation model is complete.
+[21:46:37] INFO    : Initializing the scheduler...
+[21:46:37] INFO    : Initializing of the scheduler is complete.
+[21:46:37] INFO    : Initializing the display objects...
+[21:46:37] INFO    : Initialization of the display objects is complete...
+[21:46:37] INFO    : Lauching agents on first run...
+[21:46:37] INFO    : [AgentCamion-1] Agent received an INIT signal !
+[21:46:37] INFO    : [AgentCamion-1] Agent received a SETUP signal !

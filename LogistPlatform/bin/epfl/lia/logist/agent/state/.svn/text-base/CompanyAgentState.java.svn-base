@@ -1,0 +1,57 @@
+package epfl.lia.logist.agent.state;
+
+/* importation table */
+import epfl.lia.logist.agent.AgentProfile;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public abstract class CompanyAgentState extends AgentState {
+
+	/**
+	 * Constructor of the state
+	 * @param ap
+	 * @param as
+	 */
+	public CompanyAgentState( AgentProfile ap, AgentState as ) {
+		super(ap,as);
+	}
+			
+	
+	/**
+	 * Generates a descriptor for this task
+	 */
+	public void step() {
+		
+		// unregister the mail recipient
+		//mDispatcher.unregister( this );
+	}
+		
+	
+	/**
+	 * Indicates if agent is currently idle or 
+	 * busy waiting for comms
+	 * @return
+	 */
+	public boolean isIdle() {
+		return true;
+	}
+
+			
+	/**
+	 * Indicates if the agent has more work to do or not
+	 * @return
+	 */
+	public boolean hasWorkToDo() {
+		return true;
+	}
+	
+	/**
+	 * Executes the vehavior of the agent state
+	 */
+	protected abstract void execute(); 
+}
+

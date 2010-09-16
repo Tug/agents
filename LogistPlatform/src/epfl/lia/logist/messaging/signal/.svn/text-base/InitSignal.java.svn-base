@@ -1,0 +1,29 @@
+/**
+ * 
+ */
+package epfl.lia.logist.messaging.signal;
+
+import epfl.lia.logist.tools.AID;
+
+/**
+ * @author malves
+ *
+ */
+public class InitSignal extends Signal<Integer> {
+
+	/**
+	 * 
+	 */
+	public InitSignal(AID sid,AID rid) {
+		super(sid,rid,null);
+	}
+	
+	
+	/**
+	 * 
+	 */
+	public SignalTypeEnum getType() {
+		return SignalTypeEnum.SMT_INIT;
+	}
+
+}

@@ -1,0 +1,23 @@
+8
+
+dir
+0
+svn+ssh://iagents/users/iagents/SVN_REPO/LogistPlatform/trunk/config/topology
+svn+ssh://iagents/users/iagents/SVN_REPO
+add
+
+
+
+
+
+
+
+svn:special svn:externals svn:needs-lock
+
+switzerland.xml
+file
+
+
+
+add
+

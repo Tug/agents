@@ -1,0 +1,714 @@
+package epfl.lia.logist.agent;
+
+/* importation table */
+import java.awt.Color;
+import java.awt.Point;
+import java.util.ArrayList;
+
+import epfl.lia.logist.agent.behavior.BehaviorDescriptor;
+import epfl.lia.logist.agent.behavior.TestBehavior;
+import epfl.lia.logist.agent.entity.Agent;
+import epfl.lia.logist.agent.state.AgentState;
+import epfl.lia.logist.agent.state.AuctionCompanyState;
+import epfl.lia.logist.agent.state.CentralizedCompanyState;
+import epfl.lia.logist.agent.state.CentralizedVehicleState;
+import epfl.lia.logist.agent.state.DeliberativeCompanyState;
+import epfl.lia.logist.agent.state.DeliberativeVehicleState;
+import epfl.lia.logist.agent.state.ReactiveCompanyState;
+import epfl.lia.logist.agent.state.ReactiveVehicleState;
+import epfl.lia.logist.core.topology.City;
+import epfl.lia.logist.core.topology.Topology;
+import epfl.lia.logist.exception.AgentCreationException;
+import epfl.lia.logist.logging.LogManager;
+import epfl.lia.logist.logging.LogSeverityEnum;
+import epfl.lia.logist.messaging.MessageDispatcher;
+import epfl.lia.logist.messaging.signal.InitSignal;
+import epfl.lia.logist.messaging.signal.KillSignal;
+import epfl.lia.logist.messaging.signal.ResetSignal;
+import epfl.lia.logist.messaging.signal.SignalTypeEnum;
+import epfl.lia.logist.task.Task;
+import epfl.lia.logist.task.TaskManager;
+import epfl.lia.logist.tools.AID;
+import epfl.lia.logist.tools.interpolators.PointInterpolator;
+
+
+/**
+ * 
+ * @author malves
+ * 
+ */
+public class AgentProfile {
+
+	/* The profile state enum */
+	private enum ProfileStateEnum { MOVING, SERVICING, DELIVERING };
+	
+	/* The agent entity */
+	private Agent mAgent = null;
+
+	/* The identifier of the agent */
+	private AID mAgentID = null;
+
+	/* Determines if the agent is alive or dead */
+	private boolean mAlive = true;
+
+	/* The behavior of this agent */
+	private AgentBehaviorEnum mBehavior = null;
+
+	/* The capacity of the vehicle */
+	protected double mCapacity = 0.0;
+
+	/* The cost per km of the vehicle */
+	protected double mCostPerKm = 0.0;
+
+	/* The representation of the display */
+	private AgentDisplayable mDisplayable = null;
+
+	/* Keeps the history for this agent */
+	private AgentHistory mHistory = null;
+
+	/* The home location of the agent */
+	protected City mHome = null;
+
+	/* The load of the vehicle */
+	protected double mLoad = 0.0;
+
+	/* The private instance of the log manager */
+	private LogManager mLog = null;
+
+	/* The name of the agent */
+	protected String mName = null;
+
+	/* The parent profile */
+	private AgentProfile mParent;
+
+	/* The speed of the vehicle */
+	protected double mSpeed = 0.0;
+
+	/* The internal state of the agent */
+	private AgentState mState;
+
+	/* The total cost so far */
+	private double mTotalCost;
+
+	/* The total driven distance so far */
+	private double mTotalDistance;
+
+	/* The total reward so far */
+	private double mTotalReward;
+	
+	/* The type of this agent */
+	private AgentTypeEnum mType;
+	
+	/* The current city the agent is in */
+	private City mCurrentCity;
+	
+	/* The controller that makes agent move */
+	private PointInterpolator mInterpolator;
+	
+	/* Indicates if moving */
+	private boolean mIsMoving = false;
+
+	/* The topology object */
+	private Topology mTopology = null;
+	
+	/* The task manager */
+	private TaskManager mTaskMgr = null;
+	
+	/**/
+	private double mElapsedTime;
+	
+	/**/
+	private double mStartTime;
+	
+	/**/
+	private double mCurrentTime;
+	
+	/**/
+	private double mRouteDistance;
+	
+	/**/
+	private City mTargetCity;
+	
+	/**/
+	private City mDeliveryCity = null;
+	
+	/* The state of the internal marchine */
+	private ProfileStateEnum mCurrentState = ProfileStateEnum.SERVICING;
+	
+	
+	/**
+	 * The constructor of the agent.
+	 */
+	public AgentProfile() {
+		mLog = LogManager.getInstance();
+		mInterpolator = new PointInterpolator();
+		mTopology = Topology.getInstance();
+		mTaskMgr = TaskManager.getInstance();
+	}
+
+	/**
+	 * Create an agent from a single descriptor along with the parent profile.
+	 */
+	public void create(AgentDescriptor ad, AgentProfile parent)
+			throws AgentCreationException {
+
+		// stores the parent agent
+		mParent = parent;
+
+		// creates the properties from the descriptor
+		parseProperties( ad );
+
+		// log the event
+		mLog.log(LogManager.DEFAULT, LogSeverityEnum.LSV_DEBUG,
+				"Creating agent state...");
+
+		// creates the agent state
+		createAgentState(ad);
+		System.out.println( "Agent State ID = " + mState.getObjectID() );
+		
+		// log the event
+		mLog.log(LogManager.DEFAULT, LogSeverityEnum.LSV_DEBUG,
+				"Creating agent entity...");
+
+		// creates the agent
+		createAgentEntity(ad);
+		System.out.println( "Entity ID = " + mAgent.getObjectID() );
+		
+		// log the event
+		mLog.log(LogManager.DEFAULT, LogSeverityEnum.LSV_DEBUG,
+				"Creating agent representation...");
+
+		// creates the agent representation
+		if (mType == AgentTypeEnum.VEHICLE) {
+			createAgentRepresentation(ad);
+		}
+		
+		// set recipient
+		mState.setRecipient( mAgent.getObjectID() );
+	}
+
+	/**
+	 * This method creates the entity object for the agent. However, it does not
+	 * start its thread. It will start the threads when all agents will be asked
+	 * to initialize.
+	 * 
+	 * @param ad
+	 *            The Agent descriptor linked to this entity.
+	 */
+	private void createAgentEntity(AgentDescriptor ad)
+			throws AgentCreationException {
+
+		// creates a brand new agent
+		mAgent = new Agent(mState.getObjectID());
+
+		// registers the behaviors for this agent
+		registerBehaviors(ad.Behaviors);
+	}
+
+	/**
+	 * Creates a representation of the agent. A representation is a way to
+	 * separate the data and the presentation layers.
+	 * 
+	 * @param ad
+	 *            The descriptor linked to the agent.
+	 */
+	private void createAgentRepresentation(AgentDescriptor ad) 
+		throws AgentCreationException {
+
+		// Creates the representation of the agent
+		mDisplayable = new AgentDisplayable();
+
+		// try to set the color of the displayable
+		try {
+			mDisplayable.setColor( Color.decode(ad.Color) );
+		} catch( Exception e ) {
+			mDisplayable.setColor( Color.RED );
+		}
+		
+		System.out.println( "Setting position at " + mHome);
+		
+		// set the initial vehicle position
+		mDisplayable.move( mHome.getX(), mHome.getY() );
+		
+		City mTarget = (City)mTopology.getDestinations(mCurrentCity).get(0);
+		int mx = mTarget.getX() - mHome.getX();
+		int my = mTarget.getY() - mHome.getY();
+		double L = Math.sqrt( mx*mx + my*my );
+		double invL = (L<0.000001)?1.0:1.0/L;
+		mDisplayable.setDirection( (double)mx*invL, (double)my*invL );
+		
+		// set the inital direction
+		//
+		//moveAgentTo( mTarget.getX(), mTarget.getY(), mTopology.getDistance(mHome, mTarget));
+		
+	}
+
+	
+	/**
+	 * Invoked to create the state of the agent. The state of an agent is a
+	 * special class holding a finite state machine whose states change
+	 * according to actions performed by behaviors.
+	 * 
+	 * @param ad
+	 *            The descriptor of the current agent.
+	 */
+	private void createAgentState(AgentDescriptor ad)
+			throws AgentCreationException {
+
+		// creates a new behicle state
+		switch( mType ) {
+			case VEHICLE: createVehicleAgentState(ad, mState); break;
+			case COMPANY: createCompanyAgentState(ad); break;
+			default: throw new AgentCreationException("Found an invalid "
+				+ "agent type: '" + ad.Type + "'");
+		}
+		
+		// retrieves the agent iD
+		mAgentID = mState.getObjectID();
+	}
+
+	/**
+	 * Creates an agent company state. This state supervises the state of the
+	 * children agent state. Every children agent state must report received
+	 * actions to its parent to keep them synchronized..
+	 * 
+	 * @param ad
+	 *            The agent descriptor object.
+	 */
+	private void createCompanyAgentState(AgentDescriptor ad) {
+
+		// retrieves parent state
+		AgentState ps = mParent == null ? null : mParent.getState();
+
+		// creates a special agent depending on the case
+		switch (mBehavior) {
+			case REACTIVE: mState = new ReactiveCompanyState(this, ps); break;
+			case DELIBERATIVE: mState = new DeliberativeCompanyState(this, ps); break;
+			case CENTRALIZED: mState = new CentralizedCompanyState(this, ps); break;
+			case AUCTION: mState = new AuctionCompanyState(this, ps); break;
+			case CUSTOM:
+				break;
+		}
+	}
+
+	/**
+	 * Creates a vehicle agent state. We do not provide different agent
+	 * entities, however, each agent state is different, because it depends on
+	 * different states to achieve different behaviors. In this case, the agent
+	 * entity is only one container for the behaviors, while an agent state is
+	 * what controls it.
+	 * 
+	 * @param ad
+	 *            The agent descriptor object.
+	 */
+	private void createVehicleAgentState(AgentDescriptor ad, AgentState parent) {
+
+		// retrieves parent state
+		AgentState ps = mParent == null ? null : mParent.getState();
+
+		// creates a special agent depending on the case
+		switch (mBehavior) {
+			case REACTIVE: mState = new ReactiveVehicleState(this, ps); break;
+			case DELIBERATIVE: mState = new DeliberativeVehicleState(this, ps); break;
+			case CENTRALIZED: mState = new CentralizedVehicleState(this, ps); break;
+			case AUCTION:break;
+			case CUSTOM: break;
+		}
+	}
+
+	/**
+	 * Destroys the agent profile
+	 */
+	public void destroy() {
+	}
+
+	/**
+	 * Return the agent entity of this profile.
+	 */
+	public Agent getAgent() {
+		return mAgent;
+	}
+
+	/**
+	 * @return the mCostPerKm
+	 */
+	public double getCostPerKm() {
+		return mCostPerKm;
+	}
+
+	/**
+	 * @return the mCostPerKm
+	 */
+	public City getCurrentCity() {
+		return mCurrentCity;
+	}
+
+	/**
+	 * Return the displayable part of the agent.
+	 */
+	public AgentDisplayable getDisplayable() {
+		return mDisplayable;
+	}
+
+	/**
+	 * Return the history of this agent.
+	 */
+	public AgentHistory getHistory() {
+		return mHistory;
+	}
+
+	/**
+	 * @return the mHome
+	 */
+	public City getHome() {
+		return mHome;
+	}
+
+	/**
+	 * Return the identifier of the agent.
+	 */
+	public AID getID() {
+		return mAgentID;
+	}
+
+	/**
+	 * @return the mLoad
+	 */
+	public double getLoad() {
+		return mLoad;
+	}
+
+	/**
+	 * @return the mName
+	 */
+	public String getName() {
+		return mName;
+	}
+
+	/**
+	 * @return the mSpeed
+	 */
+	public double getSpeed() {
+		return mSpeed;
+	}
+
+	/**
+	 * Return the state of this agent.
+	 */
+	public AgentState getState() {
+		return mState;
+	}
+
+	/**
+	 * Return the total cost of this agent.
+	 */
+	public double getTotalCost() {
+		return mTotalCost;
+	}
+
+	/**
+	 * Return the total distance driven by this agent.
+	 */
+	public double getTotalDistance() {
+		return mTotalDistance;
+	}
+
+	/**
+	 * Return the total reward of this agent.
+	 */
+	public double getTotalReward() {
+		return mTotalReward;
+	}
+
+	/**
+	 * Return the type of this agent.
+	 */
+	public AgentTypeEnum getType() {
+		return mType;
+	}
+
+	
+	/**
+	 * Sends an initialization message to this agent 
+	 */
+	public void init() {
+		MessageDispatcher.getInstance().post(
+				new InitSignal(mState.getObjectID(), mAgent.getObjectID()));
+		getAgent().start( mName );
+	}
+
+	/**
+	 * Inidcate whether agent is still alive.
+	 */
+	public boolean isAlive() {
+		return mAlive;
+	}
+
+	/**
+	 * Kills the state of all internal objects
+	 */
+	public void kill() {
+		MessageDispatcher.getInstance().post(
+				new KillSignal(mState.getObjectID(), mAgent.getObjectID(),null) );
+	}
+
+	/**
+	 * Loads the agent from the disk
+	 */
+	public void load() {
+	}
+
+	/**
+	 * Finds the properties of the agent
+	 */
+	public void parseProperties( AgentDescriptor ad ) 
+		throws AgentCreationException {
+		
+		// setting toplevel properties for the agent
+		String lStrType = ad.Type.toLowerCase();
+		if (lStrType.equals("vehicle")) mType = AgentTypeEnum.VEHICLE;
+		else if (lStrType.equals("company")) mType = AgentTypeEnum.COMPANY;
+		else throw new AgentCreationException("Agent '" + ad.Name + "' has"
+					                     + "an unknown type '" + ad.Type + "'");
+
+		// setting the behavior of the agent
+		String lStrBehavior = ad.Behavior.toLowerCase();
+		if (lStrBehavior.equals("reactive")) mBehavior = AgentBehaviorEnum.REACTIVE;
+		else if (lStrBehavior.equals("deliberative")) mBehavior = AgentBehaviorEnum.DELIBERATIVE;
+		else if (lStrBehavior.equals("centralized")) mBehavior = AgentBehaviorEnum.CENTRALIZED;
+		else if (lStrBehavior.equals("auction")) mBehavior = AgentBehaviorEnum.AUCTION;
+		else if (lStrBehavior.equals("custom")) mBehavior = AgentBehaviorEnum.CUSTOM;
+		else throw new AgentCreationException("Agent '" + ad.Name + "' has "
+					+ "an unknown behavior '" + ad.Behavior + "'");
+
+		// selects the home
+		if ( ad.Home.equals("random")) {
+			mHome = Topology.getInstance().getRandomCity();
+		} else {
+			mHome = Topology.getInstance().getCity(ad.Home);
+		}
+
+		
+		//
+		mCurrentCity = mHome;
+		
+		// now retrieves the name of the agent
+		mName = ad.Name;
+		
+		// define the speed of the agent
+		mSpeed = Double.parseDouble(ad.Speed);
+
+		// define the capacity of the agent
+		mCapacity = Double.parseDouble(ad.Capacity);
+
+		// define the cost per km of the agent
+		mCostPerKm = Double.parseDouble(ad.CostPerKM);
+	}
+
+	/**
+	 * 
+	 * @param behaviors
+	 * @throws AgentCreationException
+	 */
+	private void registerBehaviors(ArrayList<BehaviorDescriptor> behaviors)
+			throws AgentCreationException {
+
+		// holds the list of the already loaded classes
+		// HashMap<String,Object> mLoadedClasses = new HashMap<String,Object>();
+
+		// for every behavior, we must register it
+		// for ( BehaviorDescriptor bd : behaviors ) {
+		// registerBehavior( bd );
+		// }
+		TestBehavior behavior = new TestBehavior();
+		mAgent.registerBehavior(SignalTypeEnum.SMT_INIT, behavior);
+		mAgent.registerBehavior(SignalTypeEnum.SMT_INCITY, behavior);
+		mAgent.registerBehavior(SignalTypeEnum.SMT_RESET, behavior);
+		mAgent.registerBehavior(SignalTypeEnum.SMT_SETUP, behavior);
+		mAgent.registerBehavior(SignalTypeEnum.SMT_KILL, behavior);
+
+	}
+
+	/**
+	 * Resets the state of all internal objects
+	 */
+	public void reset() {
+		MessageDispatcher.getInstance().post(
+				new ResetSignal(mState.getObjectID(), mAgent.getObjectID(),null) );
+	}
+	
+	/**
+	 * The step function of the agent
+	 */
+	public void step() {
+
+		switch( mCurrentState ) {
+			case SERVICING: mState.step(); break;
+			case MOVING: stepMove(); break;
+			case DELIVERING: stepDeliver(); break;
+		}
+	}
+	
+	public void stepMove() {
+
+		// computes the elapsed time since start time
+		mCurrentTime = (double)System.currentTimeMillis() * 0.001;
+		mElapsedTime = mCurrentTime - mStartTime;
+		
+		// computes the distance travelled so far
+		double lDistance = mElapsedTime*mSpeed;
+		
+		// if distance is greater or equal, we
+		// do not move anymore...
+		if ( lDistance >= mRouteDistance ) {
+			lDistance = mRouteDistance;
+			mCurrentCity = mTargetCity;
+			mCurrentState = ProfileStateEnum.SERVICING;
+		} else {
+			mDisplayable.move( mInterpolator.interpolate(lDistance/mRouteDistance) );	
+		}
+	}
+	
+	
+	public void stepDeliver() {
+		/**
+		 * // System.out.println( "state == MOVING" );
+				
+				// computes the elapsed time
+				mCurrentTime = (double)System.currentTimeMillis() * 0.001;
+				mElapsedTime = mCurrentTime - mStartTime;
+				
+				// computes the distance travelled so far
+				double lDistance = mElapsedTime*mSpeed;
+				
+				// if distance is greater or equal, we
+				// do not move anymore...
+				if ( lDistance >= mRouteDistance ) {
+					
+					// 
+					if ( mCurrentCity.equals(mDeliveryCity) ) {
+						deliverTask();
+						mCurrentState = ProfileStateEnum.SERVICING;
+					} else {
+						City next = mTopology.moveOnShortestPath( mCurrentCity, mDeliveryCity );
+						if ( next != null )
+							moveAgent( next );
+						else {
+							mCurrentState = ProfileStateEnum.SERVICING;
+							return;
+						}
+					}
+					
+					// is there a next city ?
+					//lDistance = mRouteDistance;
+					//mCurrentCity = mTargetCity;
+					//mTargetCity = null;
+				}
+
+				// end of interpolation
+				mDisplayable.move( mInterpolator.interpolate(lDistance/mRouteDistance) );
+				
+				break;
+		 */
+	}
+	
+	
+	public void deliverTask() {
+		System.out.println( "Task was delivered..." );
+	}
+	/* Changes the state of the internal machine */
+	public void changeState( ProfileStateEnum s ) {
+		mCurrentState = s;
+	}
+	
+	
+	/**
+	 * Stores the agent on disk
+	 */
+	public void store() {
+	}
+	
+	
+	/**
+	 * This function indicates whether the agent is moving or
+	 * not...
+	 */
+	public boolean isMoving() {
+		return (ProfileStateEnum.MOVING==mCurrentState);
+	}
+
+	
+	/**
+	 * Indicates if the task was pickup up
+	 */
+	public boolean pickupTask( Integer id ) {
+		
+		// first, tries to allocate the task
+		Task t = mTaskMgr.allocate( id.intValue(),mCurrentCity,mAgentID );
+		
+		// if allocation is performed, make the vehicle move
+		// on the shortest path to destination...
+		if ( t != null ) {
+
+			// retrieves the task if it exists...
+			System.out.println( "Task: " + t );
+			
+			// log the event
+			System.out.println( "Delivery city: " + t.getDeliveryCity() );
+			 
+			// retrieve the delivery city
+			mDeliveryCity = mTopology.getCity( t.getDeliveryCity() );
+			
+			System.out.println( "Delivery city: " + mDeliveryCity );
+			
+			// moves the agent to the delivery agent
+			//moveAgent( mDeliveryCity );
+			
+			// delivers the task
+			mCurrentState = ProfileStateEnum.DELIVERING;
+		} else { 
+			return false; 
+		}
+		
+		System.out.println( "Why here: " + t );
+		return (t!=null);
+	}
+	
+
+	/**
+	 * Moves an agent to the requested city.
+	 */
+	public void moveAgentTo( int X, int Y, double distance ) {
+		
+		// prepares the interpolator
+		mInterpolator.setFrom( new Point(mCurrentCity.getX(), mCurrentCity.getY()) );
+		mInterpolator.setTo( new Point(mTargetCity.getX(), mTargetCity.getY()) );
+
+		//System.out.println( "mTopology.getDistance( " + mCurrentCity + ", " + mTargetCity + " )" ); 
+		mRouteDistance = distance;
+		
+		// defines the direction and angle
+		int mx = X - mCurrentCity.getX();
+		int my = Y - mCurrentCity.getY();
+		double L = Math.sqrt( mx*mx + my*my );
+		double invL = (L<0.000001)?1.0:1.0/L;
+		mDisplayable.setDirection( (double)mx*invL, (double)my*invL );
+		
+		// defines the current time
+		mStartTime = (double)System.currentTimeMillis() * 0.001;
+		
+	}
+	
+	
+	/**
+	 * Moves the agent to the target city. Note that the city must be
+	 * directly accessible from the current city. If that's not the case,
+	 * then stay on the same city...
+	 */
+	public void moveAgent( String target ) {
+		mTargetCity = mTopology.getCity(target);
+		//System.out.println( "Moving from " + mCurrentCity + " to " + mTargetCity );
+		moveAgentTo( mTargetCity.getX(), mTargetCity.getY(), mTopology.getDistance(mCurrentCity, mTargetCity) );
+		changeState( ProfileStateEnum.MOVING );	
+	}
+}

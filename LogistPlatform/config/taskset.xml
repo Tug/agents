@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<taskset name="default_taskset">
+	<generator>
+		<propset>
+			<property name="max-allocatable" value="2" />
+			<property name="batch-size" value="2" />
+			<property name="distribution" value="sample2" />
+		</propset>
+
+		<!-- some discrete distribution -->
+		<distribution name="sample1" type="discrete" >
+			<propset />
+			<tasks>
+				<task pickup="Genève" delivery="Lausanne" weight="10.0" reward="14.0" />
+				<task pickup="Bern" delivery="Sion" weight="12.0" reward="13.5" />
+				<task pickup="Zürich" delivery="St-Gallen" weight="18.0" reward="21.5" />
+				<!-- 
+				<task pickup="Genève" delivery="St-Gallen" weight="15.0" reward="20.0" />
+				<task pickup="Sion" delivery="Lausanne" weight="12.0" reward="21.5" />
+				<task pickup="Sion" delivery="Basel" weight="18.0" reward="21.5" />
+				<task pickup="Genève" delivery="Sion" weight="15.0" reward="20.0" />
+				 -->
+			</tasks>
+		</distribution>
+		
+		<!--  this distribution is based on probabilistic distributions. in
+			  the distribution below, we set a certain number of probabilities
+			  manually. for the probabilities, we set a binary distribution
+			  that will assign 1.0 or 0.0 to the probability of having a
+			  task in a city. For the rewards, we set a probability distribution
+			  assigning normal values from 55.0 to 65.  -->
+		<distribution name="sample2" type="probabilistic" >
+		
+			<!--  properties for the distribution -->
+			<propset>
+				<property name="probability" value="binary-1" />
+                <property name="reward" value="gaussian-1" />
+                <property name="weight" value="constant-1" />
+                <property name="defaults" value="no" />
+                <property name="normalize" value="yes" />
+                <property name="probability-default" value="0.0" />
+                <property name="reward-default" value="0.0" />
+			</propset>
+            
+            <!-- hand written values -->
+            <probabilities>
+            <!--  
+                <probability from="Genève" to="Le Havre" task="1.0" reward="60.0" />
+                <probability from="Paris" to="Marseille" task="0.0" reward="55.0" />
+                <probability from="Lyon" to="Marseille" task="1.0" reward="57.0" />
+                <probability from="Monaco" to="Paris" task="1.0" reward="38.0" />
+                -->
+            </probabilities>
+            
+            <!-- in this section, we can redefine density functions. Every
+            	 function for which we want customized params, we must
+            	 create a function element and assign the base type we
+            	 want (gaussian or binary for this release)-->
+            <density-functions>
+	            
+	            <!-- gaussian density function -->
+	            <function name="gaussian-1" type="gaussian" >
+	                <property name="variance" value="0.2" />
+	                <property name="mean" value="0.5" />
+	                <property name="y-max" value="60.0" />
+	                <property name="y-min" value="55.0" />
+	                <property name="seed" value="13325" />
+	            </function>
+	 
+	            <!-- binary density function-->
+	            <function name="binary-1" type="binary" >
+	                <property name="min" value="0" />
+	                <property name="max" value="1" />
+	            </function>
+	            
+	            <!-- constant density function-->
+	            <function name="constant-1" type="constant" >
+	                <property name="constant" value="16" />
+	            </function>
+            </density-functions>
+		</distribution>
+	
+		<!-- some discrete distribution -->
+		<distribution name="england-taskset" type="discrete" >
+			<propset />
+			<tasks>
+				<task pickup="London" delivery="Plymouth" weight="10.0" reward="14.0" />
+				<task pickup="Plymouth" delivery="Newcastle" weight="12.0" reward="13.5" />
+				<task pickup="Manchester" delivery="Cardiff" weight="18.0" reward="21.5" />
+				<task pickup="Leeds" delivery="Norwich" weight="15.0" reward="20.0" />
+			</tasks>
+		</distribution>
+	</generator>
+</taskset>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- the main configuration for deliberative agents -->
+<configuration name="ex3-centralized">
+
+	<!-- defines the properties for this configuration -->
+	<propset>
+		<property name="world-xsize" value="665" />
+		<property name="world-ysize" value="900" />
+		<property name="backcolor" value="#ffffff" />
+		<property name="forecolor" value="#000000" />
+		<property name="num-rounds" value="1" />
+		<property name="reset-timeout" value="10000" />
+		<property name="init-timeout" value="10000" />
+		<property name="setup-timeout" value="30000" />
+		<property name="kill-timeout" value="1000" />
+		<property name="city-name-color" value="#002233" />
+		<property name="city-color" value="#00aaff" />
+		<property name="city-perim-color" value="#555555" />
+		<property name="city-radius" value="8" />
+		<property name="task-text-color" value="1000" />
+		<property name="task-pickup-color" value="#ff0000" />
+		<property name="task-deliver-color" value="#0000ff" />
+		<property name="task-indicator-color" value="#000000" />
+		<property name="show-legend" value="yes" />
+		<property name="show-gui" value="yes" />
+		<property name="classpath" value="../AgentDevProject/;" />
+		<property name="log-dir" value="logs/" />
+		<property name="history-dir" value="history/" />
+		<property name="task-threshold" value="5" />
+		<property name="antialias-scene" value="yes" />
+		<property name="antialias-text" value="yes" />		
+	</propset>
+	
+	
+	<!-- this sections describes the properties of
+	     the logs -->
+	<logset name="centralized-logset">
+	</logset>
+	
+	<!-- takes the taskset from an external file -->
+	<taskset name="default_taskset" file="taskset.xml" />
+	
+	<!-- takes the topology from an external file -->
+	<toposet name="topo_england" file="topology/england.xml" />
+	
+	<!-- this section describes all agents in the simulation -->
+	<agentset name="centralized-agents">
+		
+		<!--  defines top-level properties for the agents -->
+		<propset />	
+		
+		<!-- the company agent ruling them all -->
+		<agent name="Matrix">
+			<definition>
+				<propset>
+					<property name="type" value="company" />
+					<property name="behavior" value="centralized" />
+				</propset>
+				<behaviorset>
+					<behavior signal="*" handler="centralized.CentralizedCompanyBehavior" />
+				</behaviorset>
+			</definition>
+			<children>
+				<agent name="Neo">
+					<definition>
+						<propset>
+							<property name="type" value="vehicle" />
+							<property name="behavior" value="centralized" />
+							<property name="active" value="yes" />
+							<property name="color" value="#0000ff" />
+							<property name="home" value="Paris" />
+							<property name="speed" value="90" />
+						</propset>
+						<behaviorset>
+							<behavior signal="*" handler="centralized.CentralizedVehicleBehavior" />
+						</behaviorset>
+					</definition>
+					<children />
+				</agent>
+				<agent name="Morpheus">
+					<definition>
+						<propset>
+							<property name="type" value="vehicle" />
+							<property name="behavior" value="centralized" />
+							<property name="active" value="yes" />
+							<property name="color" value="#ff0000" />
+							<property name="home" value="Lyon" />
+							<property name="speed" value="90" />
+						</propset>
+						<behaviorset>
+							<behavior signal="*" handler="centralized.CentralizedVehicleBehavior" />
+						</behaviorset>
+					</definition>
+					<children />
+				</agent>
+			</children>
+		</agent>
+	</agentset>
+</configuration>

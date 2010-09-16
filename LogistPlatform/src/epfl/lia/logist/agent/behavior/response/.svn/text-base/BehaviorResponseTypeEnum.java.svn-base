@@ -1,0 +1,35 @@
+package epfl.lia.logist.agent.behavior.response;
+
+public enum BehaviorResponseTypeEnum {
+
+		/**
+		 * 
+		 */
+		BRT_NULL,
+		
+		/**
+		 * 
+		 */
+		BRT_TEXT,
+		
+		/**
+		 * 
+		 */
+		BRT_MOVETO,
+		
+		/**
+		 * 
+		 */
+		BRT_PICKUP,
+		
+		/**
+		 * 
+		 */
+		BRT_STATE,
+		
+		
+		/**
+		 * 
+		 */
+		BRT_READY
+}

@@ -1,0 +1,30 @@
+/**
+ * 
+ */
+package epfl.lia.logist.messaging.signal;
+
+import epfl.lia.logist.tools.AID;
+
+/**
+ * @author malves
+ *
+ */
+public class InStateSignal extends Signal<Object> {
+
+	/**
+	 * @param sid
+	 * @param rid
+	 */
+	public InStateSignal(AID sid, AID rid, Object obj) {
+		super(sid,rid,obj);
+	}
+
+	/* (non-Javadoc)
+	 * @see epfl.lia.logist.messaging.signal.Signal#getType()
+	 */
+	@Override
+	public SignalTypeEnum getType() {
+		return SignalTypeEnum.SMT_INSTATE;
+	}
+
+}

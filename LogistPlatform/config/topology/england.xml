@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<toposet name="topo_england" >
+
+	<!-- properties of the topology -->
+	<propset>
+		<property name="background" value="ressources/switzerland.jpg" />
+	</propset>
+	
+	<!-- the list of cities in the topology -->
+	<cities>
+		<city name="London" x="484" y="565"/>
+		<city name="Newcastle" x="349" y="36"/>
+		<city name="Leeds" x="355" y="220"/>
+		<city name="Sheffield" x="362" y="284"/>
+		<city name="Birmingham" x="323" y="420"/>
+		<city name="Cardiff" x="206" y="568"/>
+		<city name="Plymouth" x="118" y="729"/>
+		<city name="Norwich" x="613" y="399"/>
+		<city name="Liverpool" x="225" y="279"/>
+		<city name="Manchester" x="292" y="270"/>
+		<city name="Portsmouth" x="397" y="667"/>
+	</cities>
+
+	<!-- the list of routes in the topology 
+	
+		@note: All distances are given in miles !!!
+	-->
+	<routes>
+		<route distance="170" from="Plymouth" to="Portsmouth"/>
+		<route distance="74.8" from="Portsmouth" to="London"/>
+		<route distance="115" from="London" to="Norwich"/>
+		<route distance="118" from="London" to="Birmingham"/>
+		<route distance="115" from="Birmingham" to="Cardiff"/>
+		<route distance="94.9" from="Birmingham" to="Manchester"/>
+		<route distance="90.2" from="Birmingham" to="Sheffield"/>
+		<route distance="34.7" from="Manchester" to="Liverpool"/>
+		<route distance="72.5" from="Liverpool" to="Leeds"/>
+		<route distance="41.3" from="Sheffield" to="Leeds"/>
+		<route distance="98.5" from="Leeds" to="Newcastle"/>
+	</routes>
+
+</toposet>

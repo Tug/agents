@@ -1,0 +1,40 @@
+package epfl.lia.logist.task.distribution;
+
+/* import table */
+import java.util.ArrayList;
+import epfl.lia.logist.task.Task;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class GaussianTaskDistribution implements ITaskDistribution {
+	
+	/**
+	 * Generates one task 
+	 * @return
+	 */
+	public Task generate() {
+		return null;
+	}
+	
+
+	/**
+	 * Generates ‘count’ tasks from the distribution
+	 */
+	public ArrayList<Task> generate( int count ) {
+		return null;
+	}
+
+		
+	/**
+	 * Retrives a parameter from text distribution
+	 * @param name
+	 * @return
+	 */
+	public Object param( String name ) {
+		return null;
+	}
+}

@@ -1,0 +1,6 @@
+# environnements properties
+build.source = src/
+build.target = bin/
+build.docs = docs/
+build.output = output/
+build.classpath = bin/

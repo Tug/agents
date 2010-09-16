@@ -1,0 +1,25 @@
+Logist Platform RAW Log Output:
+===============================
+
+
+Starting date : lun. oct. 12 21:35:08 CEST 2009
+Starting time : 21:35:08
+
+General environnement info:
+
+	java-vendor     : Sun Microsystems Inc.
+	java-vendor-url : http://java.sun.com/
+	java-version    : 1.6.0_16
+	os-arch         : i386
+	os-name         : Linux
+	user-name       : polo
+	cache-size      : 1
+	max-entries     : -1
+	debug-level     : debug
+
+
+Log file entries:
+
+
+
+--| End of log |------------------------------------------------------

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- the main configuration for test agents -->
+<configuration name="ex1-reactive3">
+
+	<!-- defines the properties for this configuration -->
+	<propset>
+		<property name="world-xsize" value="640" />
+		<property name="world-ysize" value="480" />
+		<property name="backcolor" value="#ffffff" />
+		<property name="forecolor" value="#000000" />
+		<property name="num-rounds" value="2" />
+		<property name="reset-timeout" value="40000" />
+		<property name="init-timeout" value="10000" />
+		<property name="kill-timeout" value="1000" />
+		<property name="city-name-color" value="#002233" />
+		<property name="city-color" value="#ffaa00" />
+		<property name="city-perim-color" value="#555555" />
+		<property name="city-radius" value="8" />
+		<property name="task-text-color" value="1000" />
+		<property name="task-pickup-color" value="#ff0000" />
+		<property name="task-deliver-color" value="#0000ff" />
+		<property name="task-indicator-color" value="#000000" />
+		<property name="show-legend" value="yes" />
+		<property name="show-gui" value="yes" />
+		<property name="classpath" value="./src/;" />
+		<property name="taskmgr-log" value="logs/task-log.xml" />
+		<property name="agentmgr-log" value="logs/agent-log.xml" />
+		<property name="history-dir" value="./logs" />
+		<property name="log-dir" value="./logs" />
+	</propset>
+	
+	
+	<!-- this sections describes the properties of
+	     the logs -->
+	<logset name="reactive_logset">
+		<propset>
+		</propset>
+		<log name="log1">
+		</log>
+	</logset>
+	
+	<!-- takes the taskset from an external file -->
+	<taskset name="default_taskset" file="reactiveTaskSet.xml" />
+	
+	<!-- takes the topology from an external file -->
+	<toposet name="topo_partOfEurope" file="topology/reactiveTopology.xml" />
+	
+	<!-- this section describes all agents in the simulation -->
+	<agentset name="reactive-agents">
+		
+		<propset />	
+		
+		<!-- the company agent ruling them all -->
+		<agent name="Avalanche">
+			<definition>
+				<propset>
+					<property name="type" value="company" />
+					<property name="behavior" value="reactive" />
+				</propset>
+				<behaviorset />
+			</definition>
+			<children>
+				<agent name="Cloud">
+					<definition>
+						<propset>
+							<property name="speed" value="80" />
+							<property name="capacity" value="100" />
+							<property name="costperkm" value="5" />
+							<property name="home" value="Paris" />
+							<property name="color" value="#ff0000" />
+							<property name="type" value="vehicle" />
+							<property name="behavior" value="reactive" />
+						</propset>
+						<behaviorset>
+							<behavior signal="*" handler="org.logist.reactive.ReactiveBehavior" />
+						</behaviorset>
+					</definition>
+					<children />
+				</agent>
+				<agent name="Tifa">
+					<definition>
+						<propset>
+							<property name="speed" value="40" />
+							<property name="capacity" value="100" />
+							<property name="costperkm" value="5" />
+							<property name="home" value="Marseille" />
+							<property name="type" value="vehicle" />
+							<property name="behavior" value="reactive" />
+							<property name="color" value="#ff8000" />
+						</propset>
+						<behaviorset>
+							<behavior signal="*" handler="org.logist.reactive.ReactiveBehavior" />
+						</behaviorset>
+					</definition>
+					<children />
+				</agent>
+				<agent name="Lake">
+					<definition>
+						<propset>
+							<property name="speed" value="40" />
+							<property name="capacity" value="100" />
+							<property name="costperkm" value="5" />
+							<property name="home" value="Lyon" />
+							<property name="type" value="vehicle" />
+							<property name="behavior" value="reactive" />
+							<property name="color" value="#ff8000" />
+						</propset>
+						<behaviorset>
+							<behavior signal="*" handler="org.logist.reactive.ReactiveBehavior" />
+						</behaviorset>
+					</definition>
+					<children />
+				</agent>
+			</children>
+		</agent>
+	</agentset>
+</configuration>

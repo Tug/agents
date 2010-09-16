@@ -1,0 +1,35 @@
+package epfl.lia.logist.task.distribution;
+
+/* import table */
+import java.util.ArrayList;
+import epfl.lia.logist.task.Task;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public interface ITaskDistribution {
+	
+	/**
+	 * Generates one task 
+	 * @return
+	 */
+	public Task generate();
+	
+
+	/**
+	 * Generates ‘count’ tasks from the distribution
+	 */
+	public ArrayList<Task> generate( int count ); 
+
+		
+	/**
+	 * Retrives a parameter from text distribution
+	 * @param name
+	 * @return
+	 */
+	public Object param( String name );
+
+}

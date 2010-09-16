@@ -1,0 +1,524 @@
+package epfl.lia.logist.core;
+
+/* import table */
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Properties;
+
+import uchicago.src.sim.engine.Schedule;
+import uchicago.src.sim.engine.SimModelImpl;
+import uchicago.src.sim.gui.DisplaySurface;
+import uchicago.src.sim.gui.MultiObject2DDisplay;
+import uchicago.src.sim.gui.Object2DDisplay;
+import epfl.lia.logist.agent.AgentManager;
+import epfl.lia.logist.agent.AgentProfile;
+import epfl.lia.logist.config.Configuration;
+import epfl.lia.logist.core.listeners.ITopologyListener;
+import epfl.lia.logist.core.topology.Topology;
+import epfl.lia.logist.core.view.ModelView;
+import epfl.lia.logist.logging.LogManager;
+import epfl.lia.logist.logging.LogSeverityEnum;
+import epfl.lia.logist.messaging.MessageDispatcher;
+import epfl.lia.logist.task.TaskManager;
+import epfl.lia.logist.tools.LogistConstants;
+
+
+/**
+ * The simulation model.
+ */
+public class SimulationModel extends SimModelImpl implements ActionListener {
+
+	/* The width of the world grid */
+	private int mWorldXSize = 500;
+	
+	/* The height of the world grid */
+	private int mWorldYSize = 350;
+	
+	/* The scheduler object */
+	private Schedule mSchedule = null;
+	
+	/* The display surface on which each object draws */
+	protected DisplaySurface mDisplay = null;
+
+	/* The views holding displayable data */
+	private ModelView mViews = null;
+	
+	/* The primary instance of the agent manager */
+	private AgentManager mAgentMgr = null;
+	
+	/* The initial instance of the message dispatcher */
+	private MessageDispatcher mMsgDisp = null;
+	
+	/* The initial instance of the task manager */	
+	private TaskManager mTaskMgr = null;
+	
+	/* The primary instance of the log manager */
+	private LogManager mLogMgr = null;
+	
+	/* The primary instance of the topology object */
+	private Topology mTopology = null;
+	
+	/* This is the first run */
+	private boolean mFirstRun = true;
+	
+	/* The number of runs */
+	private int mRounds = 1;
+	
+	/* A list of all services */
+	private ArrayList<IService> mServices = null;
+	
+	/* A list of topology listeners */
+	private ArrayList<ITopologyListener> mListeners = null;
+	
+	
+	/**
+	 * Constructs the model and all connected systems
+	 * @param cfg
+	 */
+	public SimulationModel() {
+		mLogMgr = LogManager.getInstance();
+		mServices = new ArrayList<IService>();
+		mListeners = new ArrayList<ITopologyListener>();
+	}
+		
+	
+	/**
+	 * Creates from a configuration
+	 */
+	public void createFromConfiguration( Configuration c ) 
+		throws Exception {
+		
+		// copies the 
+		parseProperties( c.Propset );
+		
+		// instantiate all services
+		instantiateServices();	
+		
+		// register all services
+		registerServices();
+		
+		// initialize all services
+		initializeServices();
+		
+		// sets every service up
+		setupServices( c );
+	}
+
+	
+	/**
+	 * Adds a new listener object
+	 */
+	public void addListener( ITopologyListener tcl ) {
+		mListeners.add( tcl );
+	}
+	
+	
+	/**
+	 * Return the listener list
+	 */
+	public ArrayList<ITopologyListener> getListeners() {
+		return mListeners;
+	}
+	
+	
+	/**
+	 * Parses the properties of the configuration.
+	 */
+	public void parseProperties( Properties propset )  {
+	
+		// if the property set is null, then return
+		if ( propset==null ) return;
+		
+		// tries parsing properties
+		try {
+	
+			// does the property set defines the WorldXSize variable ?
+			if ( propset.containsKey("WorldXSize") ) 
+				mWorldXSize = Integer.parseInt( propset.getProperty("WorldXSize") );
+			
+			// does the property set defines the WorldSizeY variable ?
+			if ( propset.containsKey("WorldYSize") )
+				mWorldYSize = Integer.parseInt( propset.getProperty("WorldYSize") );
+	
+			// does the property set defines the Rounds variable ?
+			if ( propset.containsKey("Rounds") )
+				mRounds = Integer.parseInt( propset.getProperty("Rounds") );
+			
+		} catch ( Exception e ) {
+			// . . .
+		}
+	}
+	
+	
+	//-------------------------------------------------------------------------
+	// S E R V I C E   M A N A G E M E N T
+	//-------------------------------------------------------------------------
+	
+	
+	/**
+	 * Creates a new instance for every service out there
+	 */
+	public void instantiateServices() {
+		mViews = new ModelView( mWorldXSize, mWorldXSize );
+		mTopology = new Topology();
+		mMsgDisp = new MessageDispatcher();
+		mTaskMgr = new TaskManager( mTopology );
+		mAgentMgr = new AgentManager();
+	}
+	
+	
+	/**
+	 * Register all services in the right order
+	 */
+	public void registerServices() {
+		
+		// adds the services into the list
+		mServices.add( mViews );
+		mServices.add( mTopology );
+		mServices.add( mMsgDisp );
+		mServices.add( mTaskMgr );
+		mServices.add( mAgentMgr );
+		
+		// adds the listeners for the topology
+		mTopology.addListener( mViews.getTopologyView() );
+		mTopology.addListener( mTaskMgr );
+		
+		// adds the listeners for agents
+		mAgentMgr.addListener( mViews.getAgentView() );
+		mAgentMgr.addListener( mTaskMgr );
+	}
+	
+	
+	/**
+	 * Called everytime and event is performed
+	 */
+	public void actionPerformed( ActionEvent e ) {
+		//destroyServices();
+	}
+		
+	
+	/**
+	 * Initialize all services
+	 */
+	public void initializeServices() throws Exception {
+		for( IService service :  mServices ) {
+			mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, "'" + service.toString() + 
+					"' is initilizing..." );
+			service.init();
+		}
+	}
+	
+	
+	/**
+	 * Sets every registered service up and running
+	 */
+	public void setupServices( Configuration c ) throws Exception {
+		for( IService service : mServices ) { 
+			mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, "'" + service.toString() + 
+				"' is auto-setting up..." );
+			service.setup(c);
+		}
+	}
+	
+	
+	/**
+	 * Destroys every service out there. For service destruction,
+	 * we start by the last service to the first one
+	 */
+	public void destroyServices() {
+		
+		// destroys everything in the reverse creation order
+		for( int i=mServices.size()-1; i>=0; i-- ) {
+			mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, "'" + mServices.get(i).toString() + 
+			"' is shutting down..." );
+			mServices.get(i).shutdown();
+		}
+		
+		// flushes all entries in the log manager
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, "Flushing entries in " +
+				"the log management subsystem..." );
+		//mLogMgr.flush( LogManager.DEFAULT );
+		//mLogMgr.flush( LogManager.OUT );
+	}
+	
+	
+	/**
+	 * Method automatically invoked by the scheduler
+	 */
+	public void begin() {
+    
+	    // build the model, schedule and display
+		initModel();
+		
+		// the scheduler is also built in the buildModel() function
+		initScheduler();
+		
+		// buildSchedule();
+		initDisplay();
+		
+		// turn the display on
+		mDisplay.display();
+	}
+
+	
+	/**
+	 * Method automatically invoked by the scheduler
+	 */
+	public void setup() {
+	    
+		// suppress this if it causes errors 
+		//Logger.log( Logger.INFO, "Running setup()..." );
+		
+		// creates a brand new scheduler
+		mSchedule = new Schedule (1);
+		
+		// create the display surface
+		if ( mDisplay != null ) {
+			mDisplay.dispose();
+			mDisplay = null;
+	    }
+
+		
+		// creates the default display surface...
+		mDisplay = new DisplaySurface( this, "PICKUP AND DELIVERY SIMULATION" );
+		
+		// ... and registers it immediately
+		registerDisplaySurface( "PICKUP AND DELIVERY SIMULATION", mDisplay );
+	}
+
+	
+	/**
+	 * Method automatically invoked by the scheduler
+	 */
+	public void step() {
+		
+		// if this is the first run, then initialize the agents
+		if ( mFirstRun ) {
+			initializeFirstRound();
+			return;
+		}
+		
+		// for every agent of the agent manager class, ask the 
+		// state for possible work to do. If that’s the case, then 
+		// calls the step method in agent sate
+		for ( AgentProfile ap : mAgentMgr.getProfileList() ) {
+			ap.step();
+		}
+
+		// the round finishes when all tasks for 
+		// the current round are delivered...
+		if ( mTaskMgr.allTasksDelivered() ) {
+			
+			// one round less
+			mRounds--;
+		
+			// if no more tasks to deliver, end the simulation
+			if ( mRounds > 0 ) {
+				initializeNextRound();
+			} else {
+				
+				// kills all agents
+				// mAgentMgr.killAllAgents();
+				// TODO: install a timeout barrier to wait for all agents
+				//       to finish
+				
+				// log the event
+				mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, "Simulation ended successfully..." );
+				
+				// stops the simulation here...
+				stop();
+			} 
+		}
+
+		// updates the display
+		mDisplay.updateDisplay();
+	}
+		
+	
+	/**
+	 * This function resets all agents and start a new round. This 
+	 * round should reset all vehicles.
+	 */
+	protected void initializeNextRound() {
+		//mAgentMgr.resetAllAgents();
+	}
+	
+	
+	/**
+	 * Initializes the first round of the simulation. This round
+	 * intializes all agents and prepares all required objects. A 
+	 * timeout barrier is placed on the agents in order to wait
+	 * for all agents to initialize...
+	 */
+	protected void initializeFirstRound() {
+		
+		// log the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+			"Lauching agents on first run..." );
+		
+		// initializes all agents
+		mAgentMgr.initAllAgents();
+		
+		// TODO: place a timeout barrier to wait for agents
+		//       to initialize.
+		//
+		// while( timeoutBarrier.isReady() )
+		//	Thread.yield();
+		//
+		// or
+		//
+		// timeoutBarrier.wait();
+		
+		// no more the first run
+		mFirstRun = false;
+	}
+	
+	
+	/**
+	 * Initializes the model and the scheduler, etc…
+	 */
+	protected void initModel() {
+		
+		// logs the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+		"Initializing the simulation model..." );
+		
+		// logs the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+				"Initializing the simulation model is complete." );
+		
+	}
+		
+		
+	/**
+	 * Initializes the scheduler
+	 */
+	protected void initScheduler() {
+		
+		/* Schedules the execution of the specified method on the 
+		 * specified object to start at the specified clock tick 
+		 * and continue every tick thereafter.
+		 */
+
+		// logs the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+				"Initializing the scheduler..." );
+		
+		// schedules the action
+		mSchedule.scheduleActionBeginning( 2, this, "step" );
+		
+		// logs the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+				"Initializing of the scheduler is complete." );
+		
+	}
+		
+
+	/**
+	 * Initializes the display
+	 */
+	protected void initDisplay() {
+
+		// logs the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+				"Initializing the display objects..." );
+		
+		// the display for the topology
+		Object2DDisplay topoDisplay = 
+			new Object2DDisplay( mViews.getTopologyView().space() );
+
+		// the display for the vehicles
+		MultiObject2DDisplay vehicleDisplay = 
+			new MultiObject2DDisplay( mViews.getAgentView().space() );
+		
+		// the display for the tasks
+		MultiObject2DDisplay taskDisplay = 
+			new MultiObject2DDisplay( mViews.getTaskView().space() );
+
+		// sets all layers as visible entities	
+		mDisplay.addDisplayable( topoDisplay, "Topology" );
+		mDisplay.addDisplayable( vehicleDisplay, "Vehicles" );
+		mDisplay.addDisplayable( taskDisplay, "Tasks" );
+		
+		
+		// logs the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+				"Initialization of the display objects is complete..." );
+	}	
+	
+
+	
+	
+	//-------------------------------------------------------------------------
+	// G E T T E R S   A N D   S E T T E R S
+	//-------------------------------------------------------------------------
+	
+	/**
+	 * Returns the parametrable quantities
+	 * here..
+	 */
+	public String[] getInitParam() {
+		String[] params = { "worldXSize", "worldYSize" };
+		return params;
+	}
+	
+	
+	/**
+	 * Returns the name of the application
+	 * @return
+	 */
+	public String getName() {
+		return "EPFL-LIA Logist Platform v." + LogistConstants.VERSION_MAJOR + "." + 
+		                                       LogistConstants.VERSION_MINOR + "." +
+		                                       LogistConstants.VERSION_REVISION;
+	}
+	
+	
+	/**
+	 * Returns the schedule object
+	 */
+	public Schedule getSchedule() {
+		return mSchedule;
+	}
+	
+	
+	/**
+	 * Retrieve the size of the world on the x-axis.
+	 * @return an integer value representing the size of the
+	 * world on the x-axis.
+	 */
+	public int getWorldXSize() {
+		return mWorldXSize;
+	}
+	
+	
+	/**
+	 * Define the size of the world on the x-axis.
+	 * @param x an integer value representing the new size of
+	 * the world on the x-axis.
+	 */
+	public void setWorldXSize( int x ) {
+		mWorldXSize = x;
+	}
+	
+	
+	/**
+	 * Retrieve the size of the world on the y-axis.
+	 * @return an integer value representing the size of the
+	 * world on the y-axis.
+	 */
+	public int getWorldYSize() {
+		return mWorldYSize;
+	}
+	
+	
+	/**
+	 * Define the size of the world on the y-axis.
+	 * @param y an integer value representing the size of the
+	 * world on the y-axis.
+	 */
+	public void setWorldYSize( int y ) {
+		mWorldYSize = y;
+	}
+}

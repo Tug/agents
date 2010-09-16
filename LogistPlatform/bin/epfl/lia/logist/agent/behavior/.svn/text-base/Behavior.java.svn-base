@@ -1,0 +1,61 @@
+package epfl.lia.logist.agent.behavior;
+
+/* import table */
+import epfl.lia.logist.logging.LogManager;
+import epfl.lia.logist.logging.LogSeverityEnum;
+import epfl.lia.logist.messaging.signal.Signal;
+import epfl.lia.logist.agent.behavior.response.IBehaviorResponse;
+import epfl.lia.logist.exception.BehaviorExecutionError;
+import epfl.lia.logist.exception.BehaviorNotImplementedError;
+
+
+/**
+ * This class represents a single agent behavior. In LogistPlatforms
+ * agent structure, behaviors determine how agents react or respond
+ * to an external stimulus (signal). For example, an agent can choose
+ * to move to another city after it receives a signal telling him that
+ * it is in a particular city. Behaviors must be extended to handle
+ * particular signals or signal sets.
+ */
+public abstract class Behavior {
+	
+
+	/**
+	 * A reference to the log manager 
+	 * for speeding logging up ...
+	 */
+	private LogManager mLogMgr = null;
+
+	
+	/**
+	 * Protected behavior of the class. This class cannot be
+	 * instantiated alone.
+	 */
+	protected Behavior() {
+		mLogMgr = LogManager.getInstance();
+	}
+	
+	
+	/**
+	 * Invoked for a single execution
+	 * @param s A reference to the incoming signal
+	 * @throws BehaviorExecutionError Returns an error if the behavior
+	 *         raised an inhabitual problem.
+	 */
+	public abstract IBehaviorResponse execute( Signal s ) 
+		throws BehaviorExecutionError, BehaviorNotImplementedError;
+	
+	
+	/**
+	 * Logs some text into the main log file. This allows to speed up the
+	 * logging process a little bit, and allows to bypass the security
+	 * mechanism.
+	 * 
+	 * @param ls the severity level of this entry
+	 * @param msg the message to log on the main file.
+	 */
+	protected void log( LogSeverityEnum ls , String msg ) {
+		if( mLogMgr != null )
+			mLogMgr.log( "main", ls, "[Agent" + Thread.currentThread().getName()+ "] " + msg );
+	}
+}

@@ -1,0 +1,275 @@
+package epfl.lia.logist.core.topology;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+
+import uchicago.src.sim.network.Node;
+import epfl.lia.logist.config.Configuration;
+import epfl.lia.logist.core.IService;
+import epfl.lia.logist.core.listeners.ITopologyListener;
+import epfl.lia.logist.exception.TopologyCreationException;
+import epfl.lia.logist.logging.LogManager;
+import epfl.lia.logist.logging.LogSeverityEnum;
+import epfl.lia.logist.tools.dijkstra.DijkstraAlgorithm;
+import epfl.lia.logist.tools.dijkstra.ShortestPath;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class Topology implements IService {
+	
+	/**
+	 * A list of all the cities in the Graph
+	 */
+	private HashMap<String, City> mMapOfCities = null;
+	
+	/**
+	 * A list of all routes in the Graph
+	 */
+	private ArrayList<Route> mListOfRoutes = null;
+	
+	/**
+	 * The singleton instance of this class
+	 */
+	private static Topology msSingleton = null;
+	
+	/**
+	 * This is a list for all topology listeners out there..
+	 */
+	private ArrayList<ITopologyListener> mListeners = null;
+
+	/**
+	 * 
+	 */
+	private LogManager mLogMgr = null;
+	
+	/**
+	 * 
+	 */
+	private ShortestPath mShortestPath = null;
+	
+	
+	/**
+	 * Constructor of the class
+	 * @param space The PdpSpace in which the topology will be displayed.
+	 * @param topoFile The XML file describing the topology.
+	 */
+	public Topology(){
+		if ( msSingleton == null )
+			msSingleton = this;
+		mMapOfCities = new HashMap<String, City>();
+		mListOfRoutes = new ArrayList<Route>();
+		mListeners = new ArrayList<ITopologyListener>();
+		mLogMgr = LogManager.getInstance();
+	}	
+	
+
+	/**
+	 * 
+	 * @param td
+	 * @throws TopologyCreationException
+	 */
+	public void create( TopologyDescriptor td ) 
+		throws TopologyCreationException {
+	
+		// log the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO , 
+			"Creating the list of cities from descriptors." );
+		
+		// for all city descriptors,
+		for ( CityDescriptor cd : td.Cities ) {
+			createCityFromDescriptor( cd );
+		}
+		
+		// log the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO , 
+			"Creating the list of routes from descriptors." );
+		
+		// for every route descriptor...
+		for ( RouteDescriptor rd : td.Routes ) {
+			createRouteFromDescriptor( rd );
+		}
+		
+		// log the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO , 
+			"Computing the shortest path for all possible " +
+			"pairs of cities." );
+		
+		
+		// computes the shortest path
+		mShortestPath = DijkstraAlgorithm.computeShortestPath( this );
+	}
+	
+	
+	/**
+	 * Moves on the shortest path between two cities. Return the next
+	 * city in the path..
+	 */
+	public City moveOnShortestPath( City current, City to ) {
+		return DijkstraAlgorithm.moveOnShortestPathTowards( mShortestPath,current,to );
+	}
+	
+	
+	/**
+	 * Creates a city from a descriptor.
+	 */
+	private void createCityFromDescriptor( CityDescriptor cd ) 
+		throws TopologyCreationException {
+		
+		// we only support distinct entries
+		if ( mMapOfCities.containsKey(cd.Name) )
+			throw new TopologyCreationException( "A city" +
+					"of name '" + cd.Name + "' already exists in topology.");
+		
+		// creates a new city entry
+		City city = new City( cd.X, cd.Y, cd.Name );
+		
+		// adds the city into the table
+		mMapOfCities.put( cd.Name, city );
+		
+		// propagates the changes to all listeners
+		for ( ITopologyListener listener : mListeners ) {
+			listener.onCityAddition( city );
+		}
+		
+		// log the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO , 
+			"Created new city " + city + "." );
+	}
+	
+	
+	/**
+	 * Creates a new route from a descriptor.
+	 */
+	private void createRouteFromDescriptor( RouteDescriptor cd ) 
+		throws TopologyCreationException {
+		
+		// 
+		City cityFrom = mMapOfCities.get( cd.Source );
+		City cityTo = mMapOfCities.get( cd.Destination );
+		
+		// creates a new route
+		Route routeFrom = new Route( cityFrom, cityTo, cd.Distance );
+		Route routeTo = new Route( cityTo, cityFrom, cd.Distance );
+		
+		// adds a route to the array
+		mListOfRoutes.add( routeFrom );
+		mListOfRoutes.add( routeTo );
+		
+		// log the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO , 
+			"Creating new route between " + cityFrom + " and " + cityTo + "." );
+	}	
+	
+	
+	/**
+	 * Returns a map of Cities in the topology, indexed by their name.
+	 * @return The map of cities.
+	 */
+	public HashMap<String, City> getCities() {
+		return mMapOfCities;
+	}
+	
+	
+	/**
+	 * Get the distance between two cities.
+	 * @param start The starting city
+	 * @param end The destination city
+	 * @return the distance
+	 */
+	public int getDistance( City start, City end ){
+		Route route = (Route)start.getEdgesTo(end).iterator().next();
+		return (int)Math.round( route.getDistance() );
+	}
+
+	
+	/**
+	 * Return all the cities that can be reached from the city
+	 * @param city
+	 * @return a list of cities that can be reached from the city given as argument
+	 */
+	public ArrayList<?> getDestinations( City city ){
+		return city.getOutNodes();
+	}
+
+	
+	/**
+	 * Retrieve the running instance of the class.
+	 * @return
+	 */
+	public static Topology getInstance() {
+		return msSingleton;
+	}
+	
+	
+	/**
+	 * This function specifies if the requested city is accessible from
+	 * a particular city.
+	 */
+	public boolean isAccessible( City from, City to ) {
+		HashSet setOfEdges = from.getEdgesTo(to);
+		return ( setOfEdges!=null );
+	}
+	
+	
+	/**
+	 * Finds a city among already loaded ones.
+	 * @param city
+	 * @return
+	 */
+	public City getCity( String city ) {
+		return mMapOfCities.get(city);
+	}
+	
+	
+	/**
+	 * Retrieve a random city
+	 * @return
+	 */
+	public City getRandomCity() {
+		int lIndex = (int)((double)mMapOfCities.size() * Math.random());
+		Node theCity = (Node)(mMapOfCities.values().toArray()[lIndex]);
+		return (City)theCity;
+	}
+	
+	/**
+	 * Adds a new topology change listener
+	 * @param tcl
+	 */
+	public void addListener( ITopologyListener tcl ) {
+		mListeners.add( tcl );
+	}
+	
+	
+	/**
+	 * Initializes the class instance
+	 */
+	public void init() {
+	}
+	
+	
+	/**
+	 * Destroys the class instance
+	 */
+	public void shutdown() {
+	}
+	
+	
+	/**
+	 * Sets the topology up
+	 */
+	public void setup( Configuration cfg ) throws Exception {
+		create( cfg.Topology );
+	}
+
+	/**
+	 * The text for the service management system
+	 */
+	public String toString() {
+		return "Topology indexing service";
+	}
+}

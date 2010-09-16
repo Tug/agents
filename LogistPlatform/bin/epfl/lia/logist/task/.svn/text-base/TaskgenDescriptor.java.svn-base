@@ -1,0 +1,28 @@
+package epfl.lia.logist.task;
+
+/* import table */
+import java.util.Properties;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class TaskgenDescriptor {
+
+	/**
+	 * The task distribution descriptor
+	 */
+	public TaskDistributionDescriptor Distribution;
+
+	/**
+	 * The size of a batch of tasks 
+	 */
+	public int BatchSize;
+		
+	/**
+	 * The maximum number of allocatable tasks
+	 */
+	public int MaxAllocatable;
+}

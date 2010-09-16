@@ -1,0 +1,5 @@
+package epfl.lia.logist.config;
+
+public class ConfigurationProducer {
+
+}

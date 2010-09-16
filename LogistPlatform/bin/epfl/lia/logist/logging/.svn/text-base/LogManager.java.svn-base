@@ -1,0 +1,221 @@
+package epfl.lia.logist.logging;
+
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+
+import epfl.lia.logist.config.Configuration;
+import epfl.lia.logist.core.IService;
+
+
+/**
+ * 
+ * @author salves
+ *
+ */
+public class LogManager implements IService {
+	
+		/* logs into the default log file */
+		public static String DEFAULT	= "main";
+		
+		/* logs into the stardard stream log */
+		public static String ERR		= "stdout";
+		public static String OUT		= "stdout";
+		
+		/** 
+		 * A list of log files
+		 */
+		protected HashMap<String,LogFile> mMapOfLogs = null;
+		
+		/**
+		 * A singleton instance of this class
+		 */
+		private static LogManager msSingleton = null;
+		
+		/**
+		 * Indicates if the logger should also log
+		 * directly into the stdout
+		 */
+		private boolean mbStdOutput = true;
+		
+		/**
+		 * Keeps a calendar, we may need it
+		 */
+		private GregorianCalendar mCalendar = new GregorianCalendar();
+		
+		
+		
+		/**
+		 * The constructor of the class. This method is responsible
+		 * for initializing the state of the class as well as the
+		 * singleton instance.
+		 */
+		public LogManager() {
+			if ( msSingleton==null )
+				msSingleton = this;
+			mMapOfLogs = new HashMap<String,LogFile>();
+		}
+		
+		
+		/**
+		 * Creates a new log file from a log file descriptor.
+		 * @param lfd a descriptor object for the log file.
+		 * @return the index of the created log file.
+		 */
+		public void createLog( LogDescriptor lfd ) throws Exception {
+
+			// creates a new log file
+			LogFile lf = new LogFile();
+
+			// if the log file already contains an entry,
+			// then do not create a new log file
+			if ( mMapOfLogs.containsKey(lfd.ID) )
+				return;
+			
+			// creates the log file from a descriptor and
+			// returns the log index.
+			if ( lf.create( lfd ) ) {
+				mMapOfLogs.put( lfd.ID, lf );
+			}
+		}
+		
+		
+		/**
+		 * Deletes the log file from the system.
+		 * @param id
+		 */
+		public LogFile deleteLog( String ID ) {
+			
+			// retrieves the log file
+			LogFile lLog = mMapOfLogs.remove(ID);
+			
+			// ensures that log file exists
+			if ( lLog == null )
+				return null;
+			
+			// closes this log file
+			lLog.destroy();
+			
+			// returns the log file
+			return lLog;
+		}
+
+		
+		/**
+		 * Returns an instance of this class.
+		 * @return a singleton value
+		 */
+		public static synchronized LogManager getInstance() {
+			return msSingleton;
+		}
+
+		
+		/**
+		 * Initializes the log file manager. Initializes the
+		 * log map and creates three primary log files "stdout", "stderr" and
+		 * "main".
+		 */
+		public void init() throws Exception {
+			
+			// creates the first log
+			LogDescriptor lOutLogDsc = new LogDescriptor();
+			lOutLogDsc.ID 			 = "stdout";
+			lOutLogDsc.File 		 = "stdout";
+			lOutLogDsc.Format 		 = "stream";
+			lOutLogDsc.FormatClass   = null;
+			lOutLogDsc.DebugLevel	 = "debug";
+			lOutLogDsc.MaxEntries    = 0; // infinity
+			lOutLogDsc.CacheSize     = 1;
+			createLog( lOutLogDsc );
+			
+			// creates the main log file
+			LogDescriptor lMainLogDsc = new LogDescriptor();
+			lMainLogDsc.ID 		      = "main";
+			lMainLogDsc.File 		  = "logist.txt";
+			lMainLogDsc.Format 	      = "raw";
+			lMainLogDsc.FormatClass   = null;
+			lMainLogDsc.DebugLevel    = "debug";
+			lMainLogDsc.MaxEntries    = 0; // infinity
+			lMainLogDsc.CacheSize     = 5; // caches 5 entries in queue 
+			createLog( lMainLogDsc );
+			
+		}
+
+		
+		/**
+		 * Destroys the log file manager
+		 */
+		public void shutdown() {
+			String[] lStringArray = new String[ mMapOfLogs.keySet().size() ];
+			mMapOfLogs.keySet().toArray( lStringArray );
+			for( int i=0; i<lStringArray.length; i++ ) {
+				deleteLog( lStringArray[i] );
+			}
+		}
+
+		
+		/**
+		 * Sets up
+		 */
+		public void setup( Configuration cfg ) throws Exception {
+		}
+		
+		
+		/**
+		 * Logs a message to the output
+		 * @param ID the identifier of the log file to use
+		 * @param s the severity constant for this log
+		 * @param msg the message to log
+		 */
+		public synchronized void log( String ID, LogSeverityEnum s, String msg ) {
+			
+			// retrieves the log file
+			LogFile lf = mMapOfLogs.get(ID);
+			
+			// writes the entry
+			if ( lf != null ) {
+				lf.log( s, msg );
+			}
+			
+			// logs the output to stdout
+			if ( mbStdOutput ) {
+				if ( s==LogSeverityEnum.LSV_WARNING || s==LogSeverityEnum.LSV_FATAL )
+					System.err.println("[" + mCalendar.getTime() + "] " + msg );
+				else
+					System.out.println("[" + mCalendar.getTime() + "] " + msg );
+			}
+		}
+
+		
+		/**
+		 * Flushes the requested log file. The effect of this command is
+		 * to flush any pending log transaction. 
+		 * @param ID
+		 */
+		public void flush( String ID ) {
+			
+			// retrieves the log file
+			LogFile lf = mMapOfLogs.get(ID);
+			
+			// writes the entry
+			if ( lf != null ) {
+				lf.flush();
+			}
+		}
+		
+		
+		/**
+		 * 
+		 * @param sw
+		 */
+		public void setLogOnStdout( boolean sw ) {
+			mbStdOutput = sw;
+		}
+		
+		/**
+		 * The text for the service management system
+		 */
+		public String toString() {
+			return "Log management service";
+		}
+
+}

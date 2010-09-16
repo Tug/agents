@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<toposet name="topo_france" >
+
+	<!-- properties of the topology -->
+	<propset>
+	</propset>
+	
+	<!-- the list of cities in the topology -->
+	<cities>
+		<city name="Brest" x="14" y="117"/>
+		<city name="Le Havre" x="222" y="41"/>
+		<city name="Paris" x="324" y="87"/>
+		<city name="Bordeaux" x="190" y="353"/>
+		<city name="Marseille" x="462" y="451"/>
+		<city name="Lyon" x="438" y="295"/>
+		<city name="Genève" x="496" y="263"/>
+		<city name="Monaco" x="556" y="421"/>
+		<city name="Strasbourg" x="570" y="105"/>
+	</cities>
+
+	<!-- the list of routes in the topology -->
+	<routes>
+		<route distance="591" from="Paris" to="Brest"/>
+		<route distance="584" from="Paris" to="Bordeaux"/>
+		<route distance="196" from="Paris" to="Le Havre"/>
+		<route distance="487" from="Paris" to="Strasbourg"/>
+		<route distance="466" from="Paris" to="Lyon"/>
+		<route distance="389" from="Strasbourg" to="Genève"/>
+		<route distance="149" from="Lyon" to="Genève"/>
+		<route distance="316" from="Lyon" to="Marseille"/>
+		<route distance="646" from="Bordeaux" to="Marseille"/>
+		<route distance="588" from="Bordeaux" to="Lyon"/>
+		<route distance="521" from="Monaco" to="Genève"/>
+		<route distance="225" from="Marseille" to="Monaco"/>
+	</routes>
+
+</toposet>

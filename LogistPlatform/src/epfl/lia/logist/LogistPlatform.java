@@ -1,0 +1,44 @@
+package epfl.lia.logist;
+
+import epfl.lia.logist.core.entry.SimulationEntry;
+import epfl.lia.logist.exception.LogistException;
+import epfl.lia.logist.logging.LogManager;
+import epfl.lia.logist.logging.LogSeverityEnum;
+
+/**
+ * 20-MAY-07
+ *
+ */
+public class LogistPlatform {
+	
+	/** Entry point of any Java(TM) application
+	 * 
+	 * This functions is the entry point of any Java(TM) application. It 
+	 * creates an entry-point to the simulation. This entry-point parses the
+	 * arguments and then launches the simulation... 
+	 */
+	public static void main( String[] args )  {
+		
+		// local variables
+		LogManager lLogMgr = null;
+		SimulationEntry lEntry = null;
+		
+		// tries running the platform
+		try {
+			
+			// first of all, creates the logmanager
+			lLogMgr = new LogManager();
+			lLogMgr.init();
+			
+			// then creates and starts the simulation
+			// entry. from here, we start the whole 
+			// simulation
+			lEntry = new SimulationEntry( args );
+			lEntry.start();
+			
+		} catch( Exception el ) {
+			lLogMgr.flush( LogManager.DEFAULT );
+			lLogMgr.shutdown();
+		} 
+	}
+}

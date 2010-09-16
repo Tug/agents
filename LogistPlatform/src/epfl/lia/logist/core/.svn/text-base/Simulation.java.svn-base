@@ -1,0 +1,58 @@
+package epfl.lia.logist.core;
+
+/* import table */
+import uchicago.src.sim.engine.Controller;
+import uchicago.src.sim.engine.SimInit;
+import epfl.lia.logist.config.Configuration;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class Simulation implements Runnable {
+	
+	/**
+	 * 
+	 */
+	private Configuration mConfiguration = null;
+	
+	
+	/**
+	 * 
+	 * @param cfg
+	 */
+	public Simulation( Configuration cfg ) {
+		mConfiguration = cfg;
+	}
+	
+	/**
+	 * Runs the platform
+	 */
+	public void run() { 
+	
+		// initializes repast
+		SimInit init = new SimInit();
+	
+		// creates a new model
+		SimulationModel model = new SimulationModel();
+		
+		try {
+			// creates the model from a configuration
+			model.createFromConfiguration( mConfiguration );
+		} catch( Exception e ) {
+			System.err.println(e.getMessage());
+			e.printStackTrace();
+		}
+		
+		// calls the GC
+		//Runtime.getRuntime().freeMemory();
+		
+		// loads the repast model 
+		init.loadModel( model, null, false );
+		
+		// the model is an exit model listener
+		//((Controller)model.getController()).addExitListener( model );
+	}
+}

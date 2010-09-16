@@ -1,0 +1,108 @@
+<xml version="1.0" encoding="UTF-8" />
+<log>
+	<probabilities>
+		<probability city1="Genève" city2="Genève" value="0.0" reward="0.0" />
+		<probability city1="Genève" city2="Strasbourg" value="0.17380130018249584" reward="4155.0" />
+		<probability city1="Genève" city2="Brest" value="0.14960994284279705" reward="4155.0" />
+		<probability city1="Genève" city2="Paris" value="0.20960917683363003" reward="4155.0" />
+		<probability city1="Genève" city2="Monaco" value="0.011611210110609598" reward="4155.0" />
+		<probability city1="Genève" city2="Bordeaux" value="0.09662372835754196" reward="4155.0" />
+		<probability city1="Genève" city2="Lyon" value="0.14913546483929555" reward="4155.0" />
+		<probability city1="Genève" city2="Le Havre" value="0.20960917683363003" reward="1660.0" />
+		<probability city1="Genève" city2="Marseille" value="0.0" reward="4155.0" />
+		<probability city1="Strasbourg" city2="Genève" value="0.015014477801584335" reward="4155.0" />
+		<probability city1="Strasbourg" city2="Strasbourg" value="0.0" reward="0.0" />
+		<probability city1="Strasbourg" city2="Brest" value="0.0676077875085548" reward="4155.0" />
+		<probability city1="Strasbourg" city2="Paris" value="0.11560726638806759" reward="4155.0" />
+		<probability city1="Strasbourg" city2="Monaco" value="0.19987535793957162" reward="4155.0" />
+		<probability city1="Strasbourg" city2="Bordeaux" value="0.19987535793957162" reward="4155.0" />
+		<probability city1="Strasbourg" city2="Lyon" value="0.10010449775110826" reward="4155.0" />
+		<probability city1="Strasbourg" city2="Le Havre" value="0.16059059095050887" reward="4155.0" />
+		<probability city1="Strasbourg" city2="Marseille" value="0.1413246637210329" reward="4155.0" />
+		<probability city1="Brest" city2="Genève" value="0.16130442055093722" reward="4155.0" />
+		<probability city1="Brest" city2="Strasbourg" value="0.1548022984143371" reward="4155.0" />
+		<probability city1="Brest" city2="Brest" value="0.0" reward="0.0" />
+		<probability city1="Brest" city2="Paris" value="0.16130442055093722" reward="4155.0" />
+		<probability city1="Brest" city2="Monaco" value="0.16130442055093722" reward="4155.0" />
+		<probability city1="Brest" city2="Bordeaux" value="0.12193421293097194" reward="4155.0" />
+		<probability city1="Brest" city2="Lyon" value="0.11452286425704952" reward="4155.0" />
+		<probability city1="Brest" city2="Le Havre" value="0.11700269595390035" reward="4155.0" />
+		<probability city1="Brest" city2="Marseille" value="0.00782466679092956" reward="4155.0" />
+		<probability city1="Paris" city2="Genève" value="0.1547431207635484" reward="4155.0" />
+		<probability city1="Paris" city2="Strasbourg" value="0.1547431207635484" reward="4155.0" />
+		<probability city1="Paris" city2="Brest" value="0.1547431207635484" reward="4155.0" />
+		<probability city1="Paris" city2="Paris" value="0.0" reward="0.0" />
+		<probability city1="Paris" city2="Monaco" value="0.11343316729570152" reward="4155.0" />
+		<probability city1="Paris" city2="Bordeaux" value="0.1547431207635484" reward="4155.0" />
+		<probability city1="Paris" city2="Lyon" value="0.11285122888655652" reward="4155.0" />
+		<probability city1="Paris" city2="Le Havre" value="0.1547431207635484" reward="4155.0" />
+		<probability city1="Paris" city2="Marseille" value="0.0" reward="5500.0" />
+		<probability city1="Monaco" city2="Genève" value="0.13827417273847487" reward="4155.0" />
+		<probability city1="Monaco" city2="Strasbourg" value="0.13949808836424277" reward="4155.0" />
+		<probability city1="Monaco" city2="Brest" value="0.11918757647900625" reward="4155.0" />
+		<probability city1="Monaco" city2="Paris" value="0.21865027167392848" reward="4538.0" />
+		<probability city1="Monaco" city2="Monaco" value="0.0" reward="0.0" />
+		<probability city1="Monaco" city2="Bordeaux" value="0.177280335402755" reward="4155.0" />
+		<probability city1="Monaco" city2="Lyon" value="0.14190816771216455" reward="4155.0" />
+		<probability city1="Monaco" city2="Le Havre" value="0.0" reward="4155.0" />
+		<probability city1="Monaco" city2="Marseille" value="0.06520138762942816" reward="4155.0" />
+		<probability city1="Bordeaux" city2="Genève" value="0.1500651133984013" reward="4155.0" />
+		<probability city1="Bordeaux" city2="Strasbourg" value="0.09201350310684109" reward="4155.0" />
+		<probability city1="Bordeaux" city2="Brest" value="0.11928509972334551" reward="4155.0" />
+		<probability city1="Bordeaux" city2="Paris" value="0.1421947834499492" reward="4155.0" />
+		<probability city1="Bordeaux" city2="Monaco" value="0.06162071284085977" reward="4155.0" />
+		<probability city1="Bordeaux" city2="Bordeaux" value="0.0" reward="0.0" />
+		<probability city1="Bordeaux" city2="Lyon" value="0.16717490961839587" reward="4155.0" />
+		<probability city1="Bordeaux" city2="Le Havre" value="0.10047096824381142" reward="4155.0" />
+		<probability city1="Bordeaux" city2="Marseille" value="0.16717490961839587" reward="4155.0" />
+		<probability city1="Lyon" city2="Genève" value="0.15123021825406038" reward="4155.0" />
+		<probability city1="Lyon" city2="Strasbourg" value="0.15123021825406038" reward="4155.0" />
+		<probability city1="Lyon" city2="Brest" value="0.0" reward="4155.0" />
+		<probability city1="Lyon" city2="Paris" value="0.15123021825406038" reward="4155.0" />
+		<probability city1="Lyon" city2="Monaco" value="0.15123021825406038" reward="4155.0" />
+		<probability city1="Lyon" city2="Bordeaux" value="0.12273692061143172" reward="4155.0" />
+		<probability city1="Lyon" city2="Lyon" value="0.0" reward="0.0" />
+		<probability city1="Lyon" city2="Le Havre" value="0.12111198811826639" reward="4155.0" />
+		<probability city1="Lyon" city2="Marseille" value="0.15123021825406038" reward="2557.0" />
+		<probability city1="Le Havre" city2="Genève" value="0.17773852152513386" reward="4155.0" />
+		<probability city1="Le Havre" city2="Strasbourg" value="0.15238396706133256" reward="4155.0" />
+		<probability city1="Le Havre" city2="Brest" value="0.16715728668346627" reward="4155.0" />
+		<probability city1="Le Havre" city2="Paris" value="0.08974807652668063" reward="4155.0" />
+		<probability city1="Le Havre" city2="Monaco" value="0.17773852152513386" reward="4155.0" />
+		<probability city1="Le Havre" city2="Bordeaux" value="0.08081398878727629" reward="4155.0" />
+		<probability city1="Le Havre" city2="Lyon" value="0.0" reward="4155.0" />
+		<probability city1="Le Havre" city2="Le Havre" value="0.0" reward="0.0" />
+		<probability city1="Le Havre" city2="Marseille" value="0.1544196378909766" reward="4155.0" />
+		<probability city1="Marseille" city2="Genève" value="0.027562671933549953" reward="4155.0" />
+		<probability city1="Marseille" city2="Strasbourg" value="0.19576064409592508" reward="4155.0" />
+		<probability city1="Marseille" city2="Brest" value="0.12080481136345746" reward="4155.0" />
+		<probability city1="Marseille" city2="Paris" value="0.16927564957408836" reward="4155.0" />
+		<probability city1="Marseille" city2="Monaco" value="0.12588921855479998" reward="4155.0" />
+		<probability city1="Marseille" city2="Bordeaux" value="0.19576064409592508" reward="4155.0" />
+		<probability city1="Marseille" city2="Lyon" value="0.13874169914845844" reward="4155.0" />
+		<probability city1="Marseille" city2="Le Havre" value="0.026204661233795563" reward="4155.0" />
+		<probability city1="Marseille" city2="Marseille" value="0.0" reward="0.0" />
+	</probabilities>
+	<tasks>
+		<task id="0" pickup="Paris" delivery="Genève" owner="Cloud" weight="0.0" reward="4155.0" />
+		<task id="1" pickup="Le Havre" delivery="Genève" owner="None" weight="0.0" reward="4155.0" />
+		<task id="2" pickup="Brest" delivery="Genève" owner="None" weight="0.0" reward="4155.0" />
+		<task id="3" pickup="Monaco" delivery="Genève" owner="None" weight="0.0" reward="4155.0" />
+		<task id="4" pickup="Strasbourg" delivery="Paris" owner="None" weight="0.0" reward="4155.0" />
+		<task id="5" pickup="Marseille" delivery="Genève" owner="Tifa" weight="0.0" reward="4155.0" />
+		<task id="6" pickup="Le Havre" delivery="Genève" owner="None" weight="0.0" reward="4155.0" />
+		<task id="7" pickup="Brest" delivery="Genève" owner="None" weight="0.0" reward="4155.0" />
+	</tasks>
+	<delivered>
+		<task id="0" pickup="Paris" delivery="Genève" owner="Cloud" weight="0.0" reward="4155.0" />
+		<task id="5" pickup="Marseille" delivery="Genève" owner="Tifa" weight="0.0" reward="4155.0" />
+	</delivered>
+	<undelivered>
+		<task id="4" pickup="Strasbourg" delivery="Paris" owner="None" weight="0.0" reward="4155.0" />
+		<task id="2" pickup="Brest" delivery="Genève" owner="None" weight="0.0" reward="4155.0" />
+		<task id="7" pickup="Brest" delivery="Genève" owner="None" weight="0.0" reward="4155.0" />
+		<task id="3" pickup="Monaco" delivery="Genève" owner="None" weight="0.0" reward="4155.0" />
+		<task id="1" pickup="Le Havre" delivery="Genève" owner="None" weight="0.0" reward="4155.0" />
+		<task id="6" pickup="Le Havre" delivery="Genève" owner="None" weight="0.0" reward="4155.0" />
+	</undelivered>
+</log>

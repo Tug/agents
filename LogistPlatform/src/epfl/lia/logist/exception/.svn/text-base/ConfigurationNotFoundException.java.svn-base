@@ -1,0 +1,33 @@
+package epfl.lia.logist.exception;
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class ConfigurationNotFoundException extends Exception {
+	
+	/**
+	 * The name of the configuration that was not 
+	 * found in the file...
+	 */
+	private String mStrName = null;
+	
+	
+	/**
+	 * Constructor of the exception class
+	 * @param name
+	 */
+	public ConfigurationNotFoundException( String name ) {
+		mStrName = name;
+	}
+	
+	
+	/**
+	 * Returns the error message
+	 */
+	public String toString() {
+		return "The configuration tree named '" + mStrName + "' " +
+		       "doesn't exist...";
+	}
+}

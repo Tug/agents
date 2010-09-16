@@ -1,0 +1,129 @@
+Logist Platform RAW Log Output:
+===============================
+
+
+Starting date : sam. juin 30 17:34:18 CEST 2007
+Starting time : 17:34:18
+
+General environnement info:
+
+	java-vendor     : Sun Microsystems Inc.
+	java-vendor-url : http://java.sun.com/
+	java-version    : 1.6.0-rc
+	os-arch         : x86
+	os-name         : Windows XP
+	user-name       : salves
+	cache-size      : 5
+	max-entries     : 0
+	debug-level     : debug
+
+
+Log file entries:
+
+[17:34:18] INFO    : Platform started
+[17:34:18] INFO    : Reading the configuration file...
+[17:34:18] INFO    : Loading the configuration file 'default.xml'...
+[17:34:18] INFO    : The default configuration name is 'reactive'
+[17:34:18] INFO    : New configuration found: 'reactive'
+[17:34:18] INFO    : New taskset found: 'default_taskset'
+[17:34:18] INFO    : Found new task from 'Genève' to 'Lausanne'.
+[17:34:18] INFO    : Found new task from 'Berne' to 'Lucerne'.
+[17:34:18] INFO    : Found new task from 'Genève' to 'Sion'.
+[17:34:18] INFO    : Found new task from 'Sion' to 'Lausanne'.
+[17:34:18] INFO    : New topology information found: 'topo_switzerland'
+[17:34:18] DEBUG   : Found new city: 'Lausanne'
+[17:34:18] DEBUG   : Found new city: 'Genève'
+[17:34:18] DEBUG   : Found new city: 'Sion'
+[17:34:18] DEBUG   : Found new city: 'Neuchâtel'
+[17:34:18] DEBUG   : Found new city: 'Bern'
+[17:34:18] DEBUG   : Found new city: 'Basel'
+[17:34:18] DEBUG   : Found new city: 'Fribourg'
+[17:34:18] DEBUG   : Found new city: 'Zürich'
+[17:34:18] DEBUG   : Found new city: 'Aarau'
+[17:34:18] DEBUG   : Found new city: 'Luzern'
+[17:34:18] DEBUG   : Found new city: 'St-Gallen'
+[17:34:18] DEBUG   : Found new city: 'Thun'
+[17:34:18] DEBUG   : Found new route from 'Lausanne' to 'Genève'
+[17:34:18] DEBUG   : Found new route from 'Sion' to 'Lausanne'
+[17:34:18] DEBUG   : Found new route from 'Neuchâtel' to 'Lausanne'
+[17:34:18] DEBUG   : Found new route from 'Fribourg' to 'Lausanne'
+[17:34:18] DEBUG   : Found new route from 'Fribourg' to 'Bern'
+[17:34:18] DEBUG   : Found new route from 'Sion' to 'Thun'
+[17:34:18] DEBUG   : Found new route from 'Neuchâtel' to 'Bern'
+[17:34:18] DEBUG   : Found new route from 'Basel' to 'Bern'
+[17:34:18] DEBUG   : Found new route from 'Zürich' to 'Aarau'
+[17:34:18] DEBUG   : Found new route from 'Zürich' to 'Luzern'
+[17:34:18] DEBUG   : Found new route from 'Bern' to 'Aarau'
+[17:34:18] DEBUG   : Found new route from 'Luzern' to 'Aarau'
+[17:34:18] DEBUG   : Found new route from 'St-Gallen' to 'Zürich'
+[17:34:18] DEBUG   : Found new route from 'Thun' to 'Bern'
+[17:34:18] DEBUG   : Found new route from 'Basel' to 'Zürich'
+[17:34:18] INFO    : New agent set found: 'reactive_agents'
+[17:34:18] INFO    : Found an agent named 'Alabama Entreprises'
+[17:34:18] INFO    : Agent 'Alabama Entreprises' properties:
+[17:34:18] INFO    :    --> speed: 120.0
+[17:34:18] INFO    :    --> capacity: 80.0
+[17:34:18] INFO    :    --> costperkm: 15.0
+[17:34:18] INFO    :    --> color: black
+[17:34:18] INFO    :    --> home: random
+[17:34:18] INFO    : Found an agent named 'VehicleA-1'
+[17:34:18] INFO    : Agent 'VehicleA-1' properties:
+[17:34:18] INFO    :    --> speed: 120.0
+[17:34:18] INFO    :    --> capacity: 80.0
+[17:34:18] INFO    :    --> costperkm: 15.0
+[17:34:18] INFO    :    --> color: red
+[17:34:18] INFO    :    --> home: Genève
+[17:34:18] DEBUG   : Found a behavior for signal 'kill'
+[17:34:18] DEBUG   : Found a behavior for signal '*'
+[17:34:18] INFO    : Found an agent named 'VehicleA-2'
+[17:34:18] INFO    : Agent 'VehicleA-2' properties:
+[17:34:18] INFO    :    --> speed: 1500
+[17:34:18] INFO    :    --> capacity: 80.0
+[17:34:18] INFO    :    --> costperkm: 15.0
+[17:34:19] INFO    :    --> color: black
+[17:34:19] INFO    :    --> home: Aarau
+[17:34:19] INFO    : Initializing the managers...
+[17:34:19] INFO    : Initializing the views...
+[17:34:19] INFO    : Initialization of the views is complete.
+[17:34:19] INFO    : Initializing the agent management service...
+[17:34:19] INFO    : Initializing the agent management service...
+[17:34:19] INFO    : Initialisation of the agent management is complete.
+[17:34:19] INFO    : Initialization of agent management service is complete
+[17:34:19] INFO    : Initializing the messaging service...
+[17:34:19] INFO    : Initialization of the messaging service is complete.
+[17:34:19] INFO    : Initializing the task management service...
+[17:34:19] INFO    : Initialization of the task management service is complete.
+[17:34:19] INFO    : Initializing the topology management service...
+[17:34:19] INFO    : Initialization of the topology is complete.
+[17:34:19] INFO    : Creating the tasks from the descriptor...
+[17:34:19] DEBUG   : Task manager received a request to create agents.
+[17:34:19] INFO    : Creation of the tasks is complete.
+[17:34:19] INFO    : Creation of the tasks is complete.
+[17:34:19] INFO    : Creating the agents from the descriptor...
+[17:34:19] INFO    : Beginning creation of the individual agents...
+[17:34:19] DEBUG   : Spawning named agent 'Alabama Entreprises'...
+[17:34:19] DEBUG   : Creating agent state...
+[17:34:19] FATAL   : Hello World From a Reactive Vehicle Agent !!!
+[17:34:19] DEBUG   : Creating agent entity...
+[17:34:19] DEBUG   : Creating agent representation...
+[17:34:19] DEBUG   : Spawning children agents for 'Alabama Entreprises'...
+[17:34:19] DEBUG   : Spawning named agent 'VehicleA-1'...
+[17:34:19] DEBUG   : Creating agent state...
+[17:34:19] FATAL   : Hello World From a Reactive Company Agent !!!
+[17:34:19] DEBUG   : Creating agent entity...
+[17:34:19] INFO    : Registering behavior for signal 'kill'.
+[17:34:19] INFO    : Registering behavior for signal '*'.
+[17:34:19] DEBUG   : Creating agent representation...
+[17:34:19] DEBUG   : Spawning children agents for 'VehicleA-1'...
+[17:34:19] DEBUG   : Spawning named agent 'VehicleA-2'...
+[17:34:19] DEBUG   : Creating agent state...
+[17:34:19] FATAL   : Hello World From a Reactive Company Agent !!!
+[17:34:19] DEBUG   : Creating agent entity...
+[17:34:19] DEBUG   : Creating agent representation...
+[17:34:20] DEBUG   : Spawning children agents for 'VehicleA-2'...
+[17:34:20] DEBUG   : All agents were successfully created !
+[17:34:20] INFO    : Agent creation and initialization is complete.
+[17:34:20] INFO    : Creation of the agents is complete.
+
+
+--| End of log |------------------------------------------------------

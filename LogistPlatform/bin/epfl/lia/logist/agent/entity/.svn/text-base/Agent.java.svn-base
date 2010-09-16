@@ -1,0 +1,212 @@
+package epfl.lia.logist.agent.entity;
+
+/* importation table */
+import java.util.HashMap;
+import epfl.lia.logist.messaging.*;
+import epfl.lia.logist.messaging.signal.*;
+import epfl.lia.logist.messaging.action.*;
+import epfl.lia.logist.agent.behavior.*;
+import epfl.lia.logist.agent.behavior.response.*;
+import epfl.lia.logist.exception.BehaviorExecutionError;
+import epfl.lia.logist.exception.BehaviorNotImplementedError;
+import epfl.lia.logist.logging.*;
+import epfl.lia.logist.tools.AID;
+
+
+
+/**
+ * An agent represents a single moving entity in the simulation. An agent can either
+ * be a vehicle or a company in the context of logistics. It cannot exist alone and
+ * is controled by an agent state entity. For all behaviors, an agent state has an
+ * internal state machine specifying which moves the agent's behavior can operate. The
+ * agent state are drawable entitites.
+ *
+ */
+public class Agent extends MessageHandler 
+		implements Runnable {
+
+	/**
+	 * A map of behaviors 
+	 */
+	private HashMap<SignalTypeEnum,Behavior> mMapOfBehaviors = null; 
+	
+	/**
+	 * A private instance of the dispatcher
+	 */
+	private MessageDispatcher mDispatcher = null;
+	
+	/**
+	 * Indicates whether the agent is active
+	 */
+	private boolean mbActive = true;
+	
+	/**
+	 * The ID of the corresponding state
+	 */
+	private AID mStateID = null;
+	
+	/**
+	 * The thread for this object
+	 */
+	private Thread mThread = null;
+	
+	
+	/**
+	 * The constructor of the class
+	 */
+	public Agent( AID stateID ) {
+		super();
+		mStateID = stateID;
+		mDispatcher = MessageDispatcher.getInstance();
+		mMapOfBehaviors = new HashMap<SignalTypeEnum,Behavior>();
+		mDispatcher.register(this);
+	}
+	
+	
+	/**
+	 * The subclassed method of class Runnable 
+	 */
+	public void run() {
+		
+		// tant que l'agent est encore en vie...
+		while ( mbActive ) {
+		
+			// checks to see if there is a message
+			if ( mDispatcher.check(this) ) {
+			
+				// retrieves the next message
+				Message msg = mDispatcher.retrieve( this );
+				
+				// we only care about signals
+				if ( msg != null &&
+					 msg.getMsgType() == MessageTypeEnum.MGT_SIGNAL ) {
+				
+					// retrieves the signal
+					Signal signal = (Signal)msg;
+				
+					// if the message is a kill message
+					if ( signal.getType() == SignalTypeEnum.SMT_KILL )
+						mbActive = false;
+				
+					// dispatches the signal
+					dispatchSignal( signal );
+				}
+			}
+			
+			// gives the hand to another thread
+			Thread.yield();
+		}
+		
+		// unregister it
+		mDispatcher.unregister( this );
+		
+		// TODO: Log event here
+		LogManager.getInstance().log( "main", LogSeverityEnum.LSV_INFO, "Thread has been killed !!!" );
+	}
+	
+	
+	/**
+	 * Indicates whether agent is active or not
+	 * @return
+	 */
+	public boolean isActive() {
+		return mbActive;
+	}
+	
+	
+	/**
+	 * Starts the thread for this agent
+	 */
+	public void start( String name ) {
+		mThread = new Thread( this, name );
+		mThread.start();
+	}
+	
+	
+	/**
+	 * Dispatches the incoming signal to correct behavior 
+	 */
+	private void dispatchSignal( Signal m ) {
+		
+		// retrieves the corresponding behavior
+		Behavior behavior = mMapOfBehaviors.get( m.getType() );
+		
+		// if the behavior exists, then execute it
+		if ( behavior != null ) {
+			
+			// tries executing the behavior
+			try {
+				IBehaviorResponse br = behavior.execute(m);
+				handleResponse( br );
+			} catch( BehaviorNotImplementedError err1 ) {
+				// TODO: Log the event to disk
+				LogManager.getInstance().log( "stdout", LogSeverityEnum.LSV_WARNING, "The requested behavior was not implemented" );
+				postMessage( new ReadyAction(this.getObjectID(),mStateID) );
+			} catch( Exception e ) {
+				// TODO: Log the event to disk
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	
+	/**
+	 * Handles the response returned by the behavior
+	 * @param br
+	 */
+	private void handleResponse( IBehaviorResponse br ) {
+		
+		/**/
+		switch( br.getType() ) {
+			
+			/**/
+			case BRT_READY:
+				postMessage( new ReadyAction(mObjectID,mStateID) );
+				break;
+				
+			/**/
+			case BRT_PICKUP:
+				postMessage( new PickupAction(mObjectID,mStateID,new Integer(((PickupBehaviorResponse)br).getTaskID())) );
+				break;
+				
+			/**/
+			case BRT_MOVETO:
+				postMessage( new MoveAction(mObjectID,mStateID,((MoveBehaviorResponse)br).Destination ) );
+				break;
+				
+			/**/
+			case BRT_TEXT:
+				postMessage( new ReadyAction(this.getObjectID(),mStateID) );
+				break;
+				
+		}
+	}
+	
+	
+	/**
+	 * 
+	 *
+	 */
+	private void postMessage( Action<?> action ) {
+		MessageDispatcher.getInstance().post( action );
+	}
+	
+	
+	/**
+	 * Registers a behavior for a particular signal 
+	 */
+	public void registerBehavior( SignalTypeEnum st, Behavior b ) {
+		// TODO: Log the event
+		mMapOfBehaviors.put( st, b );
+	}
+
+
+	/**
+	 * Unregisters a behavior for a particular signal 
+	 */
+	public void unregisterBehavior( SignalTypeEnum st ) {
+		// TODO: Log the event
+		if ( mMapOfBehaviors.containsKey(st) )
+			mMapOfBehaviors.remove(st);
+	}
+}

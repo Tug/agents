@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+<!-- the simulation default file -->
+<simulation version="1.0" default="test-config">
+  
+  <!-- default configuration for reactive agents -->
+  <configuration name="test-config" file="test.xml"/> 
+
+  <!-- default configuration for reactive agents -->
+  <configuration name="ex1-reactive1" file="reactive1.xml"/>
+
+  <!-- default configuration for reactive agents -->
+  <configuration name="ex1-reactive2" file="reactive2.xml"/>
+
+  <!-- default configuration for reactive agents -->
+  <configuration name="ex1-reactive3" file="reactive3.xml"/>
+  
+  
+</simulation>

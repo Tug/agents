@@ -1,0 +1,4 @@
+package epfl.lia.logist.exception;
+
+public class BehaviorNotImplementedError extends Error {
+}

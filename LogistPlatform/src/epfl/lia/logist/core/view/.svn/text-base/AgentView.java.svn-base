@@ -1,0 +1,66 @@
+package epfl.lia.logist.core.view;
+
+/* import table */
+import uchicago.src.sim.space.Multi2DGrid;
+import epfl.lia.logist.agent.AgentDisplayable;
+import epfl.lia.logist.agent.AgentProfile;
+import epfl.lia.logist.core.listeners.IAgentListener;
+
+
+/**
+ *
+ * * This class wraps a Multi2DGrid to represent the space of Vehicles
+ * 
+ */
+
+public class AgentView extends View<Multi2DGrid> implements IAgentListener {
+	
+	/**
+	 * Default constructor of the class
+	 * @param xSize
+	 * @param ySize
+	 */
+	public AgentView( int width, int height ) {
+		this.msSpace = new Multi2DGrid( width, height, true );
+	}
+	
+	/** 
+	 * Invoked once to create the view
+	 */
+	public void create() {
+	}
+	
+	
+	/**
+	 * Invoked once to destroy the view
+	 */
+	public void destroy() {
+	}
+	
+	
+	/**
+	 * This is automatically invoked by the agent manager
+	 * when a new agent is created. This allows depending
+	 * systems to update themselves easily.
+	 * @param ag a reference 
+	 */
+	public void onAgentAddition( AgentProfile ap ) {
+		System.out.println( "Agent '" + ap.getName() + "' added..." );
+		space().putObjectAt( ap.getDisplayable().getX(), 
+							 ap.getDisplayable().getY(), 
+							 ap.getDisplayable() );
+	}
+	
+	
+	/**
+	 * This is automatically invoked by the agent manager
+	 * when an agent is removed. This allows depending systems
+	 * to update themselves easily.
+	 * @param ag a reference to the agent profile.
+	 */
+	public void onAgentDeletion( AgentProfile ap ) {
+		space().putObjectAt( ap.getDisplayable().getX(), 
+							 ap.getDisplayable().getY(), null );
+	}
+	
+}

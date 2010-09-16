@@ -1,0 +1,81 @@
+package epfl.lia.logist.config;
+
+/* import table */
+import java.io.File;
+import epfl.lia.logist.exception.ConfigurationNotFoundException;
+import epfl.lia.logist.exception.NoConfigurationException;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class ConfigurationManager {
+
+	/**
+	 * The configuration file
+	 */
+	private File mConfigFile = null;
+	
+	
+	/**
+	 * Default constructor of the class
+	 * @param mConfigFile
+	 */
+	public ConfigurationManager( File cf ) {
+		mConfigFile = cf;
+	}
+	
+	
+	/**
+	 * Retrieve the configuration by name
+	 * @param name
+	 * @return
+	 */
+	public Configuration getConfigurationByName( String name )
+		throws Throwable {
+		
+		// creates a new configuration reader
+		ConfigurationReader lCfgReader = new ConfigurationReader(mConfigFile);
+		
+		// retrieves the simulation descriptor
+		lCfgReader.load();
+		
+		// retrieves the configuration given by its name 
+		Configuration lConfig = lCfgReader.getConfigurationByName(name);
+		
+		// if the configuration was not found, throw an exception
+		if ( lConfig == null )
+			throw new ConfigurationNotFoundException(name);
+		
+		//	returns the configuration name
+		return lConfig;
+
+	}
+	
+	
+	/**
+	 * Returns the default configuration
+	 * @return
+	 */
+	public Configuration getConfigurationByDefault() 
+		throws Throwable {
+		
+		// creates a new configuration reader
+		ConfigurationReader lCfgReader = new ConfigurationReader( mConfigFile );
+		
+		// retrieves the simulation descriptor
+		lCfgReader.load();
+		
+		// retrieves the configuration given by its name 
+		Configuration lConfig = lCfgReader.getConfigurationByDefault();
+		
+		// if the configuration was not found, throw an exception
+		if ( lConfig == null )
+			throw new NoConfigurationException();
+		
+		//	returns the configuration name
+		return lConfig;
+	}
+}

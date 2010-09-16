@@ -1,0 +1,8 @@
+package epfl.lia.logist.exception;
+
+public class LogistException extends Exception {
+
+	public LogistException(String msg) {
+		super(msg);
+	}
+}

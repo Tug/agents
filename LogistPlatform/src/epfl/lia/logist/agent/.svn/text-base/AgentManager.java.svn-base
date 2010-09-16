@@ -1,0 +1,292 @@
+package epfl.lia.logist.agent;
+
+/* import list */
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+
+import epfl.lia.logist.config.Configuration;
+import epfl.lia.logist.core.IService;
+import epfl.lia.logist.core.listeners.IAgentListener;
+import epfl.lia.logist.exception.AgentCreationException;
+import epfl.lia.logist.exception.AgentPopulationException;
+import epfl.lia.logist.logging.LogManager;
+import epfl.lia.logist.logging.LogSeverityEnum;
+import epfl.lia.logist.tools.AID;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class AgentManager implements IService {
+
+	/* This map holds agent profiles. */
+	private HashMap<AID,AgentProfile> mMapOfProfiles = null;
+	
+	/* The singleton instance of this class */
+	private static AgentManager msSingleton = null;
+	
+	/* The log manager reference */
+	private LogManager mLogMgr = null;
+	
+	/* Agent change listener */
+	private ArrayList<IAgentListener> mListeners = null;
+	
+	
+	/**
+	 * Default class constructor. Initializes instance objects
+	 * that do not need special privileges.
+	 */
+	public AgentManager() {
+		if ( msSingleton == null )
+			msSingleton = this;
+		mLogMgr = LogManager.getInstance();
+		mMapOfProfiles = new HashMap<AID,AgentProfile>();
+		mListeners = new ArrayList<IAgentListener>();
+		
+	}
+	
+	
+	/**
+	 * Initializes the manager’s internal state
+	 */
+	public void init() {
+		
+		// logs the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+			"Initializing the agent management service..." );
+		
+		
+		// logs the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+			"Initialisation of the agent management is complete." );
+
+	}
+
+	
+	/**
+	 * Deletes all internal data and deletes the manager
+	 */
+	public void shutdown() {
+		
+		// logs the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+			"Shutting the agent management service down..." );
+
+		// destroys the profiles 
+		for ( AgentProfile ap: mMapOfProfiles.values() ) {
+			ap.destroy();
+		}
+		
+		// TODO: wait for all agents to kill themselves
+		
+		// wipes every entry
+		mMapOfProfiles.clear();
+		
+		// immediately calls the garbage collector
+		Runtime.getRuntime().gc();
+		
+		// logs the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+			"Agent management service is s..." );
+	}
+	
+	
+	/**
+	 * Sets the agents up
+	 */
+	public void setup( Configuration cfg ) throws Exception {
+		create( cfg.Agents );
+	}
+	
+	
+	/**
+	 * Adds a new listener. A listener is invoked when an
+	 * agent is created, deleted or changed. This allows classes
+	 * depending on agents to use only a list, thus having no
+	 * need to duplicate data.
+	 * 
+	 * @param acl The listeneriSIiSIIiSIiiSiiSIIIiiiSIIii
+	 */
+	public void addListener( IAgentListener acl ) {
+		mListeners.add( acl );
+	}
+	
+
+			
+	/**
+	 * Initializes the internal state from a descriptor. 
+	 * This creates all agents 
+	 * @param ad
+	 */
+	public void create( AgentsetDescriptor ad ) 
+		throws AgentPopulationException {	
+		
+		// logs the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+			"Beginning creation of the individual agents..." );
+		
+		// try creating the root agent
+		try {
+			createAgent( ad.RootAgent, null );
+		} catch( AgentCreationException e ) {
+			throw new AgentPopulationException( e.getMessage() );
+		}
+		
+		// log the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_DEBUG, 
+			"All agents were successfully created !" );
+		
+		// if no profile was created, then we throw and
+		if ( mMapOfProfiles.size() == 0 )
+			throw new AgentPopulationException( "There exist no agent in simulation." );
+		
+		// logs the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, 
+			"Agent creation and initialization is complete." );
+	}
+	
+	
+	/**
+	 * This function allows creating a new agent.
+	 * @return
+	 * @throws AgentCreationException
+	 */
+	private void createAgent( AgentDescriptor ad, AgentProfile parent ) 
+		throws AgentCreationException {
+		
+		// verifies that the descriptor is not null
+		if ( ad == null ) 
+			throw new AgentCreationException( "No agent descriptor." );
+		
+		// first, we create the agent profile
+		AgentProfile ap = new AgentProfile();
+
+		// log the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_DEBUG, 
+			"Spawning named agent '" + ad.Name + "'..." );
+
+		// tests to see whether the profile was created or not
+		if ( ap == null )
+			throw new AgentCreationException( "No profile created" );
+		
+		// tries to create the agent from the descriptor.
+		try {
+			ap.create( ad, parent );
+		} catch( Exception e ) {
+			throw new AgentCreationException( e.getMessage() );
+		}
+		
+		// log the event
+		mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_DEBUG, 
+			"Spawning children agents for '" + ad.Name + "'..." );
+
+		// calls every listener to update their states
+		if ( ap.getType() == AgentTypeEnum.VEHICLE ) {
+			for ( IAgentListener acl : mListeners ) {
+				acl.onAgentAddition( ap );
+			}
+		}
+		
+		// creating the children agents
+		for( AgentDescriptor adc: ad.Children ) {
+			createAgent( adc, ap );
+		}
+		
+		// adds the agent descriptor
+		mMapOfProfiles.put( ap.getID(), ap );
+	}
+			
+	
+	/**
+	 * Kills an already existing agent
+	 */
+	public void initAgent( AID agentID ) {
+		AgentProfile ap = mMapOfProfiles.get( agentID );
+		if ( ap==null ) ap.init();
+	}
+	
+
+	/**
+	 * Kills all agents in the simulation
+	 */
+	public void initAllAgents() {
+		for ( AgentProfile ap : mMapOfProfiles.values() ) {
+			ap.init();
+		}
+	}
+	
+	
+	/**
+	 * Kills an already existing agent
+	 */
+	public void killAgent( AID agentID ) {
+		AgentProfile ap = mMapOfProfiles.get( agentID );
+		if ( ap==null ) ap.kill();
+	}
+	
+
+	/**
+	 * Kills all agents in the simulation
+	 */
+	public void killAllAgents() {
+		for ( AgentProfile ap : mMapOfProfiles.values() ) {
+			ap.kill();
+		}
+	}
+	
+	
+	/**
+	 * Resets the state of an agent 
+	 */
+	public void resetAgent( AID agentID ) {
+		AgentProfile ap = mMapOfProfiles.get( agentID );
+		if ( ap==null ) ap.reset();
+	}
+
+	
+	/**
+	 * Resets all agents in the manager.
+	 */
+	public void resetAllAgents() {
+		for ( AgentProfile ap : mMapOfProfiles.values() ) {
+			ap.reset();
+		}
+	}
+
+	
+	/**
+	 * Returns an instance of the manager
+	 * @return
+	 */
+	public static AgentManager getInstance() {
+		return msSingleton;
+	}
+
+	
+	/**
+	 * Returns the profile for a single agent 
+	 * @return
+	 */
+	public AgentProfile getProfile( AID agentID ) {
+		return mMapOfProfiles.get(agentID) ;
+	}
+
+	
+	/**
+	 * Returns a collection of profiles
+	 * @return
+	 */
+	public Collection<AgentProfile> getProfileList() {
+		return mMapOfProfiles.values();
+	}
+	
+	/**
+	 * The text for the service management system
+	 */
+	public String toString() {
+		return "Agent management service";
+	}
+}

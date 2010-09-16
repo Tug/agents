@@ -1,0 +1,71 @@
+package epfl.lia.logist.messaging;
+
+/* imports the array list class */
+import java.util.ArrayList;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class MessageBox {
+	
+	/**
+	 * The queue of messages. The first message arrived 
+	 * is the first to be retrieved
+	 */
+	private ArrayList<Message<?>> mMessageBox;
+
+
+	private int session;
+	
+	/**
+	 * Default constructor of the class. Initializes
+	 * the message box.
+	 */
+	public MessageBox() {
+		mMessageBox = new ArrayList<Message<?>>();
+	}
+	
+	/**
+	 * Stores a new message in the mailbox
+	 * @param m
+	 */
+	public void store( Message<?> m ) {
+		session = (int)(Math.random() * 6000.0);
+		mMessageBox.add( m );
+	}
+
+	/**
+	 * Counts the number of messages in the mailbox
+	 * @return
+	 */
+	public int count() {
+		return mMessageBox.size();
+	}
+
+	/**
+	 * Inidicates if the message box is empty or not
+	 * @return
+	 */
+	public boolean isEmpty() {
+		return mMessageBox.isEmpty();
+	}
+	
+	/**
+	 * Deletes every pending message in the
+	 * queue.
+	 */
+	public void trashAll() {
+		mMessageBox.clear();
+	}
+	/**
+	 * Retrieves a message, or null if none is available
+	 * @return
+	 */
+	public Message<?> retrieve() {
+		Message<?> m = mMessageBox.remove(0);
+		return m;
+	}
+}

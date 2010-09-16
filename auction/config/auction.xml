@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- the main configuration for deliberative agents -->
+<configuration name="ex4-auction">
+
+	<!-- defines the properties for this configuration -->
+	<propset>
+		<property name="world-xsize" value="665" />
+		<property name="world-ysize" value="900" />
+		<property name="backcolor" value="#ffffff" />
+		<property name="forecolor" value="#000000" />
+		<property name="num-rounds" value="2" />
+		<property name="reset-timeout" value="10000" />
+		<property name="init-timeout" value="10000" />
+		<property name="setup-timeout" value="30000" />
+		<property name="kill-timeout" value="1000" />
+	<!-- <property name="auction-timeout" value="60000" /> -->
+		<property name="city-name-color" value="#002233" />
+		<property name="city-color" value="#00aaff" />
+		<property name="city-perim-color" value="#555555" />
+		<property name="city-radius" value="8" />
+		<property name="task-text-color" value="1000" />
+		<property name="task-pickup-color" value="#ff0000" />
+		<property name="task-deliver-color" value="#0000ff" />
+		<property name="task-indicator-color" value="#000000" />
+		<property name="show-legend" value="yes" />
+		<property name="show-gui" value="yes" />
+		<property name="classpath" value="src/;" />
+		<property name="log-dir" value="logs/" />
+		<property name="history-dir" value="history/" />
+		<property name="task-threshold" value="0" />
+		<property name="antialias-scene" value="yes" />
+		<property name="antialias-text" value="yes" />		
+	</propset>
+	
+	
+	<!-- this sections describes the properties of
+	     the logs -->
+	<logset name="auction-logset">
+		<propset />
+		<log name="hello-world" />
+	</logset>
+	
+	<!-- takes the taskset from an external file -->
+	<taskset name="default_taskset" file="taskset.xml" />
+	
+	<!-- takes the topology from an external file -->
+	<toposet name="topo_england" file="topology/england.xml" />
+	
+	<!-- this section describes all agents in the simulation -->
+	<agentset name="auction-agents">
+		
+		<!--  defines top-level properties for the agents -->
+		<propset />	
+		
+		<!-- the company agent ruling them all -->
+		<agent name="Matrix">
+			<definition>
+				<propset>
+					<property name="type" value="company" />
+					<property name="behavior" value="auction" />
+				</propset>
+				<behaviorset />
+			</definition>
+			<children>
+				<agent name="BelloPocardCorp">
+					<definition>
+						<propset>
+							<property name="type" value="company" />
+							<property name="behavior" value="bidder" />
+							<property name="active" value="yes" />
+						</propset>
+						<behaviorset>
+							<behavior signal="*" handler="auction.BidderCompanyBehavior" />
+						</behaviorset>
+					</definition>
+					<children>
+						<agent name="BelloPocardCorp.Vehicle1">
+							<definition>
+								<propset>
+									<property name="type" value="vehicle" />
+									<property name="behavior" value="bidder" />
+									<property name="active" value="yes" />
+									<property name="color" value="#0f00ff" />
+								</propset>
+								<behaviorset />
+							</definition>
+							<children />
+						</agent>
+						<agent name="BelloPocardCorp.Vehicle2">
+							<definition>
+								<propset>
+									<property name="type" value="vehicle" />
+									<property name="behavior" value="bidder" />
+									<property name="active" value="yes" />
+									<property name="color" value="#f0f0ff" />
+								</propset>
+								<behaviorset />
+							</definition>
+							<children />
+						</agent>
+					</children>
+				</agent>
+				<agent name="LoosersCorp">
+					<definition>
+						<propset>
+							<property name="type" value="company" />
+							<property name="behavior" value="bidder" />
+							<property name="active" value="yes" />
+						</propset>
+						<behaviorset>
+							<behavior signal="*" handler="opponent.BidderCompanyBehavior" />
+						</behaviorset>
+					</definition>
+					<children>
+						<agent name="LoosersCorp.Vehicle1">
+							<definition>
+								<propset>
+									<property name="type" value="vehicle" />
+									<property name="behavior" value="bidder" />
+									<property name="active" value="yes" />
+									<property name="color" value="#ff0f0f" />
+								</propset>
+								<behaviorset />
+							</definition>
+							<children />
+						</agent>
+						<agent name="LoosersCorp.Vehicle2">
+							<definition>
+								<propset>
+									<property name="type" value="vehicle" />
+									<property name="behavior" value="bidder" />
+									<property name="active" value="yes" />
+									<property name="color" value="#ff000f" />
+								</propset>
+								<behaviorset />
+							</definition>
+							<children />
+						</agent>
+					</children>
+				</agent>
+			</children>
+		</agent>
+	</agentset>
+</configuration>

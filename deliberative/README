@@ -1,0 +1,64 @@
+Please under no circumstances change the file Manifest.txt. If you do then
+I will not be able to run your program without additional tweaking. If
+your directory structure is not the same as mine then you will not be
+able to run the jar file. This is perfectly normal behaviour.
+
+The most straightforward approach is to implement code in the
+subdirectory of the src directory. Please note there are some skeleton
+files already there. The .xml files provided in config directory are
+configured to look for the behaviors of your agents in these
+classes. For the simplicity sake, each .java file must have
+corresponding .class file in the same directory (in other words the
+program must be compiled and available in src directory).
+
+If you want to run your program on your system which has a different
+directory structure then classpath variable should point to directory
+LogistPlatform/bin (or logist.jar), LogistPlatform/lib/jdom.jar,
+LogistPlatform/lib/commons-math-1.1.jar, RepastJ/repast.jar
+
+Compilation Example :
+
+javac -sourcepath ./src -cp ../../../LogistPlatform/bin/:../../../LogistPlatform/lib/jdom.jar:../../../../Repast-3.1/RepastJ/repast.jar:../../../LogistPlatform/lib/commons-math-1.1.jar src/org/logist/deliberative/DeliberativeBehavior.java 
+
+Note : repast.jar uses internally jar files from RepastJ directory,
+copying repast to other directory (.e.g. LogistPlatform/lib/) and
+attempting to set the classpath to the file there will cause problems
+as it will not be able to find some of its own external jar files.
+
+Run Example :
+
+java -cp ../../../LogistPlatform/bin/:../../../LogistPlatform/lib/jdom.jar:../../../../Repast-3.1/RepastJ/repast.jar:../../../LogistPlatform/lib/commons-math-1.1.jar:. MainDeliberative
+
+
+Note : Please notice that CLASSPATH (cp) is augmented with path "." as it needs
+to find precompiled MainDeliberative.class file.
+
+Due to possible usage of different versions of JVM it is advised to
+recompile the MainDeliberative.java class file.
+
+
+Tip for Eclipse :
+
+Make sure you have colt.jar and trove.jar from repast lib directory included in
+your project classpath. 
+
+
+
+Directory structure to make your jar file work (given fixed! manifest) :
+
+CourseIntelligentAgents/Repast-3.1 - with Repast
+CourseIntelligentAgents/LogistPlatform/LogistPlatform - with LogistPlatform
+CourseIntelligentAgents/LogistPlatform/Assignments/deliberative/lastname/ - with the files you have received for deliberative Agent exercise plus your own code.
+
+In order to submit the solution, simply run the script pack.sh with
+your lastnames (e.g. Boi-Szymanek) while being in the same directory as 
+script pack.sh . 
+
+
+
+Additional external jar-files :
+
+If for some reason, while coding your agents you want to use other
+external jar files (not mentioned in Manifest file) then please
+contact me during labs, as we will have to change the Manifest file
+together.

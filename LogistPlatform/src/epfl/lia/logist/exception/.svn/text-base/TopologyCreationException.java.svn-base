@@ -1,0 +1,7 @@
+package epfl.lia.logist.exception;
+
+public class TopologyCreationException extends Exception {
+	public TopologyCreationException( String msg ) {
+		super(msg);
+	}
+}

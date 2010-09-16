@@ -1,0 +1,7 @@
+package epfl.lia.logist.exception;
+
+public class AgentPopulationException extends Exception {
+	public AgentPopulationException( String msg ) {
+		super( msg );
+	}
+}

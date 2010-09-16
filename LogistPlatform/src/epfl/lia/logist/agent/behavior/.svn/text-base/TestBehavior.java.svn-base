@@ -1,0 +1,89 @@
+package epfl.lia.logist.agent.behavior;
+
+/* import table */
+import java.util.ArrayList;
+
+import epfl.lia.logist.agent.behavior.response.IBehaviorResponse;
+import epfl.lia.logist.agent.behavior.response.MoveBehaviorResponse;
+import epfl.lia.logist.agent.behavior.response.PickupBehaviorResponse;
+import epfl.lia.logist.agent.behavior.response.ReadyBehaviorResponse;
+import epfl.lia.logist.exception.BehaviorExecutionError;
+import epfl.lia.logist.exception.BehaviorNotImplementedError;
+import epfl.lia.logist.messaging.signal.InCitySignal;
+import epfl.lia.logist.messaging.signal.Signal;
+
+
+/**
+ * 
+ * @author salves
+ *
+ */
+public class TestBehavior extends Behavior {
+
+	@Override
+	public IBehaviorResponse execute(Signal s) throws BehaviorExecutionError,
+			BehaviorNotImplementedError {
+		
+		switch( s.getType() ) {
+		case SMT_INIT:
+			//this.log( LogSeverityEnum.LSV_INFO, "Signal received: INIT" );
+			return new ReadyBehaviorResponse();
+		case SMT_RESET:
+			//this.log( LogSeverityEnum.LSV_INFO, "Signal received: RESET" );
+			return new ReadyBehaviorResponse();
+		case SMT_KILL:
+			//this.log( LogSeverityEnum.LSV_INFO, "Signal received: KILL" );
+			return new ReadyBehaviorResponse();
+		case SMT_SETUP:
+			//this.log( LogSeverityEnum.LSV_INFO, "Signal received: SETUP" );
+			return new ReadyBehaviorResponse();
+		case SMT_INCITY:
+		{
+			// this agent always picks tasks up
+			InCitySignal.InCityObject cc = ((InCitySignal)s).getMessage();
+			/*if ( cc.Tasks.size() > 0 ) {
+				return new PickupBehaviorResponse( cc.Tasks.get(0).ID );
+			}*/
+
+			// if no task, just move
+			MoveBehaviorResponse ret = new MoveBehaviorResponse();
+			ret.Destination = chooseCity( cc.Neighbors );
+			// returns the response
+			return ret;
+		}
+		
+			
+		case SMT_INSTATE:
+			//this.log( LogSeverityEnum.LSV_INFO, "Signal received: INSTATE" );
+			break;
+		case SMT_TASKDELIVERED:
+			//this.log( LogSeverityEnum.LSV_INFO, "Signal received: TASKDELIVERED" );
+			break;
+		case SMT_TASKREFUSED:
+			//this.log( LogSeverityEnum.LSV_INFO, "Signal received: TASKREFUSED" );
+			break;
+		case SMT_AUCTION:
+			//this.log( LogSeverityEnum.LSV_INFO, "Signal received: AUCTION" );
+			break;
+		case SMT_ASKBID:
+			//this.log( LogSeverityEnum.LSV_INFO, "Signal received: ASKBID" );
+			break;
+		case SMT_TEXT:
+			//this.log( LogSeverityEnum.LSV_INFO, "Signal received: TEXT" );
+			break;
+		}
+		
+		throw new BehaviorNotImplementedError();
+	}
+	
+	
+	/**
+	 * Chooses the city
+	 */
+	public String chooseCity( ArrayList<String> cities ) {
+		int lRandom = (int)(Math.random() * (double)cities.size());
+		String city= cities.get( lRandom ); 
+		return city;
+	}
+
+}

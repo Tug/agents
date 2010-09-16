@@ -1,0 +1,32 @@
+<log>
+  <general-info>
+    <start-date>mer. sept. 26 00:09:59 CEST 2007</start-date>
+    <start-time>00:09:59</start-time>
+    <java-vendor>Sun Microsystems Inc.</java-vendor>
+    <java-vendor-url>http://java.sun.com/</java-vendor-url>
+    <java-version>1.6.0_02</java-version>
+    <os-arch>x86</os-arch>
+    <os-name>Windows XP</os-name>
+    <user-name>salves</user-name>
+    <cache-size>1</cache-size>
+    <max-entries>-1</max-entries>
+    <debug-level>debug</debug-level>
+  </general-info>
+
+  <log-entries>
+    <log-entry id="0">
+      <entry-severity>ERROR</entry-severity>
+      <entry-module></entry-module>
+      <entry-line>0</entry-line>
+      <entry-time>00:10:03</entry-time>
+      <entry-message>Initializing the agent configuration...</entry-message>
+    </log-entry>
+    <log-entry id="1">
+      <entry-severity>ERROR</entry-severity>
+      <entry-module></entry-module>
+      <entry-line>0</entry-line>
+      <entry-time>00:10:03</entry-time>
+      <entry-message>Initializing the agent configuration...</entry-message>
+    </log-entry>
+  </log-entries>
+</log>

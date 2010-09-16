@@ -1,0 +1,53 @@
+<log>
+  <general-info>
+    <start-date>mar. juin 19 22:40:28 CEST 2007</start-date>
+    <start-time>22:40:28</start-time>
+    <java-vendor>Sun Microsystems Inc.</java-vendor>
+    <java-vendor-url>http://java.sun.com/</java-vendor-url>
+    <java-version>1.6.0_01</java-version>
+    <os-arch>x86</os-arch>
+    <os-name>Windows XP</os-name>
+    <user-name>malves</user-name>
+    <cache-size>5</cache-size>
+    <max-entries>0</max-entries>
+    <debug-level>debug</debug-level>
+  </general-info>
+
+  <log-entries>
+    <log-entry id="0">
+      <entry-severity>DEBUG</entry-severity>
+      <entry-module></entry-module>
+      <entry-line>0</entry-line>
+      <entry-time>22:40:28</entry-time>
+      <entry-message>This is a simple debug message !</entry-message>
+    </log-entry>
+    <log-entry id="1">
+      <entry-severity>INFO</entry-severity>
+      <entry-module></entry-module>
+      <entry-line>0</entry-line>
+      <entry-time>22:40:28</entry-time>
+      <entry-message>This is a simple piece of information !</entry-message>
+    </log-entry>
+    <log-entry id="2">
+      <entry-severity>WARNING</entry-severity>
+      <entry-module></entry-module>
+      <entry-line>0</entry-line>
+      <entry-time>22:40:28</entry-time>
+      <entry-message>This is a warning !</entry-message>
+    </log-entry>
+    <log-entry id="3">
+      <entry-severity>ERROR</entry-severity>
+      <entry-module></entry-module>
+      <entry-line>0</entry-line>
+      <entry-time>22:40:28</entry-time>
+      <entry-message>This is a serious error !</entry-message>
+    </log-entry>
+    <log-entry id="4">
+      <entry-severity>FATAL</entry-severity>
+      <entry-module></entry-module>
+      <entry-line>0</entry-line>
+      <entry-time>22:40:28</entry-time>
+      <entry-message>This is a fatal error ! Must QUIT !!!</entry-message>
+    </log-entry>
+  </log-entries>
+</log>

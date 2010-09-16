@@ -1,0 +1,77 @@
+<project name="LogistPlatform" default="usage" basedir=".">
+	
+	<!-- the definition file for the build ant file -->
+	<property file="${os.name}.properties"/>
+
+	<!-- displays the usage -->
+	<target name="usage">
+		<echo message="${os.name}" />
+		<echo message="" />
+		<echo message="build.source = ${build.source}" />
+		<echo message="build.target = ${build.target}" />
+		<echo message="build.docs = ${build.docs}" />
+		<echo message="build.output = ${build.output}" />
+		<echo message="build.classpath = ${build.classpath}" />
+		<echo message="build.libs = ${build.libs}" />
+		<echo message="repast.path = ${repast.path}" />
+		<echo message="jdom.path = ${jdom.path}" />
+		<echo message="commons.path = ${commons.path}" />
+		<echo message="" />
+		<echo message="Available commands are:" />
+		<echo message="   usage        displays this message" />
+		<echo message="   compile      compiles the platform from source" />
+		<echo message="   package      generates a jar file from source" />
+		<echo message="   launch-jar   launches the platform as a jar" />
+		<echo message="   launch       launch the platform from source" />
+	</target>
+
+	
+	<!-- compiles the files -->
+	<target name="compile" description="Builds the complete platform">
+		
+		<!-- creates the output directory, if none exists -->
+		<mkdir dir="${build.target}"/>
+		
+		<!-- invokes the java compiler -->
+		<javac srcdir="${build.source}" 
+		       destdir="${build.target}" 
+		       listfiles="yes"
+		       source="1.5">
+			<classpath>
+				<pathelement path="${build.classpath}"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<!-- packages the platform into a single jar -->
+	<target name="package" depends="compile" description="Packages the platform into a single JAR file">
+		<mkdir dir="${build.output}" />
+		<jar destfile="${build.output}/logist1-1.jar">
+			<fileset dir="${build.target}" />
+			<manifest>
+				<attribute name="Built-By" value="Bruno Alves" />
+				<attribute name="Main-Class" value="epfl.lia.logist.LogistPlatform" />
+				<attribute name="Class-Path" value="${repast.path} ${jdom.path} ${commons.path}" />
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- launches the jar file -->
+	<target name="launch-jar" description="Launches everything from the JAR">
+ 		<java jar="${build.output}/logist1-1.jar" fork="true" failonerror="true">
+ 			<arg value="config/default.xml"/>
+ 			<arg value="ex1-reactive" />
+ 		</java>
+	</target>
+
+	<!-- launches the class described by variable ${launch.class}-->
+	<target name="launch" description="Launches everything from the source">
+		<java classname="${launch.class}">
+        	<classpath>
+           		<pathelement path="${build.target}"/>
+        		<pathelement path="${build.output}"/>
+         	</classpath>
+       	</java>
+
+	</target>
+</project>

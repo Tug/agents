@@ -1,0 +1,64 @@
+8
+
+dir
+80
+svn+ssh://iagents/users/iagents/SVN_REPO/LogistPlatform/trunk/src/epfl/lia/logist/tools/interpolators
+svn+ssh://iagents/users/iagents/SVN_REPO
+
+
+
+2007-07-11T20:38:55.747376Z
+80
+iagents
+
+
+svn:special svn:externals svn:needs-lock
+
+IntegerInterpolator.java
+file
+
+
+
+
+2007-07-06T21:46:56.000000Z
+802f42c424499c9a83cb55fa1287f46d
+2007-07-11T20:38:55.747376Z
+80
+iagents
+
+ILinearInterpolator.java
+file
+
+
+
+
+2007-07-06T21:46:56.000000Z
+8dde686800e54573cf47b5706d91efc3
+2007-07-11T20:38:55.747376Z
+80
+iagents
+
+FloatInterpolator.java
+file
+
+
+
+
+2007-07-06T21:46:56.000000Z
+a72380c35b2058727edf6077060abfc7
+2007-07-11T20:38:55.747376Z
+80
+iagents
+
+PointInterpolator.java
+file
+
+
+
+
+2007-07-06T21:46:56.000000Z
+53ca81492d570a3327125c36c07f4f25
+2007-07-11T20:38:55.747376Z
+80
+iagents
+

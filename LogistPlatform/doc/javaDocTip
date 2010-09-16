@@ -1,0 +1,1 @@
+javadoc -sourcepath ../src/ -classpath ../../../Repast-3.1/RepastJ/lib/colt.jar:../lib/jdom.jar:../lib/commons-math-1.1.jar:../../../Repast-3.1/RepastJ/repast.jar -subpackages epfl.lia.logist -d .

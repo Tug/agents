@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<taskset name="default_taskset">
+	<generator>
+		<propset>
+			<property name="max-allocatable" value="5" />
+			<property name="batch-size" value="5" />
+			<property name="distribution" value="sample2" />
+		</propset>
+
+		<!--  this distribution is based on probabilistic distributions. in
+			  the distribution below, we set a certain number of probabilities
+			  manually. for the probabilities, we set a binary distribution
+			  that will assign 1.0 or 0.0 to the probability of having a
+			  task in a city. For the rewards, we set a probability distribution
+			  assigning normal values from 55.0 to 65.  -->
+		<distribution name="sample2" type="probabilistic" >
+		
+		<!--  properties for the distribution -->
+		<propset>
+			<property name="probability" value="binary-1" />
+			<property name="reward" value="gaussian-1" />
+			<property name="weight" value="uniform-1" />
+			<property name="defaults" value="no" />
+			<property name="normalize" value="yes" />
+			<property name="probability-default" value="0.0" />
+			<property name="reward-default" value="0.0" />
+		</propset>
+            
+	        <!-- hand written values -->
+		<probabilities>
+		        <probability from="Genève" to="Le Havre" task="1.0" reward="1660.0" />
+			<probability from="Paris" to="Marseille" task="0.0" reward="5500.0" />
+			<probability from="Lyon" to="Marseille" task="1.0" reward="2557.0" />
+			<probability from="Monaco" to="Paris" task="1.0" reward="4538.0" />
+		</probabilities>
+            
+	        <!-- in this section, we can redefine density functions. Every
+		         function for which we want customized params, we must
+            	         create a function element and assign the base type we
+            	     want (gaussian or binary for this release)-->
+		
+		<density-functions>
+	            
+	            <!-- gaussian density function -->
+	            <function name="gaussian-1" type="gaussian" >
+	                <property name="variance" value="0.2" />
+	                <property name="mean" value="0.5" />
+	                <property name="y-max" value="7960.0" />
+	                <property name="y-min" value="4155.0" />
+	                <property name="seed" value="13325" />
+	            </function>
+
+	            <function name="gaussian-2" type="gaussian" >
+	                <property name="variance" value="0.2" />
+	                <property name="mean" value="0.5" />
+	                <property name="y-max" value="30.0" />
+	                <property name="y-min" value="10.0" />
+	                <property name="seed" value="13325" />
+	            </function>
+	 
+	            <!-- binary density function-->
+	            <function name="binary-1" type="binary" >
+	                <property name="min" value="0" />
+	                <property name="max" value="1" />
+			<property name="bias" value="0.2" />
+	                <property name="seed" value="13325" />
+	            </function>
+
+		    <function name="uniform-1" type="uniform" >
+		        <property name="min" value="10" />
+			<property name="max" value="30" />
+			<property name="seed" value="13325" />
+		    </function>
+	            
+            </density-functions>
+		</distribution>
+	</generator>
+</taskset>

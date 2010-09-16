@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<history>
+	<round id="1">
+	</round>
+	<round id="0">
+	</round>
+	<statistics>
+		<total-cost>775950.0</total-cost>
+		<total-reward>18550.0</total-reward>
+		<total-gain>-757400.0</total-gain>
+		<total-distance>51730.0</total-distance>
+	</statistics>
+</history>

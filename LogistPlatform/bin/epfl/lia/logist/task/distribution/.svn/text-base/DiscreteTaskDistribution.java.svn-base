@@ -1,0 +1,72 @@
+package epfl.lia.logist.task.distribution;
+
+/* import table */
+import java.util.ArrayList;
+import epfl.lia.logist.task.Task;
+
+
+/**
+ * The DiscreteTaskDistribution class initialized a TaskDistribution object
+ * with tasks loaded from the disk. This is typically done for exercices that
+ * require a fixed set of well known tasks from the beginning.
+ */
+public class DiscreteTaskDistribution implements ITaskDistribution {
+	
+	/* The tasklist that was loaded from the disk */
+	private ArrayList<Task> mListOfTasks = null;
+	
+	
+	/**
+	 * Constructor of the class. Initializes the list of tasks.
+	 */
+	public DiscreteTaskDistribution( ArrayList<Task> al ) {
+		mListOfTasks = al;
+	}
+	
+	
+	/**
+	 * Generates a single task form the list
+	 */
+	public Task generate() {
+		if ( mListOfTasks.size()>0 )
+			return mListOfTasks.remove(0);
+		return null;
+	}
+	
+
+	/**
+	 * Generates ‘count’ tasks from the distribution
+	 * 
+	 * @param count The number of tasks to generate
+	 */
+	public ArrayList<Task> generate( int count ) {
+		if ( mListOfTasks.size()>0 ) {
+			ArrayList<Task> lNewList = new ArrayList<Task>();
+			for( int i=0; mListOfTasks.size()>0&&i<count; i++ )
+				lNewList.add( mListOfTasks.remove(0) );
+			return lNewList;
+		}
+		return null;
+	}
+
+		
+	/**
+	 * Retrives a parameter from text distribution
+	 * 
+	 * @param name The name of the parameter
+	 */
+	public Object param( String name ) {
+		
+		// what does the user want ?
+		String lParamName = name.toLowerCase();
+		
+		// what information do you want ?
+		if ( lParamName.equals("distribution") )
+			return "discrete";
+		if ( lParamName.equals("num-tasks") )
+			return new Integer( mListOfTasks.size() );
+		
+		// nothing else was asked...
+		return null;
+	}
+}

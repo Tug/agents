@@ -1,0 +1,68 @@
+package epfl.lia.logist.agent;
+
+/* some useful importations */
+import java.awt.Color;
+import java.util.ArrayList;
+import java.util.HashMap;
+import epfl.lia.logist.agent.behavior.BehaviorDescriptor;
+import epfl.lia.logist.messaging.signal.SignalTypeEnum;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class AgentDescriptor {
+	
+	/**
+	 * The name of the agent
+	 */
+	public String Name = "Default";
+	
+	/**
+	 * The speed of the vehicle (if type==’VEHICLE’)
+	 */
+	public String Speed = "120.0";
+	
+	/**
+	 * The load capacity of the vehicle (if type==’VEHICLE’)
+	 */
+	public String Capacity = "80.0";
+	
+	/**
+	 * The cost per kilometer (if type==’VEHICLE’)
+	 */
+	public String CostPerKM = "15.0";
+	
+	/**
+	 * The cost per kilometer (if type==’VEHICLE’)
+	 */
+	public String Home = "random";
+	
+	/**
+	 * The color of the agent (if vehicle) 
+	 */
+	public String Color = "000000";
+	
+	/**
+	 * The type of agent
+	 */
+	public String Type = "default";
+	
+	/**
+	 * The behavior of the agent (reactive,deliberative,centralized,auction,custom)	
+	 */
+	public String Behavior = "reactive";
+	
+	/**
+	 * A list of childrens (if !=’VEHICLE’)
+	 */
+	public ArrayList<BehaviorDescriptor> Behaviors = null;
+	
+	/**
+	 * A list of childrens (if !=’VEHICLE’)
+	 */
+	public ArrayList<AgentDescriptor> Children = null;
+	
+}

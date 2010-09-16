@@ -1,0 +1,56 @@
+<!-- 20-MAY-07 -->
+<project name="LogistPlatform" default="usage" basedir=".">
+	
+	<!-- the definition file for the build ant file -->
+	<property file="${os.name}.properties"/>
+
+	<!-- displays the usage -->
+	<target name="usage">
+			
+		<echo message="${os.name}" />
+	</target>
+	
+	<!-- compiles the files -->
+	<target name="compile" description="Builds the complete platform">
+		
+		<!-- creates the output directory, if none exists -->
+		<mkdir dir="${build.target}"/>
+		
+		<!-- invokes the java compiler -->
+		<javac srcdir="${build.source}" 
+		       destdir="${build.target}" 
+		       listfiles="yes"
+		       source="1.6">
+			<classpath>
+				<pathelement path="${build.classpath}"/>
+			</classpath>
+		</javac>
+	</target>
+
+	<!-- packages the platform into a single jar -->
+	<target name="package" depends="compile" description="Packages the platform into a single JAR file">
+		<mkdir dir="${build.output}" />
+		<jar destfile="${build.output}/logist.jar">
+			<fileset dir="${build.target}" />
+			<manifest>
+				<attribute name="Built-By" value="Bruno Alves" />
+				<attribute name="Main-Class" value="epfl.lia.logist.LogistPlatform" />
+			</manifest>
+		</jar>
+	</target>
+
+	<!-- launches the jar file -->
+	<target name="launch-jar" depends="package" description="Launches everything from the JAR">
+ 		<java jar="${build.output}/logist.jar" fork="true" failonerror="true" />
+	</target>
+
+	<!-- launches the class described by variable ${launch.class}-->
+	<target name="launch" description="Launches everything from the source">
+		<java classname="${launch.class}">
+        	<classpath>
+           		<pathelement path="${build.target}"/>
+         	</classpath>
+       	</java>
+
+	</target>
+</project>

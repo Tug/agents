@@ -1,0 +1,1192 @@
+package epfl.lia.logist.config;
+
+/* import table */
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Properties;
+
+import org.jdom.Attribute;
+import org.jdom.DataConversionException;
+import org.jdom.Document;
+import org.jdom.Element;
+import org.jdom.JDOMException;
+import org.jdom.input.SAXBuilder;
+import org.xml.sax.InputSource;
+
+import epfl.lia.logist.agent.AgentDescriptor;
+import epfl.lia.logist.agent.AgentsetDescriptor;
+import epfl.lia.logist.agent.behavior.BehaviorDescriptor;
+import epfl.lia.logist.core.topology.CityDescriptor;
+import epfl.lia.logist.core.topology.RouteDescriptor;
+import epfl.lia.logist.core.topology.TopologyDescriptor;
+import epfl.lia.logist.exception.ConfigurationParsingError;
+import epfl.lia.logist.logging.LogDescriptor;
+import epfl.lia.logist.logging.LogManager;
+import epfl.lia.logist.logging.LogSeverityEnum;
+import epfl.lia.logist.logging.LogsetDescriptor;
+import epfl.lia.logist.task.TaskDescriptor;
+import epfl.lia.logist.task.TaskDistributionDescriptor;
+import epfl.lia.logist.task.TaskgenDescriptor;
+import epfl.lia.logist.task.TasksetDescriptor;
+import epfl.lia.logist.tools.LogistConstants;
+
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class ConfigurationReader {
+
+	/**
+	 * The name of the main configuration file 
+	 */
+	private File mFile = null;
+	
+	/**
+	 * A reference to the log manager
+	 */
+	private LogManager mLogMgr = null;
+	
+	/**
+	 * The default configuration name
+	 */
+	private String mDefaultCfg = null;
+	
+	/**
+	 * The file path leading to the config file
+	 */
+	private String mPath = null;
+	
+	/**
+	 * A map of configurations, indexed by configuration name
+	 */
+	private HashMap<String,Configuration> mConfigMap = null;
+	
+	
+	
+	/**
+	 * Default constructor
+	 * @param filename
+	 */
+	public ConfigurationReader( File cf ) {
+		mFile = cf;
+	}
+	
+	
+	/**
+	 * Retrieves the configuration given by the default name
+	 * @return
+	 */
+	public Configuration getConfigurationByDefault() {
+		if ( mDefaultCfg != null ) {
+			return mConfigMap.get(mDefaultCfg);
+		}
+		return null;
+	}
+	
+	
+	/**
+	 * Retrieves the configuration given by a name
+	 * @param name
+	 * @return
+	 */
+	public Configuration getConfigurationByName( String name ) {
+		return mConfigMap.get(name);
+	}
+	
+	
+	/**
+	 * Loads the entire configuration
+	 * @throws FileNotFoundException
+	 * @throws JDOMException
+	 */
+	public void load() 
+		throws ConfigurationParsingError {
+		
+		// stack variables
+		Element lRootElt = null; 
+			
+		// finds the path
+		mPath = mFile.getParent() + File.separatorChar;
+
+		// retrieves a reference to the log manager
+		mLogMgr = LogManager.getInstance();
+		
+		// holds a list of configurations
+		mConfigMap = new HashMap<String,Configuration>();
+		
+		// loads the root element
+		try {
+			lRootElt = loadXMLRootFromDisk( mFile.getPath() );
+		} catch( FileNotFoundException e1 ) {
+			throw new ConfigurationParsingError( "The configuration file '" + mFile.getName() + "' does not exist!" );
+		} catch( JDOMException e2 ) {
+			throw new ConfigurationParsingError( e2.getMessage() );
+		} catch ( Exception e3 ) {
+			throw new ConfigurationParsingError( "Unknown error while loading configuration file.");
+		}
+		
+		// logs the event
+		mLogMgr.log( "main", LogSeverityEnum.LSV_INFO, 
+				"Loading the configuration file '" + mFile.getName() + "'..." );
+		
+		// the top-level element must be
+		if ( !lRootElt.getName().equals("simulation") )
+			throw new ConfigurationParsingError( "Malformed configuration file. Root element must be 'simulation'." );
+		
+		// retrieves the requested version
+		String lVersion = LogistConstants.VERSION_MAJOR + "." + 
+						  LogistConstants.VERSION_MINOR;
+		
+		// retrieves the version of the platform
+		Attribute lVersionAttr = lRootElt.getAttribute( "version" );
+		if ( lVersionAttr == null || !lVersionAttr.getValue().equals(lVersion) ) {
+			mLogMgr.log( "main", LogSeverityEnum.LSV_FATAL, "The configuration file version is wrong, it must be " + lVersion );
+			throw new ConfigurationParsingError( "Wrong configuration file version. Should be " + lVersion );
+		}
+		
+		// retrieves the name of the default configuration
+		Attribute lDefaultAttr = lRootElt.getAttribute( "default" );
+		if ( lDefaultAttr != null ) {
+			mLogMgr.log( "main", LogSeverityEnum.LSV_INFO, "The default configuration name is '" + lDefaultAttr.getValue() + "'" );
+			mDefaultCfg = lDefaultAttr.getValue();
+		}
+		
+		// handles the root element
+		handleSimulation( lRootElt );
+	}
+	
+	
+	/**
+	 * This method handles the parsing of the whole simulation.
+	 * @param root the simulation tag
+	 * @throws ConfigurationParsingError
+	 */
+	protected void handleSimulation( Element root ) 
+		throws ConfigurationParsingError 
+	{
+		
+		// stack variables
+		String lChildStr = null;
+		
+		// we get the list of children
+		List lChildrenList = root.getChildren();
+		
+		// we create an iterator on the list
+		Iterator i = lChildrenList.iterator();
+		while( i.hasNext() )
+		{
+		      // get the next element in the list
+		      Element lNextChild = (Element)i.next();
+		      
+		      // get the name of the current element
+		      lChildStr = lNextChild.getName();
+		      
+		      // handles the top level tags
+		      if ( lChildStr.equals("configuration") ) 
+		      {
+		    	 Configuration lConfiguration = handleConfiguration( lNextChild );
+		    	 mConfigMap.put( lConfiguration.Name, lConfiguration );
+		      } 
+		      else if ( lChildStr.equals("logset") ) 
+		      {
+		    	  //handleLogset( lNextChild );
+		      } 
+		      else if ( lChildStr.equals("propset") ) 
+		      {
+		    	  //handlePropertyset( lNextChild );
+		      }
+
+				// appends the configuration
+				
+		}
+	}
+	
+	
+	/**
+	 * This method handles the parsing of a single configuration
+	 * @param parent
+	 * @return
+	 * @throws ConfigurationParsingError
+	 */
+	protected Configuration handleConfiguration( Element parent )
+		throws ConfigurationParsingError 
+	{
+
+		// creates a new configuration
+		Configuration lConfiguration = new Configuration();
+		
+		// tries to load from an external file
+		Element lConfigElement = loadXMLExternal( parent );
+		
+		// posts the event here
+  	  	mLogMgr.log( "main", LogSeverityEnum.LSV_INFO, "New configuration" +
+  	  			" found: '" + lConfigElement.getAttributeValue("name") + "'" );
+		
+		// stores the value of the name
+  	  	lConfiguration.Name = lConfigElement.getAttributeValue("name");
+		
+		// retrieves  property information
+		lConfiguration.Propset = handlePropertyset( lConfigElement, true );
+		
+		// finds logging information
+		lConfiguration.Logs = handleLogset( lConfigElement );
+		
+		// finds tasks information
+		lConfiguration.Tasks = handleTaskset( lConfigElement );
+		
+		// finds topology information
+		lConfiguration.Topology = handleToposet( lConfigElement );
+		
+		// finds agent information
+		lConfiguration.Agents = handleAgentset( lConfigElement );
+		
+		// returns the configuration
+		return lConfiguration;
+	}
+	
+
+	/**
+	 * 
+	 * @param parent
+	 * @return
+	 * @throws ConfigurationParsingError
+	 */
+	protected LogsetDescriptor handleLogset( Element parent )
+		throws ConfigurationParsingError {
+		
+		// creates a new descriptor
+		LogsetDescriptor lDescriptor = new LogsetDescriptor();
+		
+		// retrieves only the first logset element
+		Element lLogsetElement = getFirstElement( parent, "logset", false );
+		
+		// then loads it from disk if necessary
+		lLogsetElement = loadXMLExternal( lLogsetElement );
+		
+		// returns the descriptor
+		return lDescriptor;
+	}
+	
+	
+	/**
+	 * 
+	 * @param parent
+	 * @return
+	 * @throws ConfigurationParsingError
+	 */
+	protected LogDescriptor handleLogfile( Element parent )
+		throws ConfigurationParsingError {
+		
+		// creates a new descriptor
+		LogDescriptor lDescriptor = new LogDescriptor();
+		
+		// returns the descriptor
+		return lDescriptor;
+	}
+	
+	
+	/**
+	 * Handles a simple set of tasks
+	 * @param parent
+	 * @return
+	 * @throws ConfigurationParsingError
+	 */
+	protected TasksetDescriptor handleTaskset( Element parent )
+		throws ConfigurationParsingError {
+
+		// creates a new configuration
+		TasksetDescriptor lDescriptor = new TasksetDescriptor();;
+		
+		// retrieves the first element
+		Element lTasksetElement = getFirstElement( parent, "taskset", true );
+		
+		// tries to load from an external file
+		lTasksetElement = loadXMLExternal( lTasksetElement );
+		
+		// posts the event here
+  	  	mLogMgr.log( "main", LogSeverityEnum.LSV_INFO, "New taskset found: '" + 
+  	  		lTasksetElement.getAttributeValue("name") + "'" );
+		
+		// retrieves the task generator
+		lDescriptor.TaskGeneratorDescriptor = handleTaskgen( lTasksetElement );
+		
+		// returns the taskset
+		return lDescriptor;
+	}
+	
+	
+	/**
+	 * Handles the generator
+	 * @param parent
+	 * @return
+	 * @throws ConfigurationParsingError
+	 */
+	protected TaskgenDescriptor handleTaskgen( Element parent )
+		throws ConfigurationParsingError {
+		
+		// creates a new log descriptor
+		TaskgenDescriptor lNewDescr = new TaskgenDescriptor();
+		
+		// finds the first <generator> element
+		List<?> lGeneratorList = parent.getChildren( "generator" );
+
+		// at least one must be present
+		if ( lGeneratorList==null || (lGeneratorList!=null && lGeneratorList.size()<=0) )
+			throw new ConfigurationParsingError( "The <generator> element is mandatory." );
+
+		// more than one, use first
+		if ( lGeneratorList.size()>1 )
+			throw new ConfigurationParsingError( "More than one <generator> element was " +
+					"found. Using the first only." );
+		
+		
+		// retrieves the first on
+		Element lElement = (Element)lGeneratorList.get(0);
+		
+		// posts the event here
+  	  	mLogMgr.log( LogManager.DEFAULT, LogSeverityEnum.LSV_INFO, "Parsing the task generator information..." );
+		
+		// retrieves the attributes
+		Attribute lBatchSizeAttr = lElement.getAttribute( "batch-size" );
+		Attribute lMaxAllocatableAttr = lElement.getAttribute( "max-allocatable" );
+		Attribute lDistributionAttr = lElement.getAttribute( "distribution" );
+		
+		// retrieves the batch size attribute
+		if ( lBatchSizeAttr!=null )
+			try { lNewDescr.BatchSize = lBatchSizeAttr.getIntValue(); }
+			catch( Exception e ) { throw new ConfigurationParsingError(e.getMessage()); }
+			
+		// retrieves the max allocatable attribute
+		if ( lMaxAllocatableAttr!=null )
+			try { lNewDescr.MaxAllocatable = lMaxAllocatableAttr.getIntValue(); }
+			catch( Exception e ) { throw new ConfigurationParsingError(e.getMessage()); }
+			
+		// retrieves the max allocatable attribute
+		if ( lDistributionAttr==null )
+			throw new ConfigurationParsingError( "The distribution attribute of a task " +
+					"generator is mandatory" );
+		
+		// last step is to retrieve the list of all tasks
+		lNewDescr.Distribution = handleDistribution( lElement, lDistributionAttr.getValue() );
+		
+		// returns the newly created descriptor
+		return lNewDescr;
+	}
+	
+	
+	public TaskDistributionDescriptor handleDistribution( Element parent, String name ) {
+		
+		/**
+		 * Can be anything in { poisson, gaussian, discrete, custom }
+		
+		public String Type;
+		public String Class;
+		public Properties Params;
+		public ArrayList<TaskDescriptor> TaskDescriptorList = null;
+		/**
+		<!-- the generator list -->
+		<generator type="discrete" max-allocatable="-1" batch-size="10">
+			<tasks>
+				<task pickup="Genève" delivery="Lausanne" weight="100.0" reward="14.0" />
+				<task pickup="Berne" delivery="Lucerne" weight="120.0" reward="13.5" />
+				<task pickup="Genève" delivery="Sion" weight="115.0" reward="20.0" />
+				<task pickup="Sion" delivery="Lausanne" weight="112.0" reward="21.5" />
+			</tasks>
+		</generator>
+		*/
+		
+		// creates a new descriptor
+		TaskDistributionDescriptor lNewDescr = new TaskDistributionDescriptor();
+
+		// finds all children elements
+		List<?> lChildren = parent.getChildren( "distribution" );
+		
+		// there must be at least on distribution
+		if ( lChildren==null || (lChildren!=null && lChildren.size()<=0) )
+			throw new ConfigurationParsingError( "No task distribution found." );
+		
+		// stores the name attribute
+		Attribute lNameAttr = null;
+		Element lSelected = null;
+		
+		// tries to find the requested distribution
+		Iterator<?> lItor = lChildren.iterator();
+		while( lItor.hasNext() ) {
+			
+			// tries to find the element
+			Element el = (Element)lItor.next();
+			
+			// retrieves the name attribute
+			lNameAttr = el.getAttribute( "name" );
+			
+			// if the name attribute is present 
+			if ( lNameAttr!=null && lNameAttr.getValue().equals(name) ) {
+				lSelected = el;
+				break;
+			}
+		}
+		
+		// there should be at least one distribution
+		if ( lSelected==null )
+			throw new ConfigurationParsingError( "The distribution named '" + name + 
+					"' was not found." );
+
+		// handles the distributions
+		Attribute lTypeAttr = lSelected.getAttribute( "type" );
+		Attribute lClassAttr = lSelected.getAttribute( "class" );
+		
+		// the type attribute is mandatory
+		if ( lTypeAttr == null )
+			throw new ConfigurationParsingError( "The type attribute for the " +
+					"taskgenerator is mandatory.");
+		
+		// if the type is custom
+		if ( lTypeAttr.getValue().equals("custom") && lClassAttr==null )
+			throw new ConfigurationParsingError( "The class attribute is " +
+					"mandatory for custom generators." );
+	
+		// retrieves the values
+		lNewDescr.Type = lTypeAttr.getValue();
+		if ( lClassAttr != null ) lNewDescr.Class = lClassAttr.getValue();
+		
+		// handles the descriptor
+		if ( lTypeAttr.getValue().equals("discrete") )
+			lNewDescr.TaskDescriptorList = handleTasks( lSelected );
+		
+		// returns the descriptor
+		return lNewDescr;
+	}
+	
+	
+	/**
+	 * Handles the list of tasks 
+	 * @return
+	 * @throws ConfigurationParsingError
+	 */
+	protected ArrayList<TaskDescriptor> handleTasks( Element parent )
+		throws ConfigurationParsingError {
+		
+		// creates a new task array
+		ArrayList<TaskDescriptor> lTaskArray = new ArrayList<TaskDescriptor>();
+		
+		// retrieves the first element
+		Element lTasksElement = getFirstElement( parent, "tasks", false );
+		if ( lTasksElement == null )
+			return lTaskArray;
+		
+		// then, takes the list of tasks
+		List lTaskList = lTasksElement.getChildren( "task" );
+		Iterator lItor = lTaskList.iterator();
+		while( lItor.hasNext() ) {
+			
+			// retrieves the next element
+			Element lTaskElement = (Element)lItor.next();
+			
+			// retrieve the descriptor
+			TaskDescriptor lDescriptor = handleTask( lTaskElement );
+			
+			// adds it to the array
+			lTaskArray.add( lDescriptor );
+		}
+		
+		// returns the task array
+		return lTaskArray;
+	}
+	
+	
+	/**
+	 * 
+	 * @param parent
+	 * @return
+	 * @throws ConfigurationParsingError
+	 */
+	protected TaskDescriptor handleTask( Element element )
+		throws ConfigurationParsingError {
+
+		// creates a new log descriptor
+		TaskDescriptor lDescriptor = new TaskDescriptor();
+		
+		// tries to parse the task
+		try {
+		
+			// retrieves the reward of the task
+			if ( element.getAttribute("reward") != null )
+				lDescriptor.RewardPerKm = element.getAttribute("reward").getDoubleValue(); 
+
+			// retrieves the weight of the task
+			if ( element.getAttribute("weight") != null )
+				lDescriptor.Weight = element.getAttribute("weight").getDoubleValue();
+		
+			// retrieves the name of the pickup city
+			if ( element.getAttribute("pickup") != null )
+				lDescriptor.PickupCity = element.getAttributeValue("pickup");
+
+			// retrieves the name of the delivery city
+			if ( element.getAttribute("delivery") != null )
+				lDescriptor.DeliveryCity = element.getAttributeValue("delivery");
+			
+		} catch( Exception e ) {
+			throw new ConfigurationParsingError(e.toString());
+		}
+		
+		// logs the event
+		mLogMgr.log( "main", LogSeverityEnum.LSV_INFO, "Found new task from '" + 
+				lDescriptor.PickupCity + "' to '" + lDescriptor.DeliveryCity + "'." );
+		
+		// returns the newly created descriptor
+		return lDescriptor;
+	}
+	
+	
+	/**
+	 * 
+	 * @param parent
+	 * @return
+	 * @throws ConfigurationParsingError
+	 */
+	protected TopologyDescriptor handleToposet( Element parent )
+		throws ConfigurationParsingError {
+		
+		// stack variables
+		TopologyDescriptor lDescription = new TopologyDescriptor();
+		
+		// retrieves only the first logset element
+		Element lToposetElement = getFirstElement( parent, "toposet", true );
+		
+		// tries to load from an external file
+		lToposetElement = loadXMLExternal( lToposetElement );
+		
+		// posts the event here
+  	  	mLogMgr.log( "main", LogSeverityEnum.LSV_INFO, "New topology information found: '" + 
+  	  		lToposetElement.getAttributeValue("name") + "'" );
+		
+		// handle the properties
+		lDescription.Props = handlePropertyset( lToposetElement, false );
+		
+		// handle city information
+  	  	lDescription.Cities = handleCityset( lToposetElement );
+		
+		// handles route information
+		lDescription.Routes = handleRouteset( lToposetElement );
+		
+		// TODO: other parsing here...
+		
+		// returns the newly created descriptor
+		return lDescription;
+	}
+	
+	
+	/**
+	 * 
+	 * @param parent
+	 * @return
+	 */
+	protected ArrayList<CityDescriptor> handleCityset( Element parent )
+		throws ConfigurationParsingError 
+	{	
+		// constructs an array of route descriptors
+		ArrayList<CityDescriptor> lArrayList = new ArrayList<CityDescriptor>();
+
+		// retrieves only the first logset element
+		Element lCitiesElement = getFirstElement( parent, "cities", true );
+		
+		// if the element doesn't exist, throws an exception
+		List lCityList = lCitiesElement.getChildren( "city" );
+		
+		// finds all routes
+		Iterator i = lCityList.iterator();
+		while( i.hasNext() ) {
+			
+			// retrieves the current element
+			Element lNextElt = (Element)i.next();
+			
+			// retreives the current descriptor
+			CityDescriptor lDescr = handleCity( lNextElt );
+			
+			// logs the event
+			mLogMgr.log( "main", LogSeverityEnum.LSV_DEBUG, "Found new city: '" + lDescr.Name + "'" );
+			
+			// adds the descriptor to the list of descriptors
+			lArrayList.add( lDescr );
+		}
+		
+		// returns the previously created descriptor
+		return lArrayList;
+	}
+	
+	
+	/**
+	 * 
+	 * @param parent
+	 * @return
+	 */
+	protected ArrayList<RouteDescriptor> handleRouteset( Element parent )
+		throws ConfigurationParsingError 
+	{	
+		// constructs an array of route descriptors
+		ArrayList<RouteDescriptor> lArrayList = new ArrayList<RouteDescriptor>();
+
+		// retrieves only the first logset element
+		Element lRoutesElement = getFirstElement( parent, "routes", true );
+		
+		// if the element doesn't exist, throws an exception
+		List lRouteList = lRoutesElement.getChildren( "route" );
+		
+		// finds all routes
+		Iterator lItor = lRouteList.iterator();
+		while( lItor.hasNext() ) {
+			
+			// retrieves the current element
+			Element lNextElement = (Element)lItor.next();
+			
+			// retreives the current descriptor
+			RouteDescriptor lDescriptor = handleRoute( lNextElement );
+			
+			// logs the event
+			mLogMgr.log( "main", LogSeverityEnum.LSV_DEBUG, "Found new route from '" + 
+					lDescriptor.Source + "' to '" + lDescriptor.Destination + "'" );
+			
+			// adds the descriptor to the list of descriptors
+			lArrayList.add( lDescriptor );
+		}
+		
+		// returns the previously created descriptor
+		return lArrayList;
+	}
+	
+	
+	/**
+	 * Handles information about a single city 
+	 * @param parent
+	 * @return
+	 */
+	protected CityDescriptor handleCity( Element parent )
+		throws ConfigurationParsingError 
+	{	
+		
+		// creates a brand new descriptor
+		CityDescriptor lDescriptor = new CityDescriptor();
+
+		// retrieves the attribute list
+		Attribute lNameAttr = parent.getAttribute( "name" );
+		Attribute lXAttr = parent.getAttribute( "x" );
+		Attribute lYAttr = parent.getAttribute( "y" );
+		
+		// if a single route is missing
+		if ( lNameAttr==null || lXAttr==null || lYAttr==null )
+			throw new ConfigurationParsingError( "All attributes of a city are mandatory." );
+
+		// stores the results
+		try 
+		{
+			lDescriptor.Name = lNameAttr.getValue();
+			lDescriptor.X = lXAttr.getIntValue();
+			lDescriptor.Y = lYAttr.getIntValue();
+		} 
+		catch( DataConversionException e ) 
+		{
+			throw new ConfigurationParsingError(e.toString());
+		}
+		
+		// returns the descriptor
+		return lDescriptor;
+	}
+	
+	
+	/**
+	 * Handles information about a single route
+	 * @param parent
+	 * @return
+	 */
+	protected RouteDescriptor handleRoute( Element parent )
+		throws ConfigurationParsingError 
+	{	
+		// creates a brand new descriptor
+		RouteDescriptor lDescriptor = new RouteDescriptor();
+	
+		// retrieves the attribute list
+		Attribute lDistAttr = parent.getAttribute( "distance" );
+		Attribute lCity1Attr = parent.getAttribute( "from" );
+		Attribute lCity2Attr = parent.getAttribute( "to" );
+		
+		// if a single route is missing
+		if ( lDistAttr==null || lCity1Attr==null || lCity2Attr==null )
+			throw new ConfigurationParsingError( "All attributes of a route are mandatory." );
+
+		// stores the results
+		try 
+		{
+			lDescriptor.Source = lCity1Attr.getValue();
+			lDescriptor.Destination = lCity2Attr.getValue();
+			lDescriptor.Distance = lDistAttr.getDoubleValue();
+		} 
+		catch( DataConversionException e ) 
+		{
+			throw new ConfigurationParsingError(e.toString());
+		}
+		
+		// returns the newly created descriptor
+		return lDescriptor;
+	}
+		
+	
+	/**
+	 * 
+	 * @param parent
+	 * @return
+	 * @throws ConfigurationParsingError
+	 */
+	protected AgentsetDescriptor handleAgentset( Element parent )
+		throws ConfigurationParsingError {
+		
+		// creates a new log descriptor
+		AgentsetDescriptor lDescriptor = new AgentsetDescriptor();
+
+		// retrieves only the first logset element
+		Element lAgentsetElement = getFirstElement( parent, "agentset", true );
+		
+		// tries to load from an external file
+		lAgentsetElement = loadXMLExternal( lAgentsetElement );
+		
+		// posts the event here
+  	  	mLogMgr.log( "main", LogSeverityEnum.LSV_INFO, "New agent set found: '" + 
+  	  		lAgentsetElement.getAttributeValue("name") + "'" );
+  	  	
+		// handles the properties for this object
+		lDescriptor.Props = handlePropertyset( lAgentsetElement, false );
+			
+		// now, searches for the first agent
+		List lRootAgentList = lAgentsetElement.getChildren( "agent" );
+		
+		// if no element is found, then throw an error
+		if ( lRootAgentList.size() == 0 ) 
+			throw new ConfigurationParsingError( "No root agent was found " +
+					"for current agent set." );
+		
+		// if more than one is present, warn the user
+		if ( lRootAgentList.size()> 1 ) {
+			mLogMgr.log( "main", LogSeverityEnum.LSV_WARNING, "More than one root agent " +
+					"was found for current agent set. " +
+					"Only using the first one." );
+		}
+		
+		// TODO: other parsing here...
+		lDescriptor.RootAgent = handleAgent( (Element)lRootAgentList.get(0) );
+		
+		// returns the newly created descriptor
+		return lDescriptor;
+	}
+	
+	
+	/**
+	 * Handles a single <agent> tag.
+	 * @param parent the parent <agentset> tag.
+	 * @return a descriptor of a single agent.
+	 * @throws ConfigurationParsingError
+	 */
+	protected AgentDescriptor handleAgent( Element agent )
+		throws ConfigurationParsingError 
+	{
+
+		// creates a new log descriptor
+		AgentDescriptor lDescriptor = new AgentDescriptor();
+		
+		// retrieves the attributes
+		Attribute lNameAttr = agent.getAttribute( "name" );
+		
+		// the name attribute is mandatory
+		if ( lNameAttr == null )
+			throw new ConfigurationParsingError( "The name attribute is mandatory for an agent element." );
+		
+		// handles properties
+		lDescriptor.Name = lNameAttr.getValue();
+
+		// retrieves the attributes
+		Attribute lTypeAttr = agent.getAttribute( "type" );
+		
+		// the type attribute is mandatory
+		if ( lTypeAttr == null )
+			throw new ConfigurationParsingError( "The type attribute is mandatory for an agent element." );
+		
+		// the type attribute is mandatory
+		lDescriptor.Type = lTypeAttr.getValue();
+		
+		// indicates that a new agent was found
+		mLogMgr.log( "main", LogSeverityEnum.LSV_INFO, "Found an agent named '" + lDescriptor.Name + "'" );
+		
+		Attribute lBehaviorAttr = agent.getAttribute( "behavior" );
+		
+		// if the behavior doesn't exist, then take
+		if ( lBehaviorAttr != null )
+			lDescriptor.Behavior = lBehaviorAttr.getValue();
+		
+		// gets the first property set
+		Properties lProperties = handlePropertyset( agent, true ); 
+			
+		// now, handle properties
+		if ( lProperties.containsKey("speed") ) lDescriptor.Speed = lProperties.getProperty("speed");
+		if ( lProperties.containsKey("capacity") ) lDescriptor.Capacity = lProperties.getProperty("capacity");
+		if ( lProperties.containsKey("costperkm") ) lDescriptor.CostPerKM = lProperties.getProperty("costperkm");
+		if ( lProperties.containsKey("color") ) lDescriptor.Color = lProperties.getProperty("color");
+		if ( lProperties.containsKey("home") ) lDescriptor.Home = lProperties.getProperty("home");
+			
+		// lists the properties
+		mLogMgr.log( "main", LogSeverityEnum.LSV_INFO, "Agent '" + lDescriptor.Name + "' properties:" );
+		mLogMgr.log( "main", LogSeverityEnum.LSV_INFO, "   --> speed: " + lDescriptor.Speed );
+		mLogMgr.log( "main", LogSeverityEnum.LSV_INFO, "   --> capacity: " + lDescriptor.Capacity );
+		mLogMgr.log( "main", LogSeverityEnum.LSV_INFO, "   --> costperkm: " + lDescriptor.CostPerKM );
+		mLogMgr.log( "main", LogSeverityEnum.LSV_INFO, "   --> color: " + lDescriptor.Color );
+		mLogMgr.log( "main", LogSeverityEnum.LSV_INFO, "   --> home: " + lDescriptor.Home );	
+		//}
+		
+		// retrieves the list of behaviors
+		List lBehaviorList = agent.getChildren( "behaviorset" );
+		
+		// there most be at least one behavior
+		if ( lBehaviorList.size() == 0 )
+			throw new ConfigurationParsingError( "Agent '" + lDescriptor.Name + 
+					"' must contain one behaviorset." );
+		
+		// if many behaviors, only take the fist one
+		if ( lBehaviorList.size() > 1 )
+			mLogMgr.log( "main", LogSeverityEnum.LSV_WARNING, "Agent '" + lDescriptor.Name + 
+					"' contains more than one behaviorset, only using first one." );
+		
+		// handles the behaviors
+		lDescriptor.Behaviors = handleBehaviorset( (Element)lBehaviorList.get(0) );
+			
+		// handles all other agents
+		lDescriptor.Children = handleChildrenAgents( agent );
+		
+		// returns the newly created descriptor
+		return lDescriptor;
+	}
+	
+	
+	/**
+	 * Handle children agents for a parent agent
+	 * @param parent the node representing the parent 
+	 * @return an array holding the descriptors of the children agents.
+	 */
+	protected ArrayList<AgentDescriptor> handleChildrenAgents( Element parent )
+		throws ConfigurationParsingError {
+	
+		// creates an empty list of agents
+		ArrayList<AgentDescriptor> lDescriptorArray = new ArrayList<AgentDescriptor>();
+		
+		// first of all, finds all agents
+		List lAgentList = parent.getChildren( "agent" );
+		
+		// gets every agent out there
+		Iterator lItor = lAgentList.iterator();
+		while( lItor.hasNext() ) {
+			
+			// retrieves the next element
+			Element lNextElement = (Element)lItor.next();
+			
+			// retrieves the agent
+			AgentDescriptor lDescriptor = handleAgent( lNextElement );
+			
+			// stores the agent descriptor
+			lDescriptorArray.add( lDescriptor );
+		}
+		
+		// retunrs the list of the agents
+		return lDescriptorArray;
+	}
+	
+	
+	/**
+	 * Handles a set of behaviors.
+	 * @param element the parent <behaviorset> element of the agent description
+	 * @return a list containing descriptors for found behaviors
+	 * @throws ConfigurationParsingError
+	 */
+	protected ArrayList<BehaviorDescriptor> handleBehaviorset( Element element )
+		throws ConfigurationParsingError {
+		
+		// creates a list for every descriptor
+		ArrayList<BehaviorDescriptor> lDescriptorList = new ArrayList<BehaviorDescriptor>();
+		
+		// finds all behaviors
+		List lBehaviorList = element.getChildren( "behavior" );
+		
+		// iterates over all behaviors
+		Iterator lItor = lBehaviorList.iterator();
+		while( lItor.hasNext() ) {
+			
+			// retrieves the next elements
+			Element lNextElement = (Element)lItor.next();
+			
+			// for every behavior, handle it
+			BehaviorDescriptor lDescriptor = handleBehavior( lNextElement );
+			
+			// logs the event
+			mLogMgr.log( "main", LogSeverityEnum.LSV_DEBUG, "Found a behavior" +
+					" for signal '" + lDescriptor.Signal + "'" );
+			
+			// adds the descriptor to the list
+			lDescriptorList.add( lDescriptor );
+		}
+		
+		// returns the newly created descriptor
+		return lDescriptorList;
+	}
+	
+	
+	/**
+	 * Handles a single behavior.
+	 * @param element The parent <behavior> element.
+	 * @return A single descriptor for the behavior.
+	 */
+	protected BehaviorDescriptor handleBehavior( Element element )
+		throws ConfigurationParsingError {
+			
+		// creates a brand new descriptor
+		BehaviorDescriptor lDescriptor = new BehaviorDescriptor();
+		
+		// retrieves the signal attribute
+		Attribute lSignalAttr = element.getAttribute( "signal" );
+		if ( lSignalAttr==null )
+			throw new ConfigurationParsingError( "The signal attribute of the behavior is mandatory." );
+		
+		// retrieve the handler attribute
+		Attribute lHandlerAttr = element.getAttribute( "handler" );
+		if ( lHandlerAttr==null )
+			throw new ConfigurationParsingError( "The handler attribute of the behavior is mandatory." );
+		
+		// retrieve the shared attribute
+		Attribute lSharedAttr = element.getAttribute( "shared" );
+		
+		// stores the value in the descriptor
+		lDescriptor.Signal = lSignalAttr.getValue();
+		lDescriptor.Handler = lHandlerAttr.getValue();
+		lDescriptor.Shared = (lSharedAttr==null?"False":lSharedAttr.getValue());
+		
+		// returns the descriptor
+		return lDescriptor;
+	}
+	
+	
+	/**
+	 * Retrieves the list of propoerties for a single object.
+	 * @param parent the parent <propset> element
+	 * @return a list of properties represented by a Property class.
+	 * @throws ConfigurationParsingError
+	 */
+	protected Properties handlePropertyset( Element parent, boolean mandatory)
+		throws ConfigurationParsingError {
+		
+		// creates a new properties object
+		Properties lPropset = new Properties();
+		
+		// retrieves the first propset element
+		Element lPropsetElement = getFirstElement( parent, "propset", mandatory );
+		
+		// retrieves a list of all properties
+		List lChildrenList = lPropsetElement.getChildren( "property" );
+		
+		// we create an iterator on the list
+		Iterator lItor = lChildrenList.iterator();
+		while( lItor.hasNext() ) {
+			
+		      // get the next element in the list
+		      Element lNextElement = (Element)lItor.next();
+		      
+		      // retrieve the name attribute
+		      Attribute lNameAttr = lNextElement.getAttribute( "name" );
+		      
+		      // the name attribute is mandatory
+		      if ( lNameAttr==null )
+		    	 throw new ConfigurationParsingError( "Missing 'name' attribute in property." );
+		      
+		      // retrieves the value attribute
+		      Attribute lValueAttr = lNextElement.getAttribute("value");
+		      
+		      // the value attribute is mandatory
+		      if ( lNameAttr==null )
+			    	 throw new ConfigurationParsingError( "Missing 'value' attribute in property." );
+			      
+		      // does the property already exist ?
+		      if ( lPropset.containsKey(lNameAttr.getValue()) ) {
+		    	  mLogMgr.log( "main", LogSeverityEnum.LSV_WARNING, "Property '" + lNameAttr.getValue() + "' already exists. Overwriting." );
+		      }
+		      
+		      // sets or overwrites the value
+		      lPropset.setProperty( lNameAttr.getValue(), lValueAttr.getValue() );
+		}
+		
+		// returns the property set
+		return lPropset;
+	}
+	
+	
+	/**
+	 * Loads the root element from the disk.
+	 * @param filename
+	 * @return
+	 */
+	protected Element loadXMLRootFromDisk( String filename ) 
+		throws FileNotFoundException, JDOMException, IOException {
+
+		// loads the stream from a file
+		FileInputStream lStream = new FileInputStream( filename );
+		
+		// creates a builder
+		SAXBuilder lBuilder = new SAXBuilder();
+		
+		// loads the document from the builder
+		Document lDoc = lBuilder.build( new InputSource(lStream) );
+		
+		// retrieves the top level element
+		Element lRootElt = lDoc.getRootElement();
+		
+		// returns the root element
+		return lRootElt;
+	}
+	
+	
+	/**
+	 * Tries to load an external set.
+	 * @param file
+	 * @param parent
+	 * @param name
+	 * @return
+	 * @throws ConfigurationParsingError
+	 */
+	protected Element loadXMLExternal( Element parent ) 
+		throws ConfigurationParsingError 
+	{
+		// stack variable
+		Element lElement = null;
+
+		// retrieves the top attribute list
+		Attribute lNameAttr = parent.getAttribute("name");
+		Attribute lFileAttr = parent.getAttribute("file");
+		
+		// if no file is present, then return immediately
+		if ( lFileAttr==null )
+			return parent;
+		
+		// returns the file
+		String lFileStr = mPath + lFileAttr.getValue();
+		
+		// tries to load the file
+		try {
+			
+			// element name
+			String lParentElt = parent.getName();
+			
+			// the name attribute must be present
+			if ( lNameAttr==null )
+				throw new ConfigurationParsingError( "The name attribute of the " +
+						lParentElt + " element is mandatory." );
+			
+			// first retunrs the 
+			lElement = loadXMLRootFromDisk( lFileStr );
+
+			// the name of parent and child must correspond
+			if ( !lElement.getName().equals(lParentElt) ) 
+				throw new ConfigurationParsingError( "No root element '" + lParentElt + "' " +
+						"was found in the external file." );
+			
+			// then, check for the name 
+			Attribute lChildAttr = lElement.getAttribute( "name" );
+			
+			// the child attribute must be present
+			if ( lChildAttr == null ) 
+				throw new ConfigurationParsingError( "The external '" + lParentElt + "' " +
+						"must define a 'name' attribute." );
+			
+			// the names must match
+			if ( !lChildAttr.getValue().equals(lNameAttr.getValue()) )
+				throw new ConfigurationParsingError( "The name attribute of the external " +
+						"element '" + lParentElt + "' does not correspond to the name of its " +
+						"parent." );
+			
+			// the external file must not have anyother attribute
+			if ( lElement.getAttributes().size() > 1 )
+				throw new ConfigurationParsingError( "The external element '" + lParentElt + "' " +
+						"*must* only define one attribute !" );
+			
+		} catch( FileNotFoundException e1 ) {
+			throw new ConfigurationParsingError( "The configuration file '" + lFileStr + "' does not exist!" );
+		} catch( JDOMException e2 ) {
+			throw new ConfigurationParsingError( e2.getMessage() );
+		} catch ( Exception e3 ) {
+			throw new ConfigurationParsingError( "Unknown error while loading configuration file.");
+		}
+		
+		// returns 
+		return lElement;
+	}
+	
+	
+	/**
+	 * 
+	 * @param parent
+	 * @param element
+	 * @return
+	 */
+	public Element getFirstElement( Element parent, String element, boolean mandatory ) {
+
+		// finds configuration information (properties)
+		List lList = parent.getChildren( element );
+		
+		System.out.println( "Calling element: " + parent.getName() );
+		
+		// if no element is found, then throw an error
+		if ( lList.size() == 0 ) { 
+			if ( mandatory )
+				throw new ConfigurationParsingError( "No '" + element + "'" +
+						" found for current configuration." );
+			else 
+				return null;
+		}
+		
+		// if more than one is present, warn the user
+		if ( lList.size()> 1 ) {
+			mLogMgr.log( "main", LogSeverityEnum.LSV_WARNING, "More than one" +
+					" '" + element + "' was found for current configuration. " +
+					"only using the first one." );
+		}
+		
+		// retrieves the list
+		return (Element)lList.get(0);
+	}
+	
+	
+	/**
+	 * Makes the child propertyset inherit from the parent propertyset
+	 * @param parent
+	 * @param child
+	 * @return
+	 */
+	public Properties inheritProperties( Properties parent, Properties child ) {
+		
+		// for every parent parameter, we investigate if it
+		// is present or not in the child propertyset. Children
+		// property sets overwrite parent values..
+		for( Object param : parent.keySet() ) {
+			
+			// transforms the params
+			String lParam = (String)param;
+			
+			// only adds properties not present
+			if ( !child.containsKey(lParam) )
+				child.setProperty( lParam, parent.getProperty(lParam) );
+		}
+		
+		// returns the object
+		return child;
+	}
+}

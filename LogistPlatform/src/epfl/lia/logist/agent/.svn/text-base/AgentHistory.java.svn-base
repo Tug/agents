@@ -1,0 +1,70 @@
+package epfl.lia.logist.agent;
+
+/* importation table */
+import java.util.ArrayList;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class AgentHistory {
+	
+	/**
+	 * The parent profile
+	 */
+	private AgentProfile mAgentProfile = null;
+	
+	/**
+	 * The list of history events
+	 */
+	private ArrayList<AgentEvent> mEventList = null;
+
+	
+	/**
+	 * Constructor of the class
+	 */
+	public AgentHistory( AgentProfile ap ) {
+		mAgentProfile = ap;
+		mEventList = new ArrayList<AgentEvent>();
+	}
+				
+
+	/**
+	 * Appends a new event to the history
+	 * @param ae
+	 */
+	public void addEvent( AgentEvent ae ) {
+		if( ae!=null ) mEventList.add(ae);
+	}
+
+	
+	/**
+	 * Deletes a particular event from the history
+	 * @param i
+	 */
+	public void deleteEvent( int i ) {
+		mEventList.remove(i);
+	}
+
+	
+	/**
+	 * Stores the history to disk.
+	 * @return
+	 */
+	public boolean store() {
+		mAgentProfile.getAgent();
+		return true;
+	}
+
+	
+	/**
+	 * Loads the history from a file. This file is 
+	 * named <name-of-agent>.history
+	 * @return
+	 */
+	public boolean load() {
+		return false;
+	}
+}

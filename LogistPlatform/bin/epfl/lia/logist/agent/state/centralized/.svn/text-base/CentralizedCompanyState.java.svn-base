@@ -1,0 +1,31 @@
+package epfl.lia.logist.agent.state;
+
+/* importation table */
+import epfl.lia.logist.messaging.action.Action;
+import epfl.lia.logist.agent.AgentProfile;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class CentralizedCompanyState extends CompanyAgentState {
+
+	/**
+	 * Constructor of the state
+	 * @param ap
+	 * @param as
+	 */
+	public CentralizedCompanyState( AgentProfile ap, AgentState as ) {
+		super(ap,as);
+	}
+			
+	
+	/**
+	 * Generates a descriptor for this task
+	 */
+	protected void execute() {
+	}
+}
+

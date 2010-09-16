@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+
+<toposet name="topo_switzerland" >
+
+	<!-- properties of the topology -->
+	<propset>
+		<property name="background" value="ressources/switzerland.jpg" />
+	</propset>
+	
+	<!-- the list of cities in the topology -->
+	<cities>
+		<city name="Lausanne" x="110" y="260"/>
+		<city name="Genève" x="40" y="300"/>
+		<city name="Sion" x="200" y="300"/>
+		<city name="Neuchâtel" x="150" y="170"/>
+		<city name="Bern" x="210" y="180"/>
+		<city name="Basel" x="230" y="65"/>
+		<city name="Fribourg" x="175" y="200"/>
+		<city name="Zürich" x="340" y="90"/>
+		<city name="Aarau" x="290" y="95"/>
+		<city name="Luzern" x="320" y="155"/>
+		<city name="St-Gallen" x="455" y="85"/>
+		<city name="Thun" x="235" y="210"/>
+	</cities>
+
+	<!-- the list of routes in the topology -->
+	<routes>
+		<route distance="90" from="Lausanne" to="Genève"/>
+		<route distance="150" from="Sion" to="Lausanne"/>
+		<route distance="100" from="Neuchâtel" to="Lausanne"/>
+		<route distance="100" from="Fribourg" to="Lausanne"/>
+		<route distance="50" from="Fribourg" to="Bern"/>
+		<route distance="120" from="Sion" to="Thun"/>
+		<route distance="60" from="Neuchâtel" to="Bern"/>
+		<route distance="140" from="Basel" to="Bern"/>
+		<route distance="60" from="Zürich" to="Aarau"/>
+		<route distance="70" from="Zürich" to="Luzern"/>
+		<route distance="110" from="Bern" to="Aarau"/>
+		<route distance="90" from="Luzern" to="Aarau"/>
+		<route distance="120" from="St-Gallen" to="Zürich"/>
+		<route distance="40" from="Thun" to="Bern"/>
+		<route distance="120" from="Basel" to="Zürich"/>
+	</routes>
+
+</toposet>

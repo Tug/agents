@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="src/|config/|doc/|logs/|bin/" kind="src" path=""/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="//studentspc7/MyDocs/IN/pocard/My Documents/ia/Repast-3.1/RepastJ/repast.jar"/>
+	<classpathentry exported="true" kind="lib" path="//studentspc7/MyDocs/IN/pocard/My Documents/ia/LogistPlatform/lib/commons-math-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="//studentspc7/MyDocs/IN/pocard/My Documents/ia/LogistPlatform/lib/jdom.jar"/>
+	<classpathentry exported="true" kind="lib" path="//studentspc7/MyDocs/IN/pocard/My Documents/ia/LogistPlatform/lib/jsolver.jar"/>
+	<classpathentry exported="true" kind="lib" path="//studentspc7/MyDocs/IN/pocard/My Documents/ia/LogistPlatform/lib/log4j-1.2.15.jar"/>
+	<classpathentry exported="true" kind="lib" path="//studentspc7/MyDocs/IN/pocard/My Documents/ia/LogistPlatform/lib/logist.jar"/>
+	<classpathentry exported="true" kind="lib" path="//studentspc7/MyDocs/IN/pocard/My Documents/ia/Repast-3.1/RepastJ/lib/trove.jar"/>
+	<classpathentry exported="true" kind="lib" path="//studentspc7/MyDocs/IN/pocard/My Documents/ia/Repast-3.1/RepastJ/lib/colt.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

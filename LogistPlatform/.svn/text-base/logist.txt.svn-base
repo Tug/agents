@@ -1,0 +1,151 @@
+Logist Platform RAW Log Output:
+===============================
+
+
+Starting date : jeu. juil. 12 00:41:04 CEST 2007
+Starting time : 00:41:04
+
+General environnement info:
+
+	java-vendor     : Sun Microsystems Inc.
+	java-vendor-url : http://java.sun.com/
+	java-version    : 1.6.0-rc
+	os-arch         : x86
+	os-name         : Windows XP
+	user-name       : salves
+	cache-size      : 5
+	max-entries     : 0
+	debug-level     : debug
+
+
+Log file entries:
+
+[00:41:05] INFO    : Platform started
+[00:41:05] INFO    : Reading the configuration file...
+[00:41:05] INFO    : Loading the configuration file 'default.xml'...
+[00:41:05] INFO    : The default configuration name is 'reactive'
+[00:41:05] INFO    : New configuration found: 'reactive'
+[00:41:05] INFO    : New taskset found: 'default_taskset'
+[00:41:05] INFO    : Parsing the task generator information...
+[00:41:05] INFO    : Found new task from 'Genève' to 'Lausanne'.
+[00:41:05] INFO    : Found new task from 'Berne' to 'Lucerne'.
+[00:41:05] INFO    : Found new task from 'Genève' to 'Sion'.
+[00:41:05] INFO    : Found new task from 'Sion' to 'Lausanne'.
+[00:41:05] INFO    : New topology information found: 'topo_switzerland'
+[00:41:05] DEBUG   : Found new city: 'Lausanne'
+[00:41:05] DEBUG   : Found new city: 'Genève'
+[00:41:05] DEBUG   : Found new city: 'Sion'
+[00:41:05] DEBUG   : Found new city: 'Neuchâtel'
+[00:41:05] DEBUG   : Found new city: 'Bern'
+[00:41:05] DEBUG   : Found new city: 'Basel'
+[00:41:05] DEBUG   : Found new city: 'Fribourg'
+[00:41:05] DEBUG   : Found new city: 'Zürich'
+[00:41:05] DEBUG   : Found new city: 'Aarau'
+[00:41:05] DEBUG   : Found new city: 'Luzern'
+[00:41:05] DEBUG   : Found new city: 'St-Gallen'
+[00:41:05] DEBUG   : Found new city: 'Thun'
+[00:41:05] DEBUG   : Found new route from 'Lausanne' to 'Genève'
+[00:41:05] DEBUG   : Found new route from 'Sion' to 'Lausanne'
+[00:41:05] DEBUG   : Found new route from 'Neuchâtel' to 'Lausanne'
+[00:41:05] DEBUG   : Found new route from 'Fribourg' to 'Lausanne'
+[00:41:05] DEBUG   : Found new route from 'Fribourg' to 'Bern'
+[00:41:05] DEBUG   : Found new route from 'Sion' to 'Thun'
+[00:41:05] DEBUG   : Found new route from 'Neuchâtel' to 'Bern'
+[00:41:05] DEBUG   : Found new route from 'Basel' to 'Bern'
+[00:41:05] DEBUG   : Found new route from 'Zürich' to 'Aarau'
+[00:41:05] DEBUG   : Found new route from 'Zürich' to 'Luzern'
+[00:41:05] DEBUG   : Found new route from 'Bern' to 'Aarau'
+[00:41:05] DEBUG   : Found new route from 'Luzern' to 'Aarau'
+[00:41:05] DEBUG   : Found new route from 'St-Gallen' to 'Zürich'
+[00:41:05] DEBUG   : Found new route from 'Thun' to 'Bern'
+[00:41:05] DEBUG   : Found new route from 'Basel' to 'Zürich'
+[00:41:05] INFO    : New agent set found: 'reactive_agents'
+[00:41:05] INFO    : Found an agent named 'Alabama Entreprises'
+[00:41:05] INFO    : Agent 'Alabama Entreprises' properties:
+[00:41:05] INFO    :    --> speed: 120.0
+[00:41:05] INFO    :    --> capacity: 80.0
+[00:41:05] INFO    :    --> costperkm: 15.0
+[00:41:05] INFO    :    --> color: 000000
+[00:41:05] INFO    :    --> home: random
+[00:41:05] INFO    : Found an agent named 'VehicleA-1'
+[00:41:05] INFO    : Agent 'VehicleA-1' properties:
+[00:41:05] INFO    :    --> speed: 120.0
+[00:41:05] INFO    :    --> capacity: 80.0
+[00:41:05] INFO    :    --> costperkm: 15.0
+[00:41:05] INFO    :    --> color: #ff00ff
+[00:41:05] INFO    :    --> home: Genève
+[00:41:05] DEBUG   : Found a behavior for signal 'kill'
+[00:41:05] DEBUG   : Found a behavior for signal '*'
+[00:41:05] INFO    : Found an agent named 'VehicleA-2'
+[00:41:05] INFO    : Agent 'VehicleA-2' properties:
+[00:41:05] INFO    :    --> speed: 80
+[00:41:05] INFO    :    --> capacity: 80.0
+[00:41:05] INFO    :    --> costperkm: 15.0
+[00:41:05] INFO    :    --> color: #ff0000
+[00:41:05] INFO    :    --> home: Aarau
+[00:41:05] INFO    : 'Viewing service' is initilizing...
+[00:41:05] INFO    : 'Topology indexing service' is initilizing...
+[00:41:06] INFO    : 'Inter-object messaging service' is initilizing...
+[00:41:06] INFO    : 'Task management service' is initilizing...
+[00:41:06] INFO    : 'Agent management service' is initilizing...
+[00:41:06] INFO    : Initializing the agent management service...
+[00:41:06] INFO    : Initialisation of the agent management is complete.
+[00:41:06] INFO    : 'Viewing service' is auto-setting up...
+[00:41:06] INFO    : 'Topology indexing service' is auto-setting up...
+[00:41:06] INFO    : Creating the list of cities from descriptors.
+[00:41:06] INFO    : Created new city city<Lausanne,110,260>.
+[00:41:06] INFO    : Created new city city<Genève,40,300>.
+[00:41:06] INFO    : Created new city city<Sion,200,300>.
+[00:41:06] INFO    : Created new city city<Neuchâtel,150,170>.
+[00:41:06] INFO    : Created new city city<Bern,210,180>.
+[00:41:06] INFO    : Created new city city<Basel,230,65>.
+[00:41:06] INFO    : Created new city city<Fribourg,175,200>.
+[00:41:06] INFO    : Created new city city<Zürich,340,90>.
+[00:41:06] INFO    : Created new city city<Aarau,290,95>.
+[00:41:06] INFO    : Created new city city<Luzern,320,155>.
+[00:41:06] INFO    : Created new city city<St-Gallen,455,85>.
+[00:41:06] INFO    : Created new city city<Thun,235,210>.
+[00:41:06] INFO    : Creating the list of routes from descriptors.
+[00:41:06] INFO    : Creating new route between city<Lausanne,110,260> and city<Genève,40,300>.
+[00:41:06] INFO    : Creating new route between city<Sion,200,300> and city<Lausanne,110,260>.
+[00:41:06] INFO    : Creating new route between city<Neuchâtel,150,170> and city<Lausanne,110,260>.
+[00:41:06] INFO    : Creating new route between city<Fribourg,175,200> and city<Lausanne,110,260>.
+[00:41:06] INFO    : Creating new route between city<Fribourg,175,200> and city<Bern,210,180>.
+[00:41:06] INFO    : Creating new route between city<Sion,200,300> and city<Thun,235,210>.
+[00:41:06] INFO    : Creating new route between city<Neuchâtel,150,170> and city<Bern,210,180>.
+[00:41:06] INFO    : Creating new route between city<Basel,230,65> and city<Bern,210,180>.
+[00:41:06] INFO    : Creating new route between city<Zürich,340,90> and city<Aarau,290,95>.
+[00:41:06] INFO    : Creating new route between city<Zürich,340,90> and city<Luzern,320,155>.
+[00:41:06] INFO    : Creating new route between city<Bern,210,180> and city<Aarau,290,95>.
+[00:41:06] INFO    : Creating new route between city<Luzern,320,155> and city<Aarau,290,95>.
+[00:41:06] INFO    : Creating new route between city<St-Gallen,455,85> and city<Zürich,340,90>.
+[00:41:06] INFO    : Creating new route between city<Thun,235,210> and city<Bern,210,180>.
+[00:41:06] INFO    : Creating new route between city<Basel,230,65> and city<Zürich,340,90>.
+[00:41:06] INFO    : Computing the shortest path for all possible pairs of cities.
+[00:41:06] INFO    : 'Inter-object messaging service' is auto-setting up...
+[00:41:06] INFO    : 'Task management service' is auto-setting up...
+[00:41:06] DEBUG   : Creating the task generator.
+[00:41:06] INFO    : Creating a discrete task distribution
+[00:41:06] INFO    : 'Agent management service' is auto-setting up...
+[00:41:06] INFO    : Beginning creation of the individual agents...
+[00:41:06] DEBUG   : Spawning named agent 'Alabama Entreprises'...
+[00:41:06] DEBUG   : Creating agent state...
+[00:41:06] FATAL   : Hello World From a Reactive Company Agent !!!
+[00:41:06] DEBUG   : Creating agent entity...
+[00:41:06] DEBUG   : Creating agent representation...
+[00:41:06] DEBUG   : Spawning children agents for 'Alabama Entreprises'...
+[00:41:06] DEBUG   : Spawning named agent 'VehicleA-1'...
+[00:41:06] DEBUG   : Creating agent state...
+[00:41:06] DEBUG   : Creating agent entity...
+[00:41:06] DEBUG   : Creating agent representation...
+[00:41:06] DEBUG   : Spawning children agents for 'VehicleA-1'...
+[00:41:06] DEBUG   : Spawning named agent 'VehicleA-2'...
+[00:41:06] DEBUG   : Creating agent state...
+[00:41:06] DEBUG   : Creating agent entity...
+[00:41:06] DEBUG   : Creating agent representation...
+[00:41:06] DEBUG   : Spawning children agents for 'VehicleA-2'...
+[00:41:06] DEBUG   : All agents were successfully created !
+[00:41:09] INFO    : Agent creation and initialization is complete.
+
+
+--| End of log |------------------------------------------------------

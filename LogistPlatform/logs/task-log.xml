@@ -1,0 +1,140 @@
+<xml version="1.0" encoding="UTF-8" />
+<log>
+	<probabilities>
+		<probability city1="Leeds" city2="Leeds" value="0.0" reward="0.0" />
+		<probability city1="Leeds" city2="Sheffield" value="0.0" reward="53.55523020475405" />
+		<probability city1="Leeds" city2="Manchester" value="0.125" reward="57.7055098561243" />
+		<probability city1="Leeds" city2="Cardiff" value="0.125" reward="59.113879975279616" />
+		<probability city1="Leeds" city2="Liverpool" value="0.0" reward="56.763748315337104" />
+		<probability city1="Leeds" city2="Plymouth" value="0.125" reward="58.14584186646667" />
+		<probability city1="Leeds" city2="Norwich" value="0.125" reward="57.5687832255919" />
+		<probability city1="Leeds" city2="Portsmouth" value="0.125" reward="59.73966632962777" />
+		<probability city1="Leeds" city2="Birmingham" value="0.125" reward="54.27697284742036" />
+		<probability city1="Leeds" city2="London" value="0.125" reward="56.30485443951325" />
+		<probability city1="Leeds" city2="Newcastle" value="0.125" reward="57.55746506646669" />
+		<probability city1="Sheffield" city2="Leeds" value="0.3333333333333333" reward="53.52042085829618" />
+		<probability city1="Sheffield" city2="Sheffield" value="0.0" reward="0.0" />
+		<probability city1="Sheffield" city2="Manchester" value="0.3333333333333333" reward="54.37559602034894" />
+		<probability city1="Sheffield" city2="Cardiff" value="0.0" reward="55.69124869132179" />
+		<probability city1="Sheffield" city2="Liverpool" value="0.0" reward="56.891983973907855" />
+		<probability city1="Sheffield" city2="Plymouth" value="0.0" reward="59.245090803162526" />
+		<probability city1="Sheffield" city2="Norwich" value="0.0" reward="59.09827216293125" />
+		<probability city1="Sheffield" city2="Portsmouth" value="0.0" reward="56.50417307023342" />
+		<probability city1="Sheffield" city2="Birmingham" value="0.3333333333333333" reward="58.01726837680162" />
+		<probability city1="Sheffield" city2="London" value="0.0" reward="57.53531984077196" />
+		<probability city1="Sheffield" city2="Newcastle" value="0.0" reward="60.515602594486175" />
+		<probability city1="Manchester" city2="Leeds" value="0.14285714285714285" reward="58.798451830570045" />
+		<probability city1="Manchester" city2="Sheffield" value="0.0" reward="59.63677109561975" />
+		<probability city1="Manchester" city2="Manchester" value="0.0" reward="0.0" />
+		<probability city1="Manchester" city2="Cardiff" value="0.14285714285714285" reward="59.836838426617355" />
+		<probability city1="Manchester" city2="Liverpool" value="0.14285714285714285" reward="57.77963023314873" />
+		<probability city1="Manchester" city2="Plymouth" value="0.14285714285714285" reward="57.54989850451386" />
+		<probability city1="Manchester" city2="Norwich" value="0.0" reward="57.62676656827743" />
+		<probability city1="Manchester" city2="Portsmouth" value="0.14285714285714285" reward="54.24254347042085" />
+		<probability city1="Manchester" city2="Birmingham" value="0.0" reward="59.63201659896707" />
+		<probability city1="Manchester" city2="London" value="0.14285714285714285" reward="59.96796433234675" />
+		<probability city1="Manchester" city2="Newcastle" value="0.14285714285714285" reward="59.22290738896567" />
+		<probability city1="Cardiff" city2="Leeds" value="0.2" reward="57.66520872578983" />
+		<probability city1="Cardiff" city2="Sheffield" value="0.0" reward="61.392233668290984" />
+		<probability city1="Cardiff" city2="Manchester" value="0.0" reward="57.64640535649388" />
+		<probability city1="Cardiff" city2="Cardiff" value="0.0" reward="0.0" />
+		<probability city1="Cardiff" city2="Liverpool" value="0.2" reward="60.890940121737835" />
+		<probability city1="Cardiff" city2="Plymouth" value="0.0" reward="57.16199407574216" />
+		<probability city1="Cardiff" city2="Norwich" value="0.2" reward="57.18998204978851" />
+		<probability city1="Cardiff" city2="Portsmouth" value="0.0" reward="56.72553003402506" />
+		<probability city1="Cardiff" city2="Birmingham" value="0.2" reward="58.05397016078562" />
+		<probability city1="Cardiff" city2="London" value="0.2" reward="57.245094703650565" />
+		<probability city1="Cardiff" city2="Newcastle" value="0.0" reward="53.04926376402105" />
+		<probability city1="Liverpool" city2="Leeds" value="0.14285714285714285" reward="55.49099717851397" />
+		<probability city1="Liverpool" city2="Sheffield" value="0.0" reward="58.488266622693246" />
+		<probability city1="Liverpool" city2="Manchester" value="0.0" reward="56.75201294610767" />
+		<probability city1="Liverpool" city2="Cardiff" value="0.14285714285714285" reward="57.56767352217008" />
+		<probability city1="Liverpool" city2="Liverpool" value="0.0" reward="0.0" />
+		<probability city1="Liverpool" city2="Plymouth" value="0.14285714285714285" reward="58.252874542433794" />
+		<probability city1="Liverpool" city2="Norwich" value="0.14285714285714285" reward="55.84300123091196" />
+		<probability city1="Liverpool" city2="Portsmouth" value="0.14285714285714285" reward="59.410381506767976" />
+		<probability city1="Liverpool" city2="Birmingham" value="0.0" reward="57.00496553200336" />
+		<probability city1="Liverpool" city2="London" value="0.14285714285714285" reward="60.058493692921346" />
+		<probability city1="Liverpool" city2="Newcastle" value="0.14285714285714285" reward="59.566098568981324" />
+		<probability city1="Plymouth" city2="Leeds" value="0.0" reward="60.30242244758733" />
+		<probability city1="Plymouth" city2="Sheffield" value="0.16666666666666666" reward="53.95147419304769" />
+		<probability city1="Plymouth" city2="Manchester" value="0.0" reward="60.62244932809195" />
+		<probability city1="Plymouth" city2="Cardiff" value="0.16666666666666666" reward="61.06364637554606" />
+		<probability city1="Plymouth" city2="Liverpool" value="0.0" reward="58.05794959593455" />
+		<probability city1="Plymouth" city2="Plymouth" value="0.0" reward="0.0" />
+		<probability city1="Plymouth" city2="Norwich" value="0.16666666666666666" reward="58.00422579285058" />
+		<probability city1="Plymouth" city2="Portsmouth" value="0.16666666666666666" reward="59.30158519856143" />
+		<probability city1="Plymouth" city2="Birmingham" value="0.16666666666666666" reward="58.28674565743432" />
+		<probability city1="Plymouth" city2="London" value="0.0" reward="58.702337041208835" />
+		<probability city1="Plymouth" city2="Newcastle" value="0.16666666666666666" reward="56.52472215242292" />
+		<probability city1="Norwich" city2="Leeds" value="0.16666666666666666" reward="59.41562999875969" />
+		<probability city1="Norwich" city2="Sheffield" value="0.16666666666666666" reward="56.27339543768649" />
+		<probability city1="Norwich" city2="Manchester" value="0.16666666666666666" reward="52.44469218003653" />
+		<probability city1="Norwich" city2="Cardiff" value="0.0" reward="58.344011544766346" />
+		<probability city1="Norwich" city2="Liverpool" value="0.0" reward="54.70398910007785" />
+		<probability city1="Norwich" city2="Plymouth" value="0.0" reward="59.237913293582395" />
+		<probability city1="Norwich" city2="Norwich" value="0.0" reward="0.0" />
+		<probability city1="Norwich" city2="Portsmouth" value="0.16666666666666666" reward="57.085523444238916" />
+		<probability city1="Norwich" city2="Birmingham" value="0.0" reward="58.32353628472793" />
+		<probability city1="Norwich" city2="London" value="0.16666666666666666" reward="57.21538629830807" />
+		<probability city1="Norwich" city2="Newcastle" value="0.16666666666666666" reward="59.194041272123066" />
+		<probability city1="Portsmouth" city2="Leeds" value="0.25" reward="57.54365658606214" />
+		<probability city1="Portsmouth" city2="Sheffield" value="0.25" reward="54.669303611939355" />
+		<probability city1="Portsmouth" city2="Manchester" value="0.0" reward="57.138326910159385" />
+		<probability city1="Portsmouth" city2="Cardiff" value="0.0" reward="57.16167885102257" />
+		<probability city1="Portsmouth" city2="Liverpool" value="0.0" reward="55.41680779166803" />
+		<probability city1="Portsmouth" city2="Plymouth" value="0.0" reward="57.435333243025454" />
+		<probability city1="Portsmouth" city2="Norwich" value="0.0" reward="59.817356451700796" />
+		<probability city1="Portsmouth" city2="Portsmouth" value="0.0" reward="0.0" />
+		<probability city1="Portsmouth" city2="Birmingham" value="0.25" reward="57.40269132273785" />
+		<probability city1="Portsmouth" city2="London" value="0.25" reward="55.739670099349254" />
+		<probability city1="Portsmouth" city2="Newcastle" value="0.0" reward="54.5910098477877" />
+		<probability city1="Birmingham" city2="Leeds" value="0.25" reward="57.26939148162121" />
+		<probability city1="Birmingham" city2="Sheffield" value="0.0" reward="59.40432115636603" />
+		<probability city1="Birmingham" city2="Manchester" value="0.0" reward="57.16953110840724" />
+		<probability city1="Birmingham" city2="Cardiff" value="0.0" reward="61.0688260322981" />
+		<probability city1="Birmingham" city2="Liverpool" value="0.25" reward="57.18533535554081" />
+		<probability city1="Birmingham" city2="Plymouth" value="0.25" reward="56.46892277388471" />
+		<probability city1="Birmingham" city2="Norwich" value="0.0" reward="56.64161209944256" />
+		<probability city1="Birmingham" city2="Portsmouth" value="0.0" reward="56.67275705609369" />
+		<probability city1="Birmingham" city2="Birmingham" value="0.0" reward="0.0" />
+		<probability city1="Birmingham" city2="London" value="0.0" reward="57.997122851832245" />
+		<probability city1="Birmingham" city2="Newcastle" value="0.25" reward="58.14958051049081" />
+		<probability city1="London" city2="Leeds" value="0.0" reward="52.35355219573946" />
+		<probability city1="London" city2="Sheffield" value="0.3333333333333333" reward="57.8054627536814" />
+		<probability city1="London" city2="Manchester" value="0.3333333333333333" reward="56.991382581320615" />
+		<probability city1="London" city2="Cardiff" value="0.0" reward="57.13415760948716" />
+		<probability city1="London" city2="Liverpool" value="0.0" reward="56.05265252119279" />
+		<probability city1="London" city2="Plymouth" value="0.0" reward="54.291621996018044" />
+		<probability city1="London" city2="Norwich" value="0.0" reward="56.416003504351075" />
+		<probability city1="London" city2="Portsmouth" value="0.0" reward="59.843502650708444" />
+		<probability city1="London" city2="Birmingham" value="0.3333333333333333" reward="57.50492130063559" />
+		<probability city1="London" city2="London" value="0.0" reward="0.0" />
+		<probability city1="London" city2="Newcastle" value="0.0" reward="53.87938559350519" />
+		<probability city1="Newcastle" city2="Leeds" value="0.0" reward="58.542947204871304" />
+		<probability city1="Newcastle" city2="Sheffield" value="0.2" reward="55.82970791763629" />
+		<probability city1="Newcastle" city2="Manchester" value="0.2" reward="58.73562069311715" />
+		<probability city1="Newcastle" city2="Cardiff" value="0.0" reward="54.568197305305794" />
+		<probability city1="Newcastle" city2="Liverpool" value="0.0" reward="56.6343543269899" />
+		<probability city1="Newcastle" city2="Plymouth" value="0.2" reward="59.149237564566285" />
+		<probability city1="Newcastle" city2="Norwich" value="0.2" reward="57.33321097360489" />
+		<probability city1="Newcastle" city2="Portsmouth" value="0.0" reward="60.62050353696959" />
+		<probability city1="Newcastle" city2="Birmingham" value="0.0" reward="57.93652308221935" />
+		<probability city1="Newcastle" city2="London" value="0.2" reward="61.30088093626093" />
+		<probability city1="Newcastle" city2="Newcastle" value="0.0" reward="0.0" />
+	</probabilities>
+	<tasks>
+		<task id="2" pickup="Manchester" delivery="Leeds" owner="Company2.Vehicle1" weight="16.0" reward="58.798451830570045" />
+		<task id="1" pickup="London" delivery="Sheffield" owner="Company2.Vehicle2" weight="16.0" reward="57.8054627536814" />
+		<task id="3" pickup="Liverpool" delivery="Leeds" owner="Company1.Vehicle2" weight="16.0" reward="55.49099717851397" />
+		<task id="0" pickup="Cardiff" delivery="Leeds" owner="Company2.Vehicle1" weight="16.0" reward="57.66520872578983" />
+	</tasks>
+	<delivered>
+		<task id="0" pickup="Cardiff" delivery="Leeds" owner="Company2.Vehicle1" weight="16.0" reward="57.66520872578983" />
+		<task id="2" pickup="Manchester" delivery="Leeds" owner="Company2.Vehicle1" weight="16.0" reward="58.798451830570045" />
+		<task id="3" pickup="Liverpool" delivery="Leeds" owner="Company1.Vehicle2" weight="16.0" reward="55.49099717851397" />
+		<task id="1" pickup="London" delivery="Sheffield" owner="Company2.Vehicle2" weight="16.0" reward="57.8054627536814" />
+	</delivered>
+	<undelivered>
+	</undelivered>
+</log>

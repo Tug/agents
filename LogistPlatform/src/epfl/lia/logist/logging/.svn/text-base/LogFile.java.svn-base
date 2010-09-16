@@ -1,0 +1,168 @@
+package epfl.lia.logist.logging;
+
+/* Java utility imports */
+import java.util.ArrayDeque;
+import java.util.Date;
+
+/* Logist platform logging formats */
+import epfl.lia.logist.logging.format.*;
+
+
+/**
+ * An object representing a log file.
+ */
+public class LogFile {
+		
+	
+	/**
+	 * The cache holding log entries
+	 */
+	private ArrayDeque<LogEntry> moCache = null;
+
+	/**
+	 * The output file and formatting class
+	 */
+	private LogOutputFormat moFormat = null;
+
+	/**
+	 * The lowest severity level possible
+	 */
+	private LogSeverityEnum meDebugLevel = null;
+
+	/**
+	 * The maximum number of entries for this log
+	 */
+	private int miMaxEntries = 0;
+
+	/**
+	 * The number of entries cached before writing to disk
+	 */
+	private int miCacheSize = 1; // write cache after each log
+
+	/**
+	 * The current number of entries in the log file (<mMaxEntries)
+	 */
+	private int miNumEntries = 0;
+
+	
+	/**
+	 * Default contructor of the class.
+	 */
+	public LogFile() {
+		
+		// creates the deque holding cache entries
+		moCache = new ArrayDeque<LogEntry>( miCacheSize );
+	}
+	
+	
+	/**
+	 * Creates a log file from a simple descriptor
+	 */
+	public boolean create( LogDescriptor d ) throws Exception {
+		
+		// resets the number of entries to 0
+		miNumEntries = 0;
+		
+		// resets the cache entries
+		moCache.clear();
+		
+		// converts to lower case
+		String lsFormat = d.Format.toLowerCase();
+		
+		// for of all, selects the output formatter class
+		if ( lsFormat.equals("stream") ) {
+			moFormat = new StreamLogOutputFormat( d );
+		} else if ( lsFormat.equals("xml") ) {
+			moFormat = new XmlLogOutputFormat( d );
+		} else if ( lsFormat.equals("rtf") ) {
+			moFormat = new RtfLogOutputFormat( d );
+		} else if ( lsFormat.equals("raw") ) {
+			moFormat = new RawLogOutputFormat( d );
+		} else if ( lsFormat.equals("custom") ) {
+			// TODO: custom logs here...
+		}
+
+		// inits the format
+		moFormat.init();
+
+		// selects the debug level
+		meDebugLevel = null;
+		
+		// converts the debug level
+		String lsDebugLevel = d.DebugLevel.toLowerCase();
+		
+		// selects the appropriate level
+		if ( lsDebugLevel.equals("debug") ) {
+			meDebugLevel = LogSeverityEnum.LSV_DEBUG;
+		} else if ( lsDebugLevel.equals("info") ) {
+			meDebugLevel = LogSeverityEnum.LSV_INFO;
+		} else if ( lsDebugLevel.equals("warning") ) {
+			meDebugLevel = LogSeverityEnum.LSV_WARNING;
+		} else if ( lsDebugLevel.equals("error") ) {
+			meDebugLevel = LogSeverityEnum.LSV_ERROR;
+		} else if ( lsDebugLevel.equals("fatal") ) {
+			meDebugLevel = LogSeverityEnum.LSV_FATAL;
+		} else {
+			meDebugLevel = LogSeverityEnum.LSV_DEBUG;
+		}
+		
+		// how many entries at max ?
+		miMaxEntries = d.MaxEntries;
+		
+		// what is the size of the cache ?
+		miCacheSize = d.CacheSize;
+		
+		// Creates a complete log file from its descriptor
+		return true;
+	}
+	
+	
+	/**
+	 * Destroys the log file.
+	 */
+	public void destroy() {
+		flush();
+		moCache.clear();
+		moFormat.close();
+	}
+	
+	
+	/**
+	 * Flushes all elements in the cache to the
+	 * output.
+	 */
+	public void flush() {
+		if ( moFormat==null ) return;
+		while( moCache.size() > 0 ) {
+			moFormat.outputEntry( moCache.pop() );
+		}
+	}
+	
+	
+	/**
+	 * Logs one event into the cache.
+	 * @param ls
+	 * @param msg
+	 */
+	public void log( LogSeverityEnum ls, String msg ) {
+
+		// do not log anything
+		if ( ls.ordinal()<meDebugLevel.ordinal() )
+			return;
+	
+		// do not add more than allowed
+		if ( miMaxEntries>0 && miNumEntries == miMaxEntries )
+			return;
+		
+		// create a new anonymous entry
+		moCache.add( new LogEntry(new Date(),"", msg,ls,0) );
+		
+		// adds a new entry
+		miNumEntries++;
+		
+		// flushes the cache when enough elements are available
+		if ( moCache.size() >= miCacheSize )
+			flush();
+	}
+
+}

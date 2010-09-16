@@ -1,0 +1,31 @@
+package epfl.lia.logist.agent.state;
+
+/* importation table */
+import epfl.lia.logist.agent.AgentProfile;
+import epfl.lia.logist.messaging.action.Action;
+
+
+/**
+ * 
+ * @author malves
+ *
+ */
+public class CentralizedVehicleState extends VehicleAgentState {
+
+	/**
+	 * Constructor of the state
+	 * @param ap
+	 * @param as
+	 */
+	public CentralizedVehicleState( AgentProfile ap, AgentState as ) {
+		super(ap,as);
+	}
+			
+	
+	/**
+	 * Executes the behavior of the agent
+	 */
+	public void step() {
+	}
+}
+

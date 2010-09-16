@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- the main configuration for reactive agents -->
+<configuration name="reactive">
+
+	<!-- defines the properties for this configuration -->
+	<propset>
+		<property name="WorldXSize" value="640" />
+		<property name="WorldYSize" value="480" />
+		<property name="Backcolor" value="#ffffff" />
+		<property name="NumOfRounds" value="5" />
+	</propset>
+	
+	<!-- this sections describes the properties of
+	     the logs -->
+	<logset name="reactive_logset">
+		<propset>
+		</propset>
+		<log name="log1">
+			<propset inherit="parent">
+				<property name="level" value="warning" />
+				<property name="type" value="rtf" />
+			</propset>
+		</log>
+	</logset>
+	
+	<!-- takes the taskset from an external file -->
+	<taskset name="default_taskset" file="taskset.xml" />
+	
+	<!-- takes the topology from an external file -->
+	<toposet name="topo_switzerland" file="topology.xml" />
+	
+	<!-- this section describes all agents in the simulation -->
+	<agentset name="reactive_agents">
+		<propset />	
+		
+		<!-- this is the main agent  -->
+		<agent name="Alabama Entreprises" type="company" behavior="reactive">
+			<propset />
+			
+			<!-- the list of behaviors for company agents -->
+			<behaviorset />
+			
+			<!-- this is the first vehicle agent -->
+			<agent name="VehicleA-1" type="vehicle">
+				<propset>
+					<property name="color" value="#ff00ff" />
+					<property name="home" value="Genève" />
+				</propset>
+				<behaviorset>
+					<behavior signal="kill" handler="epfl.lia.logist.samples.behaviors.SampleKillBehavior" />
+					<behavior signal="*" handler="default" />
+				</behaviorset>
+			</agent>
+			
+			<!-- this is the second vehicle agent -->
+			<agent name="VehicleA-2" type="vehicle">
+				<propset>
+					<property name="color" value="#ff0000" />
+					<property name="speed" value="80" />
+					<property name="home" value="Aarau" />
+				</propset>
+				<behaviorset />
+			</agent>
+		</agent>
+	</agentset>
+</configuration>

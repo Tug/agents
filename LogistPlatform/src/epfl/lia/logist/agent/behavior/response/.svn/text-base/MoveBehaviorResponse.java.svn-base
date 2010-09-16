@@ -1,0 +1,18 @@
+package epfl.lia.logist.agent.behavior.response;
+
+public class MoveBehaviorResponse implements IBehaviorResponse {
+
+	/**
+	 * The destination city where to move
+	 */
+	public String Destination = null;
+	
+	
+	/* (non-Javadoc)
+	 * @see epfl.lia.logist.agent.behavior.response.BehaviorResponse#getType()
+	 */
+	@Override
+	public BehaviorResponseTypeEnum getType() {
+		return BehaviorResponseTypeEnum.BRT_MOVETO;
+	}
+}

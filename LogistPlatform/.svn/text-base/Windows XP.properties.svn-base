@@ -1,0 +1,12 @@
+# environnements properties
+build.source = src/
+build.target = bin/
+build.docs = docs/
+build.output = output/
+build.classpath = bin/
+
+# for testing purposes
+#launch.class = epfl.lia.logist.testing.security.TestSecurity3
+#launch.class = epfl.lia.logist.testing.security.TestSecurity2
+#launch.class = epfl.lia.logist.testing.security.TestSecurity1
+launch.class = epfl.lia.logist.testing.logging.TestLogging1

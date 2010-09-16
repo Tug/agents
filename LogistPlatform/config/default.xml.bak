@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	
+<!-- the simulation default file -->
+<simulation version="1.0" default="test-config">
+  
+  <!-- default configuration for reactive agents -->
+  <configuration name="test-config" file="test.xml"/>
+   
+  <!-- default configuration for reactive agents -->
+  <configuration name="ex1-reactive" file="reactive.xml"/>
+  
+  <!-- default configuration for deliberative agents
+  <configuration name="deliberative" file="deliberative.xml"/> -->
+  
+  <!-- default configuration for centralized agents
+  <configuration name="centralized" file="centralized.xml"/> -->
+  
+  <!-- default configuration for auction agents
+  <configuration name="auction" file="auction.xml"/> -->
+  
+</simulation>

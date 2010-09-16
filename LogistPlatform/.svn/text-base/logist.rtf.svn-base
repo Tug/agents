@@ -1,0 +1,195 @@
+{\rtf1\ansi\ansicpg1252\deff0\deflang1036
+{\colortbl ;\red255\green0\blue0;\red255\green128\blue0;}
+{\fonttbl{\f0\fswiss\fcharset0 Arial;}{\f1\fmodern\fprq1\fcharset0 Courier New;}}
+\f0 \fs38 \b Logist Platform RTF Log output \b0 \par
+\par \b \fs24 Starting date : \b0 dim. juil. 01 18:03:33 CEST 2007
+\par \b Starting time : \b0 18:03:33
+\par \par \fs28 \b General environnement info: \b0 \par
+\par \fs24 \tx750 \tab \f0 \b java-vendor     : \b0 Sun Microsystems Inc.
+\par \tab \f0 \b java-vendor-url : \b0 http://java.sun.com/
+\par \tab \f0 \b java-version    : \b0 1.6.0-rc
+\par \tab \f0 \b os-arch         : \b0 x86
+\par \tab \f0 \b os-name         : \b0 Windows XP
+\par \tab \f0 \b user-name       : \b0 salves
+\par \tab \f0 \b cache-size      : \b0 5
+\par \tab \f0 \b max-entries     : \b0 0
+\par \tab \f0 \b debug-level     : \b0 debug
+\par \par \fs28 \b Log file entries: \b0 \fs24 \par
+\par \tx2500 
+[18:03:33] INFO     \tab Platform started \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Reading the configuration file... \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Loading the configuration file 'default.xml'... \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab The default configuration name is 'reactive' \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab New configuration found: 'reactive' \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab New taskset found: 'default_taskset' \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Found new task from 'Genève' to 'Lausanne'. \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Found new task from 'Berne' to 'Lucerne'. \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Found new task from 'Genève' to 'Sion'. \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Found new task from 'Sion' to 'Lausanne'. \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab New topology information found: 'topo_switzerland' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new city: 'Lausanne' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new city: 'Genève' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new city: 'Sion' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new city: 'Neuchâtel' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new city: 'Bern' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new city: 'Basel' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new city: 'Fribourg' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new city: 'Zürich' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new city: 'Aarau' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new city: 'Luzern' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new city: 'St-Gallen' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new city: 'Thun' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'Lausanne' to 'Genève' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'Sion' to 'Lausanne' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'Neuchâtel' to 'Lausanne' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'Fribourg' to 'Lausanne' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'Fribourg' to 'Bern' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'Sion' to 'Thun' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'Neuchâtel' to 'Bern' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'Basel' to 'Bern' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'Zürich' to 'Aarau' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'Zürich' to 'Luzern' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'Bern' to 'Aarau' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'Luzern' to 'Aarau' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'St-Gallen' to 'Zürich' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'Thun' to 'Bern' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found new route from 'Basel' to 'Zürich' \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab New agent set found: 'reactive_agents' \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Found an agent named 'Alabama Entreprises' \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Agent 'Alabama Entreprises' properties: \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> speed: 120.0 \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> capacity: 80.0 \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> costperkm: 15.0 \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> color: black \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> home: random \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Found an agent named 'VehicleA-1' \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Agent 'VehicleA-1' properties: \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> speed: 120.0 \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> capacity: 80.0 \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> costperkm: 15.0 \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> color: red \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> home: Genève \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found a behavior for signal 'kill' \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Found a behavior for signal '*' \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Found an agent named 'VehicleA-2' \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Agent 'VehicleA-2' properties: \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> speed: 1500 \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> capacity: 80.0 \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> costperkm: 15.0 \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> color: black \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab    --> home: Aarau \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Initializing the agent management service... \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Initialisation of the agent management is complete. \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Task manager received a request to create tasks. \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Beginning creation of the individual agents... \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Spawning named agent 'Alabama Entreprises'... \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Creating agent state... \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Creating agent entity... \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Creating agent representation... \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Spawning children agents for 'Alabama Entreprises'... \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Spawning named agent 'VehicleA-1'... \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Creating agent state... \cf0
+\par \tx2500 
+\cf1 
+[18:03:33] FATAL    \tab Hello World From a Reactive Company Agent !!! \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Creating agent entity... \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Registering behavior for signal 'kill'. \cf0
+\par \tx2500 
+[18:03:33] INFO     \tab Registering behavior for signal '*'. \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Creating agent representation... \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Spawning children agents for 'VehicleA-1'... \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Spawning named agent 'VehicleA-2'... \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Creating agent state... \cf0
+\par \tx2500 
+\cf1 
+[18:03:33] FATAL    \tab Hello World From a Reactive Company Agent !!! \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Creating agent entity... \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Creating agent representation... \cf0
+\par \tx2500 
+[18:03:33] DEBUG    \tab Spawning children agents for 'VehicleA-2'... \cf0
+\par \tx2500 
+[18:03:34] DEBUG    \tab All agents were successfully created ! \cf0
+\par \tx2500 
+[18:03:34] INFO     \tab Agent creation and initialization is complete. \cf0
+\par \par --------------------------------------------------------------------------- \par
+}
